@@ -14,9 +14,9 @@ I'll be polishing and carving out some fat that, I believe, will make the code f
 >
 >  MCF.Goodwin : [Form Fading][C2]
 >
->  Burak Ozdiken : [TabControlDesigner]
+>  Burak Ozdiken : [TabControlDesigner][C3]
 >
->  Mavamaarten : [TabControl Transition Method]
+>  Mavamaarten : [TabControl Transition Method][C4]
 
   [C1]: https://github.com/N-a-r-w-i-n
   [C2]: https://www.codeproject.com/Articles/30255/C-Fade-Form-Effect-With-the-AnimateWindow-API-Func
