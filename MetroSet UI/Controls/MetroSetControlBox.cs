@@ -28,13 +28,13 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using MetroSet_UI.Components;
-using MetroSet_UI.Design;
-using MetroSet_UI.Enums;
-using MetroSet_UI.Extensions;
-using MetroSet_UI.Interfaces;
+using MetroSet.UI.Components;
+using MetroSet.UI.Design;
+using MetroSet.UI.Enums;
+using MetroSet.UI.Extensions;
+using MetroSet.UI.Interfaces;
 
-namespace MetroSet_UI.Controls
+namespace MetroSet.UI.Controls
 {
 	[ToolboxItem(true)]
 	[ToolboxBitmap(typeof(MetroSetControlBox), "Bitmaps.ControlButton.bmp")]
@@ -479,47 +479,29 @@ namespace MetroSet_UI.Controls
 
 			using (var closeBoxState = new SolidBrush(CloseHovered ? CloseHoverBackColor : Color.Transparent))
 			{
-				using (var f = new Font(@"Marlett", 12))
-				{
-					using (var tb = new SolidBrush(CloseHovered ? CloseHoverForeColor : CloseNormalForeColor))
-					{
-						using (var sf = new StringFormat { Alignment = StringAlignment.Center })
-						{
-							g.FillRectangle(closeBoxState, new Rectangle(70, 5, 27, Height));
-							g.DrawString("r", f, CloseHovered ? tb : Brushes.Gray, new Point(Width - 16, 8), sf);
-						}
-					}
-				}
-			}
+                using var f = new Font(@"Marlett", 12);
+                using var tb = new SolidBrush(CloseHovered ? CloseHoverForeColor : CloseNormalForeColor);
+                using var sf = new StringFormat { Alignment = StringAlignment.Center };
+                g.FillRectangle(closeBoxState, new Rectangle(70, 5, 27, Height));
+                g.DrawString("r", f, CloseHovered ? tb : Brushes.Gray, new Point(Width - 16, 8), sf);
+            }
 			using (var maximizeBoxState = new SolidBrush(MaximizeBox ? MaximizeHovered ? MaximizeHoverBackColor : Color.Transparent : Color.Transparent))
 			{
-				using (var f = new Font(@"Marlett", 12))
-				{
-					using (var tb = new SolidBrush(MaximizeBox ? MaximizeHovered ? MaximizeHoverForeColor : MaximizeNormalForeColor : DisabledForeColor))
-					{
-						var maxSymbol = Parent.FindForm()?.WindowState == FormWindowState.Maximized ? "2" : "1";
-						using (var sf = new StringFormat { Alignment = StringAlignment.Center })
-						{
-							g.FillRectangle(maximizeBoxState, new Rectangle(38, 5, 24, Height));
-							g.DrawString(maxSymbol, f, tb, new Point(51, 7), sf);
-						}
-					}
-				}
-			}
+                using var f = new Font(@"Marlett", 12);
+                using var tb = new SolidBrush(MaximizeBox ? MaximizeHovered ? MaximizeHoverForeColor : MaximizeNormalForeColor : DisabledForeColor);
+                var maxSymbol = Parent.FindForm()?.WindowState == FormWindowState.Maximized ? "2" : "1";
+                using var sf = new StringFormat { Alignment = StringAlignment.Center };
+                g.FillRectangle(maximizeBoxState, new Rectangle(38, 5, 24, Height));
+                g.DrawString(maxSymbol, f, tb, new Point(51, 7), sf);
+            }
 			using (var minimizeBoxState = new SolidBrush(MinimizeBox ? MinimizeHovered ? MinimizeHoverBackColor : Color.Transparent : Color.Transparent))
 			{
-				using (var f = new Font(@"Marlett", 12))
-				{
-					using (var tb = new SolidBrush(MinimizeBox ? MinimizeHovered ? MinimizeHoverForeColor : MinimizeNormalForeColor : DisabledForeColor))
-					{
-						using (var sf = new StringFormat { Alignment = StringAlignment.Center })
-						{
-							g.FillRectangle(minimizeBoxState, new Rectangle(5, 5, 27, Height));
-							g.DrawString("0", f, tb, new Point(20, 7), sf);
-						}
-					}
-				}
-			}
+                using var f = new Font(@"Marlett", 12);
+                using var tb = new SolidBrush(MinimizeBox ? MinimizeHovered ? MinimizeHoverForeColor : MinimizeNormalForeColor : DisabledForeColor);
+                using var sf = new StringFormat { Alignment = StringAlignment.Center };
+                g.FillRectangle(minimizeBoxState, new Rectangle(5, 5, 27, Height));
+                g.DrawString("0", f, tb, new Point(20, 7), sf);
+            }
 
 		}
 

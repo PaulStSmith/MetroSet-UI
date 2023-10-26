@@ -28,12 +28,12 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using MetroSet_UI.Components;
-using MetroSet_UI.Enums;
-using MetroSet_UI.Extensions;
-using MetroSet_UI.Interfaces;
+using MetroSet.UI.Components;
+using MetroSet.UI.Enums;
+using MetroSet.UI.Extensions;
+using MetroSet.UI.Interfaces;
 
-namespace MetroSet_UI.Controls
+namespace MetroSet.UI.Controls
 {
 	[ToolboxItem(true)]
 	[ToolboxBitmap(typeof(MetroSetContextMenuStrip), "Bitmaps.ContextMenu.bmp")]

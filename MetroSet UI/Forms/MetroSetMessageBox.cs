@@ -26,10 +26,10 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using MetroSet_UI.Controls;
-using MetroSet_UI.Extensions;
+using MetroSet.UI.Controls;
+using MetroSet.UI.Extensions;
 
-namespace MetroSet_UI.Forms
+namespace MetroSet.UI.Forms
 {
 	public class MetroSetMessageBox : MetroSetForm
 	{

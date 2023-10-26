@@ -24,9 +24,9 @@
 
 using System.Drawing;
 using System.Windows.Forms;
-using MetroSet_UI.Controls;
+using MetroSet.UI.Controls;
 
-namespace MetroSet_UI.Child
+namespace MetroSet.UI.Child
 {
 
 	public sealed class MetroSetToolStripMenuItem : ToolStripMenuItem

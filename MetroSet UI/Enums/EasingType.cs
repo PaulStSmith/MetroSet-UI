@@ -1,4 +1,4 @@
-﻿namespace MetroSet_UI.Enums
+﻿namespace MetroSet.UI.Enums
 {
     // for animate
     public enum EasingType

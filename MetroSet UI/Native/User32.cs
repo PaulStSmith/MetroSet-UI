@@ -26,7 +26,7 @@ using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace MetroSet_UI.Native
+namespace MetroSet.UI.Native
 {
     internal class User32
     {

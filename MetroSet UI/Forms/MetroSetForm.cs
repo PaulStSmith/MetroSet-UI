@@ -29,15 +29,15 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using MetroSet_UI.Components;
-using MetroSet_UI.Controls;
-using MetroSet_UI.Enums;
-using MetroSet_UI.Extensions;
-using MetroSet_UI.Interfaces;
-using MetroSet_UI.Native;
-using static MetroSet_UI.Native.User32;
+using MetroSet.UI.Components;
+using MetroSet.UI.Controls;
+using MetroSet.UI.Enums;
+using MetroSet.UI.Extensions;
+using MetroSet.UI.Interfaces;
+using MetroSet.UI.Native;
+using static MetroSet.UI.Native.User32;
 
-namespace MetroSet_UI.Forms
+namespace MetroSet.UI.Forms
 {
 	[ToolboxItem(false)]
 	[ToolboxBitmap(typeof(MetroSetForm), "Bitmaps.Form.bmp")]
@@ -63,7 +63,7 @@ namespace MetroSet_UI.Forms
 			UpdateStyles();
 			_mth = new Methods();
 			_utl = new Utilites();
-			_user32 = new User32();
+			User32 = new User32();
 			Padding = new Padding(12, 70, 12, 12);
 			FormBorderStyle = FormBorderStyle.None;
 			_backgroundImageTransparency = 0.90f;
@@ -97,32 +97,24 @@ namespace MetroSet_UI.Forms
 			}
 			if (ShowBorder)
 			{
-				using (var p = new Pen(BorderColor, BorderThickness))
-				{
-					e.Graphics.DrawRectangle(p, new Rectangle(0, 0, Width - 1, Height - 1));
-				}
-			}
+                using var p = new Pen(BorderColor, BorderThickness);
+                e.Graphics.DrawRectangle(p, new Rectangle(0, 0, Width - 1, Height - 1));
+            }
 
 			if (ShowLeftRect)
 			{
-				using (var b = new LinearGradientBrush(new Rectangle(0, 25, SmallRectThickness, 35), SmallLineColor1, SmallLineColor2, 90))
-				{
-					using (var textBrush = new SolidBrush(TextColor))
-					{
-						e.Graphics.FillRectangle(b, new Rectangle(0, 40, SmallRectThickness, 35));
-						e.Graphics.DrawString(Text, Font, textBrush, new Point(SmallRectThickness + 10, 46));
-					}
-				}
-			}
+                using var b = new LinearGradientBrush(new Rectangle(0, 25, SmallRectThickness, 35), SmallLineColor1, SmallLineColor2, 90);
+                using var textBrush = new SolidBrush(TextColor);
+                e.Graphics.FillRectangle(b, new Rectangle(0, 40, SmallRectThickness, 35));
+                e.Graphics.DrawString(Text, Font, textBrush, new Point(SmallRectThickness + 10, 46));
+            }
 			else
 			{
 				if (ShowHeader)
 				{
-					using (var b = new SolidBrush(HeaderColor))
-					{
-						e.Graphics.FillRectangle(b, new Rectangle(1, 1, Width - 1, HeaderHeight));
-					}
-				}
+                    using var b = new SolidBrush(HeaderColor);
+                    e.Graphics.FillRectangle(b, new Rectangle(1, 1, Width - 1, HeaderHeight));
+                }
 
 				var textBrush = new SolidBrush(TextColor);
 				if (ShowTitle)
@@ -150,7 +142,7 @@ namespace MetroSet_UI.Forms
 							}
 							break;
 						default:
-							throw new ArgumentOutOfRangeException();
+							throw new InvalidOperationException("");
 					}
 				}
 				textBrush.Dispose();
@@ -663,9 +655,7 @@ namespace MetroSet_UI.Forms
 		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
 		public string ThemeName { get; set; }
 
-		private User32 User32 => _user32;
-
-		private User32 _user32 { get; }
+		private readonly User32 User32;
 
 		#endregion Interfaces
 

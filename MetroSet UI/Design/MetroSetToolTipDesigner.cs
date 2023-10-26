@@ -23,9 +23,9 @@
  */
 
 using System.ComponentModel.Design;
-using MetroSet_UI.Actions;
+using MetroSet.UI.Actions;
 
-namespace MetroSet_UI.Design
+namespace MetroSet.UI.Design
 {
     internal class MetroSetToolTipDesigner : ComponentDesigner
     {

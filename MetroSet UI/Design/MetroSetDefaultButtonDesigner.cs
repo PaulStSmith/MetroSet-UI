@@ -24,9 +24,9 @@
 
 using System.ComponentModel.Design;
 using System.Windows.Forms.Design;
-using MetroSet_UI.Actions;
+using MetroSet.UI.Actions;
 
-namespace MetroSet_UI.Design
+namespace MetroSet.UI.Design
 {
     internal class MetroSetDefaultButtonDesigner : ControlDesigner
     {

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.Design;
-using MetroSet_UI.Components;
-using MetroSet_UI.Controls;
-using MetroSet_UI.Enums;
+using MetroSet.UI.Components;
+using MetroSet.UI.Controls;
+using MetroSet.UI.Enums;
 
 /*
  * MetroSet UI - MetroSet UI Framework
@@ -28,7 +28,7 @@ using MetroSet_UI.Enums;
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace MetroSet_UI.Actions
+namespace MetroSet.UI.Actions
 {
 	internal class MetroSetNumericActionList : DesignerActionList
 	{

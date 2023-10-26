@@ -1,4 +1,4 @@
-﻿namespace MetroSet_UI.Animates
+﻿namespace MetroSet.UI.Animates
 {
     public class DoubleAnimate : Animate<double>
     {

@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace MetroSet_UI.Animates
+namespace MetroSet.UI.Animates
 {
     public class ColorAnimate : Animate<Color>
     {

@@ -25,7 +25,7 @@
 
 using System.Windows.Forms.Design;
 
-namespace MetroSet_UI.Design
+namespace MetroSet.UI.Design
 {
     internal class MetroSetTabPageDesigner : ScrollableControlDesigner
     {

@@ -31,11 +31,11 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-using MetroSet_UI.Child;
-using MetroSet_UI.Controls;
-using MetroSet_UI.Native;
+using MetroSet.UI.Child;
+using MetroSet.UI.Controls;
+using MetroSet.UI.Native;
 
-namespace MetroSet_UI.Design
+namespace MetroSet.UI.Design
 {
 	/// <summary>
 	/// The below class designer is a part from : https://www.codeproject.com/Articles/38014/KRBTabControl after a few clean code clean up.

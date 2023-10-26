@@ -31,11 +31,11 @@ using System.IO;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using System.Xml;
-using MetroSet_UI.Design;
-using MetroSet_UI.Enums;
-using MetroSet_UI.Interfaces;
+using MetroSet.UI.Design;
+using MetroSet.UI.Enums;
+using MetroSet.UI.Interfaces;
 
-namespace MetroSet_UI.Components
+namespace MetroSet.UI.Components
 {
 	[DefaultProperty("Style")]
 	[Designer(typeof(StyleManagerDesigner))]
@@ -43,8 +43,6 @@ namespace MetroSet_UI.Components
 	[ToolboxBitmap(typeof(StyleManager), "Style.bmp")]
 	public class StyleManager : Component
 	{
-
-		private readonly Form _ownerForm;
 
 		#region Constructor
 
@@ -75,7 +73,6 @@ namespace MetroSet_UI.Components
 					form.ThemeAuthor = ThemeAuthor;
 					form.ThemeName = ThemeName;
 					form.StyleManager = this;
-					form.StyleManager.MetroForm = _ownerForm;
 					break;
 			}
 
@@ -118,7 +115,7 @@ namespace MetroSet_UI.Components
 
 				foreach (Control child in ctrl.Controls)
 				{
-					if (!(child is IMetroSetControl))
+					if (child is not IMetroSetControl)
 						continue;
 					((IMetroSetControl)child).Style = Style;
 					((IMetroSetControl)child).StyleManager = this;
@@ -249,15 +246,11 @@ namespace MetroSet_UI.Components
 		public void OpenTheme()
 		{
 			Style = Style.Custom;
-			using (var ofd = new OpenFileDialog { Filter = @"Xml File (*.xml)|*.xml" })
-			{
-				if (ofd.ShowDialog() != DialogResult.OK)
-				{
-					return;
-				}
-				CustomTheme = ofd.FileName;
-			}
-		}
+            using var ofd = new OpenFileDialog { Filter = @"Xml File (*.xml)|*.xml" };
+            if (ofd.ShowDialog() != DialogResult.OK)
+                return;
+            CustomTheme = ofd.FileName;
+        }
 
 		/// <summary>
 		/// The Method for setting the custom theme up.

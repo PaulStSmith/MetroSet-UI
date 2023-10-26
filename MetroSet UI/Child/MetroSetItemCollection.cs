@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 
-namespace MetroSet_UI.Child
+namespace MetroSet.UI.Child
 {
     public class MetroSetItemCollection : Collection<object>
     {

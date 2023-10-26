@@ -1,7 +1,7 @@
 ﻿using System;
-using MetroSet_UI.Enums;
+using MetroSet.UI.Enums;
 
-namespace MetroSet_UI.Animates
+namespace MetroSet.UI.Animates
 {
 	// for animate
 	public class Interpolation

@@ -25,11 +25,11 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using MetroSet_UI.Components;
-using MetroSet_UI.Controls;
-using MetroSet_UI.Enums;
+using MetroSet.UI.Components;
+using MetroSet.UI.Controls;
+using MetroSet.UI.Enums;
 
-namespace MetroSet_UI.Actions
+namespace MetroSet.UI.Actions
 {
 	public class MetroSetTileActionList : DesignerActionList
 	{

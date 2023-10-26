@@ -24,10 +24,10 @@
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using MetroSet_UI.Components;
-using MetroSet_UI.Enums;
+using MetroSet.UI.Components;
+using MetroSet.UI.Enums;
 
-namespace MetroSet_UI.Actions
+namespace MetroSet.UI.Actions
 {
 	internal class MetroSetToolTipActionList : DesignerActionList
 	{

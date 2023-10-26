@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
-using MetroSet_UI.Enums;
+using MetroSet.UI.Enums;
 
-namespace MetroSet_UI.Animates
+namespace MetroSet.UI.Animates
 {
 	// interpolation animate
 	public abstract class Animate<T> : IDisposable

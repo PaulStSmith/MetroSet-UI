@@ -1,7 +1,7 @@
-﻿using MetroSet_UI.Components;
-using MetroSet_UI.Enums;
+﻿using MetroSet.UI.Components;
+using MetroSet.UI.Enums;
 
-namespace MetroSet_UI.Interfaces
+namespace MetroSet.UI.Interfaces
 {
 	public interface MetroSetControl
 	{

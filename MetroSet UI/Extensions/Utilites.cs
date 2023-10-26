@@ -26,9 +26,9 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-using MetroSet_UI.Native;
+using MetroSet.UI.Native;
 
-namespace MetroSet_UI.Extensions
+namespace MetroSet.UI.Extensions
 {
 	internal class Utilites
 	{

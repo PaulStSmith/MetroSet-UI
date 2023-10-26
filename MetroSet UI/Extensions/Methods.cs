@@ -27,7 +27,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
-namespace MetroSet_UI.Extensions
+namespace MetroSet.UI.Extensions
 {
 	internal class Methods
 	{

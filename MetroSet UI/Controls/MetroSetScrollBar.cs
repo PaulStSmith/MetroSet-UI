@@ -26,12 +26,12 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using MetroSet_UI.Components;
-using MetroSet_UI.Design;
-using MetroSet_UI.Enums;
-using MetroSet_UI.Extensions;
-using MetroSet_UI.Interfaces;
-namespace MetroSet_UI.Controls
+using MetroSet.UI.Components;
+using MetroSet.UI.Design;
+using MetroSet.UI.Enums;
+using MetroSet.UI.Extensions;
+using MetroSet.UI.Interfaces;
+namespace MetroSet.UI.Controls
 {
 	[ToolboxItem(true)]
 	[ToolboxBitmap(typeof(MetroSetScrollBar), "Bitmaps.ScrollBar.bmp")]

@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace MetroSet_UI.Extensions
+namespace MetroSet.UI.Extensions
 {
     public class Global_Font
     {

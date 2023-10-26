@@ -27,7 +27,7 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 
-namespace MetroSet_UI.Extensions
+namespace MetroSet.UI.Extensions
 {
     public class MetroSetFonts
     {

@@ -27,7 +27,7 @@ using System;
 using System.ComponentModel.Design;
 using System.Windows.Forms;
 
-namespace MetroSet_UI.Child
+namespace MetroSet.UI.Child
 {
 
 	/// <summary>

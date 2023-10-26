@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Windows.Forms;
 
-namespace MetroSet_UI.Extensions
+namespace MetroSet.UI.Extensions
 {
     public class GraphicsQuality
     {
