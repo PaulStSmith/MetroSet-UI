@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace MetroSet_UI_Example
+namespace MetroSet.UI_Example
 {
 	static class Program
 	{

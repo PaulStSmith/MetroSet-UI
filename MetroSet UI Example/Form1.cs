@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
-using MetroSet_UI.Enums;
-using MetroSet_UI.Forms;
+using MetroSet.UI.Enums;
+using MetroSet.UI.Forms;
 
-namespace MetroSet_UI_Example
+namespace MetroSet.UI_Example
 {
 	public partial class Form1 : MetroSetForm
 	{
