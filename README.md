@@ -1,4 +1,4 @@
-# Moder UI for WinForms
+# Modern UI for WinForms
 
 Project forked from [here][1].
 
