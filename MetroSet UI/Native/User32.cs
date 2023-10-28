@@ -3,6 +3,7 @@
  * 
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of 
  * this software and associated documentation files (the "Software"), to deal in the 
@@ -31,13 +32,7 @@ namespace MetroSet.UI.Native
     internal class User32
     {
 
-        #region Properties
-
         public AnimateWindowFlags AW_HIDE { get; internal set; }
-
-        #endregion
-
-        #region Structure
 
         [StructLayout(LayoutKind.Sequential)]
         public struct TCHITTESTINFO
@@ -63,10 +58,6 @@ namespace MetroSet.UI.Native
 	            Point pt = new Point(x, y);
             }
         }
-
-        #endregion
-
-        #region Flags
 
         public const int WM_SETCURSOR = 0x0020;
         public const int IDC_HAND = 32649;
@@ -109,10 +100,6 @@ namespace MetroSet.UI.Native
             TCHT_ONITEM = TCHT_ONITEMICON | TCHT_ONITEMLABEL
         };
 
-        #endregion
-
-        #region Methods
-
         [DllImport("user32")]
         public static extern bool AnimateWindow(IntPtr hwnd, int time, AnimateWindowFlags flags);
 
@@ -130,10 +117,6 @@ namespace MetroSet.UI.Native
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr SetCursor(IntPtr hCursor);
 
-        #endregion
-
-        #region Symbolic Constants
-
         public const byte _AC_SRC_OVER = 0x00;
         public const byte _AC_SRC_ALPHA = 0x01;
         public const int _LWA_ALPHA = 0x00000002;
@@ -150,10 +133,6 @@ namespace MetroSet.UI.Native
         public const int _TCN_FIRST = -550;
         public const int _TCN_SELCHANGE = -551;
         public const int _TCN_SELCHANGING = -552;
-
-        #endregion
-
-        #region Windows Messages
 
         /// <summary>
         /// Specifies values from Msgs enumeration.
@@ -1165,8 +1144,6 @@ namespace MetroSet.UI.Native
             /// </summary>
             WM_THEMECHANGED = 0x031A,
         };
-
-        #endregion
 
     }
 

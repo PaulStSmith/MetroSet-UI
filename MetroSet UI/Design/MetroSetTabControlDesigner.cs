@@ -3,6 +3,7 @@
  *
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -21,7 +22,6 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 
 using System;
 using System.Collections;
@@ -42,19 +42,10 @@ namespace MetroSet.UI.Design
 	/// </summary>
 	public class MetroSetTabControlDesigner : ParentControlDesigner
 	{
-		#region Instance Members
 
 		private DesignerVerbCollection _verbs;
 		private IDesignerHost _designerHost;
 		private IComponentChangeService _changeService;
-
-		#endregion Instance Members
-
-		#region Constructor
-
-		#endregion Constructor
-
-		#region Property
 
 		public override DesignerVerbCollection Verbs
 		{
@@ -88,10 +79,6 @@ namespace MetroSet.UI.Design
 				return _verbs;
 			}
 		}
-
-		#endregion Property
-
-		#region Override Methods
 
 		public override void Initialize(IComponent component)
 		{
@@ -172,10 +159,6 @@ namespace MetroSet.UI.Design
 			base.Dispose(disposing);
 		}
 
-		#endregion Override Methods
-
-		#region Helper Methods
-
 		/*  When the designer modifies the MetroSetTabControl.TabPages collection,
                 the Properties window is not updated until the control is deselected and then reselected. To
                 correct this defect, you need to explicitly notify the IDE that a change has been made by using
@@ -237,6 +220,5 @@ namespace MetroSet.UI.Design
 			}
 		}
 
-		#endregion Helper Methods
 	}
 }

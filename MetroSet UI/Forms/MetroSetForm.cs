@@ -3,6 +3,7 @@
  * 
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of 
  * this software and associated documentation files (the "Software"), to deal in the 
@@ -49,8 +50,6 @@ namespace MetroSet.UI.Forms
 	public class MetroSetForm : Form, IMetroForm
 	{
 
-		#region Constructor
-
 		protected MetroSetForm()
 		{
 			SetStyle(
@@ -61,8 +60,7 @@ namespace MetroSet.UI.Forms
 				ControlStyles.ContainerControl |
 				ControlStyles.SupportsTransparentBackColor, true);
 			UpdateStyles();
-			_mth = new Methods();
-			_utl = new Utilites();
+			
 			User32 = new User32();
 			Padding = new Padding(12, 70, 12, 12);
 			FormBorderStyle = FormBorderStyle.None;
@@ -76,10 +74,6 @@ namespace MetroSet.UI.Forms
 
 		}
 
-		#endregion Constructor
-
-		#region Draw Control
-
 		protected override void OnPaint(PaintEventArgs e)
 		{
 
@@ -92,7 +86,7 @@ namespace MetroSet.UI.Forms
 				e.Graphics.FillRectangle(b, new Rectangle(0, 0, Width, Height));
 				if (BackgroundImage != null)
 				{
-					_mth.DrawImageWithTransparency(e.Graphics, BackgroundImageTransparency, BackgroundImage, ClientRectangle);
+					Methods.DrawImageWithTransparency(e.Graphics, BackgroundImageTransparency, BackgroundImage, ClientRectangle);
 				}
 			}
 			if (ShowBorder)
@@ -149,10 +143,6 @@ namespace MetroSet.UI.Forms
 			}
 		}
 
-		#endregion Draw Control
-
-		#region Properties
-
 		/// <summary>
 		/// Gets or sets the form backcolor.
 		/// </summary>
@@ -166,7 +156,6 @@ namespace MetroSet.UI.Forms
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the form fore color.
@@ -188,7 +177,6 @@ namespace MetroSet.UI.Forms
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the form text color.
 		/// </summary>
@@ -202,7 +190,6 @@ namespace MetroSet.UI.Forms
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the form small line color 1.
@@ -218,7 +205,6 @@ namespace MetroSet.UI.Forms
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the form small line color 2.
 		/// </summary>
@@ -233,7 +219,6 @@ namespace MetroSet.UI.Forms
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the header color.
 		/// </summary>
@@ -247,7 +232,6 @@ namespace MetroSet.UI.Forms
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the width of the small rectangle on top left of the window.
@@ -264,7 +248,6 @@ namespace MetroSet.UI.Forms
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets whether the border be shown.
 		/// </summary>
@@ -278,7 +261,6 @@ namespace MetroSet.UI.Forms
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the border thickness.
@@ -342,7 +324,6 @@ namespace MetroSet.UI.Forms
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the title alignment.
 		/// </summary>
@@ -356,8 +337,6 @@ namespace MetroSet.UI.Forms
 				Refresh();
 			}
 		}
-
-
 
 		/// <summary>
 		/// Gets or sets whether show the header.
@@ -426,7 +405,6 @@ namespace MetroSet.UI.Forms
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets whether the form use animation.
 		/// </summary>
@@ -440,7 +418,6 @@ namespace MetroSet.UI.Forms
 				Refresh();
 			}
 		}
-
 
 		[Browsable(false)]
 		public new Padding Padding
@@ -480,7 +457,6 @@ namespace MetroSet.UI.Forms
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the background image displayed in the control.
 		/// </summary>
@@ -501,7 +477,6 @@ namespace MetroSet.UI.Forms
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets whether the user be able to resize the form or not.
 		/// </summary>
@@ -516,11 +491,6 @@ namespace MetroSet.UI.Forms
 			}
 		}
 
-
-		#endregion Properties
-
-		#region Methods
-
 		/// <summary>
 		/// Allows the user to resize the form at runtime.
 		/// Credits : dizzy.stackoverflow
@@ -533,8 +503,6 @@ namespace MetroSet.UI.Forms
 			var x = (int)(message.LParam.ToInt64() & 65535);
 			var y = (int)((message.LParam.ToInt64() & -65536) >> 0x10);
 			var point = PointToClient(new Point(x, y));
-
-			#region  From Corners  
 
 			if (point.Y >= Height - 0x10)
 			{
@@ -565,10 +533,6 @@ namespace MetroSet.UI.Forms
 				}
 			}
 
-			#endregion
-
-			#region From Sides
-
 			if (point.Y <= 0x10)
 			{
 				message.Result = (IntPtr)0xc;
@@ -592,12 +556,7 @@ namespace MetroSet.UI.Forms
 				message.Result = (IntPtr)0xb;
 			}
 
-			#endregion
 		}
-
-		#endregion Methods
-
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -643,30 +602,7 @@ namespace MetroSet.UI.Forms
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
 		private readonly User32 User32;
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Utilites _utl;
-		private readonly Methods _mth;
-
-		#endregion Global Vars
-
-		#region Internal Vars
 
 		private Style _style;
 		private StyleManager _styleManager;
@@ -691,10 +627,6 @@ namespace MetroSet.UI.Forms
 		private bool _dropShadowEffect;
 		private bool _allowResize;
 
-		#endregion Internal Vars
-
-		#region ApplyTheme
-
 		/// <summary>
 		/// Gets or sets the style provided by the user.
 		/// </summary>
@@ -711,8 +643,6 @@ namespace MetroSet.UI.Forms
 					SmallLineColor1 = Color.FromArgb(65, 177, 225);
 					SmallLineColor2 = Color.FromArgb(65, 177, 225);
 					HeaderColor = Color.FromArgb(65, 177, 225);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
@@ -724,8 +654,6 @@ namespace MetroSet.UI.Forms
 					SmallLineColor2 = Color.FromArgb(65, 177, 225);
 					HeaderColor = Color.FromArgb(65, 177, 225);
 					TextColor = ShowHeader ? Color.Gray : Color.White;
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -737,27 +665,27 @@ namespace MetroSet.UI.Forms
 							{
 								if (varkey.Key == "ForeColor")
 								{
-									ForeColor = _utl.HexColor((string)varkey.Value);
+									ForeColor = Utilites.HexColor((string)varkey.Value);
 								}
 								else if (varkey.Key == "BackColor")
 								{
-									BackgroundColor = _utl.HexColor((string)varkey.Value);
+									BackgroundColor = Utilites.HexColor((string)varkey.Value);
 								}
 								else if (varkey.Key == "BorderColor")
 								{
-									BorderColor = _utl.HexColor((string)varkey.Value);
+									BorderColor = Utilites.HexColor((string)varkey.Value);
 								}
 								else if (varkey.Key == "TextColor")
 								{
-									TextColor = _utl.HexColor((string)varkey.Value);
+									TextColor = Utilites.HexColor((string)varkey.Value);
 								}
 								else if (varkey.Key == "SmallLineColor1")
 								{
-									SmallLineColor1 = _utl.HexColor((string)varkey.Value);
+									SmallLineColor1 = Utilites.HexColor((string)varkey.Value);
 								}
 								else if (varkey.Key == "SmallLineColor2")
 								{
-									SmallLineColor2 = _utl.HexColor((string)varkey.Value);
+									SmallLineColor2 = Utilites.HexColor((string)varkey.Value);
 								}
 								else if (varkey.Key == "SmallRectThickness")
 								{
@@ -765,7 +693,7 @@ namespace MetroSet.UI.Forms
 								}
 								else if (varkey.Key == "HeaderColor")
 								{
-									HeaderColor = _utl.HexColor((string)varkey.Value);
+									HeaderColor = Utilites.HexColor((string)varkey.Value);
 								}
 							}
 							else
@@ -782,10 +710,6 @@ namespace MetroSet.UI.Forms
 		{
 			Invalidate();
 		}
-
-		#endregion Theme Changing
-
-		#region Events
 
 		/// <summary>
 		/// Handling windows messages.
@@ -806,7 +730,6 @@ namespace MetroSet.UI.Forms
 			ResizeForm(ref message);
 
 		}
-
 
 		protected override void OnHandleCreated(EventArgs e)
 		{
@@ -856,7 +779,17 @@ namespace MetroSet.UI.Forms
 			}
 		}
 
-		#endregion
+		/// <summary>
+		/// Returns a value indicating whether or not the form can close.
+		/// </summary>
+		/// <param name="closeReason">The reason for the closing.</param>
+		/// <returns>True if the fom can be closed; false otherwise.</returns>
+		protected internal bool CanClose(CloseReason closeReason)
+		{
+			var e = new FormClosingEventArgs(closeReason, false);
+			OnFormClosing(e);
+			return !e.Cancel;
+        }
 
 	}
 

@@ -3,6 +3,7 @@
  *
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -22,7 +23,6 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -37,8 +37,6 @@ namespace MetroSet.UI.Child
 	[Designer(typeof(MetroSetTabPageDesigner))]
 	public class MetroSetSetTabPage : TabPage, IMetroSetControl
 	{
-
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -84,28 +82,8 @@ namespace MetroSet.UI.Child
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
-
-		#endregion Internal Vars
-
-		#region Constructors
 
 		public MetroSetSetTabPage()
 		{
@@ -120,10 +98,6 @@ namespace MetroSet.UI.Child
 			ApplyTheme();
 		}
 
-		#endregion Constructors
-
-		#region ApplyTheme
-
 		/// <summary>
 		/// Gets or sets the style provided by the user.
 		/// </summary>
@@ -137,15 +111,11 @@ namespace MetroSet.UI.Child
 			{
 				case Style.Light:
 					BaseColor = Color.White;
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
 				case Style.Dark:
 					BaseColor = Color.FromArgb(32, 32, 32);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 			}
@@ -158,10 +128,6 @@ namespace MetroSet.UI.Child
 		{
 			Invalidate();
 		}
-
-		#endregion ApplyTheme
-
-		#region Properties
 
 		[Browsable(false)]
 		public new Color BackColor { get; set; } = Color.Transparent;
@@ -207,10 +173,6 @@ namespace MetroSet.UI.Child
 			}
 		}
 
-		#endregion Properties
-
-		#region DrawControl
-
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			Graphics g = e.Graphics;
@@ -220,8 +182,6 @@ namespace MetroSet.UI.Child
 				g.FillRectangle(bg, ClientRectangle);
 			}
 		}
-
-		#endregion
 
 	}
 }

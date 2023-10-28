@@ -3,6 +3,7 @@
  *
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -44,7 +45,6 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetTabControl : TabControl, IMetroSetControl
 	{
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -88,29 +88,6 @@ namespace MetroSet.UI.Controls
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Methods _mth;
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
 		private PointFAnimate _slideAnimator;
@@ -123,10 +100,6 @@ namespace MetroSet.UI.Controls
 		private Color _selectedTextColor;
 		private TabStyle _tabStyle;
 
-		#endregion Internal Vars
-
-		#region Constructors
-
 		public MetroSetTabControl()
 		{
 			SetStyle(
@@ -138,15 +111,11 @@ namespace MetroSet.UI.Controls
 			UpdateStyles();
 			ItemSize = new Size(100, 38);
 			Font = MetroSetFonts.UIRegular(8);
-			_mth = new Methods();
-			_utl = new Utilites();
+			
+			
 			_slideAnimator = new PointFAnimate();
 			ApplyTheme();
 		}
-
-		#endregion Constructors
-
-		#region ApplyTheme
 
 		/// <summary>
 		/// Gets or sets the style provided by the user.
@@ -164,8 +133,6 @@ namespace MetroSet.UI.Controls
 					BackgroundColor = Color.White;
 					UnselectedTextColor = Color.Gray;
 					SelectedTextColor = Color.White;
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
@@ -174,8 +141,6 @@ namespace MetroSet.UI.Controls
 					BackgroundColor = Color.FromArgb(30, 30, 30);
 					UnselectedTextColor = Color.Gray;
 					SelectedTextColor = Color.White;
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -186,19 +151,19 @@ namespace MetroSet.UI.Controls
 							switch (varkey.Key)
 							{
 								case "ForeColor":
-									ForegroundColor = _utl.HexColor((string)varkey.Value);
+									ForegroundColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BackColor":
-									BackgroundColor = _utl.HexColor((string)varkey.Value);
+									BackgroundColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "UnselectedTextColor":
-									UnselectedTextColor = _utl.HexColor((string)varkey.Value);
+									UnselectedTextColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "SelectedTextColor":
-									SelectedTextColor = _utl.HexColor((string)varkey.Value);
+									SelectedTextColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -223,10 +188,6 @@ namespace MetroSet.UI.Controls
 				//throw new Exception(ex.StackTrace);
 			}
 		}
-
-		#endregion ApplyTheme
-
-		#region Properties
 
 		/// <summary>
 		/// Get or set slide animate time(ms).
@@ -269,7 +230,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the size of the control's tabs.
 		/// </summary>
@@ -310,7 +270,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets which control borders are docked to its parent control and determines how a control is resized with its parent.
@@ -361,7 +320,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the tab page text while selected.
 		/// </summary>
@@ -375,7 +333,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the tab control appearance style
@@ -411,10 +368,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-		#endregion Properties
-
-		#region Draw Control
-
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			var g = e.Graphics;
@@ -447,7 +400,7 @@ namespace MetroSet.UI.Controls
 						}
 						using (var tb = new SolidBrush(i == SelectedIndex ? SelectedTextColor : UnselectedTextColor))
 						{
-							g.DrawString(TabPages[i].Text, Font, tb, r, _mth.SetPosition());
+							g.DrawString(TabPages[i].Text, Font, tb, r, Methods.SetPosition());
 						}
 					}
 					break;
@@ -465,18 +418,13 @@ namespace MetroSet.UI.Controls
 						}
 						using (var tb = new SolidBrush(UnselectedTextColor))
 						{
-							g.DrawString(TabPages[i].Text, Font, tb, r, _mth.SetPosition());
+							g.DrawString(TabPages[i].Text, Font, tb, r, Methods.SetPosition());
 						}
 					}
 					break;
 			}
 
-
 		}
-
-		#endregion Draw Control
-
-		#region Events
 
 		/// <summary>
 		/// Handling mouse move event of the control, chnaging the cursor to hande whenever mouse located in a tab page.
@@ -512,12 +460,10 @@ namespace MetroSet.UI.Controls
 		/// <param name="m"></param>
 		protected override void WndProc(ref Message m)
 		{
-			_utl.SmoothCursor(ref m);
+			Utilites.SmoothCursor(ref m);
 
 			base.WndProc(ref m);
 		}
-
-		#region Animation
 
 		// Credits : Mavamaarten
 
@@ -526,8 +472,8 @@ namespace MetroSet.UI.Controls
 		private void DoSlideAnimate(TabPage control1, TabPage control2, bool moveback)
 		{
 			// initialize control and child controls when control first painted
-			_utl.InitControlHandle(control1);
-			_utl.InitControlHandle(control2);
+			Utilites.InitControlHandle(control1);
+			Utilites.InitControlHandle(control2);
 			_slideGraphics = Graphics.FromHwnd(control2.Handle);
 			_slideBitmap = new Bitmap(control1.Width + control2.Width, control1.Height + control2.Height);
 
@@ -622,12 +568,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-		#endregion Animation
-
-		#endregion Events
-
-		#region Methods
-
 		/// <summary>
 		/// The Method that provide the specific color for every single tab page in the tab control.
 		/// </summary>
@@ -641,8 +581,6 @@ namespace MetroSet.UI.Controls
 				T.Invalidate();
 			}
 		}
-
-		#endregion
 
 	}
 }

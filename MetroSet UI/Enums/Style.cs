@@ -3,6 +3,7 @@
  * 
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of 
  * this software and associated documentation files (the "Software"), to deal in the 
@@ -27,18 +28,14 @@ namespace MetroSet.UI.Enums
     public enum Style
     {
 
-
         // Sets the style of the control to Light.
         Light,
-
 
         // Sets the style of the control to Dark.
         Dark,
 
-
         // Sets the style of the control to Custom.
         Custom
-
 
     }
 }

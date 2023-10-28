@@ -3,6 +3,7 @@
 *
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy of
 * this software and associated documentation files (the "Software"), to deal in the
@@ -46,8 +47,6 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetListBox : Control, IMetroSetControl
 	{
-
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -96,28 +95,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
 		private MetroSetItemCollection _items;
@@ -143,10 +120,6 @@ namespace MetroSet.UI.Controls
 		private Color _disabledBackColor;
 		private Color _borderColor;
 
-		#endregion Internal Vars
-
-		#region Constructors
-
 		public MetroSetListBox()
 		{
 			SetStyle(
@@ -159,7 +132,7 @@ namespace MetroSet.UI.Controls
 			UpdateStyles();
 			base.BackColor = Color.Transparent;
 			base.Font = MetroSetFonts.Light(10);
-			_utl = new Utilites();
+			
 			ApplyTheme();
 			SetDefaults();
 		}
@@ -192,10 +165,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-		#endregion Constructors
-
-		#region ApplyTheme
-
 		/// <summary>
 		/// Gets or sets the style provided by the user.
 		/// </summary>
@@ -217,8 +186,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(204, 204, 204);
 					DisabledForeColor = Color.FromArgb(136, 136, 136);
 					BorderColor = Color.LightGray;
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
@@ -232,8 +199,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(80, 80, 80);
 					DisabledForeColor = Color.FromArgb(109, 109, 109);
 					BorderColor = Color.FromArgb(64, 64, 64);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -245,39 +210,39 @@ namespace MetroSet.UI.Controls
 							{
 
 								case "ForeColor":
-									ForeColor = _utl.HexColor((string)varkey.Value);
+									ForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BackColor":
-									BackColor = _utl.HexColor((string)varkey.Value);
+									BackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledBackColor":
-									DisabledBackColor = _utl.HexColor((string)varkey.Value);
+									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledForeColor":
-									DisabledForeColor = _utl.HexColor((string)varkey.Value);
+									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "HoveredItemBackColor":
-									HoveredItemBackColor = _utl.HexColor((string)varkey.Value);
+									HoveredItemBackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "HoveredItemColor":
-									HoveredItemColor = _utl.HexColor((string)varkey.Value);
+									HoveredItemColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "SelectedItemBackColor":
-									SelectedItemBackColor = _utl.HexColor((string)varkey.Value);
+									SelectedItemBackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "SelectedItemColor":
-									SelectedItemColor = _utl.HexColor((string)varkey.Value);
+									SelectedItemColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BorderColor":
-									BorderColor = _utl.HexColor((string)varkey.Value);
+									BorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -295,10 +260,6 @@ namespace MetroSet.UI.Controls
 		{
 			Invalidate();
 		}
-
-		#endregion ApplyTheme
-
-		#region Draw Control
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
@@ -370,10 +331,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-		#endregion Draw Control
-
-		#region Properties
-
 		/// <summary>
 		/// Gets the items of the ListBox.
 		/// </summary>
@@ -404,7 +361,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the currently selected item in the ListBox.
 		/// </summary>
@@ -433,7 +389,6 @@ namespace MetroSet.UI.Controls
 				Invalidate();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the zero-based index of the currently selected item in a ListBox.
@@ -516,7 +471,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets BackColor used by the control
 		/// </summary>
@@ -547,7 +501,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets selected item backcolor used by the control
 		/// </summary>
@@ -561,7 +514,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets hovered item used by the control
@@ -577,7 +529,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets hovered item BackColor used by the control
 		/// </summary>
@@ -591,7 +542,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets disabled ForeColor used by the control
@@ -607,7 +557,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets disabled BackColor used by the control
 		/// </summary>
@@ -621,7 +570,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets border color used by the control
@@ -655,11 +603,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
-
-		#endregion Properties
-
-		#region Methods
 
 		/// <summary>
 		/// Adds an item to collection.
@@ -749,10 +692,6 @@ namespace MetroSet.UI.Controls
 			InvalidateScroll(this, null);
 		}
 
-		#endregion Methods
-
-		#region Events
-
 		public event SelectedIndexChangedEventHandler SelectedIndexChanged;
 
 		public delegate void SelectedIndexChangedEventHandler(object sender);
@@ -771,7 +710,6 @@ namespace MetroSet.UI.Controls
 			InvalidateLayout();
 			base.OnSizeChanged(e);
 		}
-
 
 		/// <summary>
 		/// Here we will handle the selection item(s).
@@ -953,8 +891,6 @@ namespace MetroSet.UI.Controls
 			}
 			base.WndProc(ref m);
 		}
-
-		#endregion Events
 
 	}
 }

@@ -3,6 +3,7 @@
 * 
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of 
 * this software and associated documentation files (the "Software"), to deal in the 
@@ -44,8 +45,6 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetTextBox : Control, IMetroSetControl
 	{
-
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -89,28 +88,6 @@ namespace MetroSet.UI.Controls
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
 		private HorizontalAlignment _textAlign;
@@ -134,15 +111,7 @@ namespace MetroSet.UI.Controls
 		private Color _disabledBackColor;
 		private Color _disabledBorderColor;
 
-		#region Base TextBox
-
-		private TextBox _textBox = new TextBox();
-
-		#endregion
-
-		#endregion Internal Vars
-
-		#region Constructors
+		private readonly TextBox _textBox = new TextBox();
 
 		public MetroSetTextBox()
 		{
@@ -163,7 +132,7 @@ namespace MetroSet.UI.Controls
 
 		private void EvaluateVars()
 		{
-			_utl = new Utilites();
+			
 		}
 
 		private void T_Defaults()
@@ -203,10 +172,6 @@ namespace MetroSet.UI.Controls
 			_textBox.KeyPress += T_KeyPress;
 
 		}
-
-		#endregion Constructors
-
-		#region Draw Control
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
@@ -261,10 +226,6 @@ namespace MetroSet.UI.Controls
 
 		}
 
-		#endregion
-
-		#region ApplyTheme
-
 		/// <summary>
 		/// Gets or sets the style provided by the user.
 		/// </summary>
@@ -284,8 +245,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(204, 204, 204);
 					DisabledBorderColor = Color.FromArgb(155, 155, 155);
 					DisabledForeColor = Color.FromArgb(136, 136, 136);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
@@ -297,8 +256,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(80, 80, 80);
 					DisabledBorderColor = Color.FromArgb(109, 109, 109);
 					DisabledForeColor = Color.FromArgb(109, 109, 109);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -310,19 +267,19 @@ namespace MetroSet.UI.Controls
 							{
 
 								case "ForeColor":
-									ForeColor = _utl.HexColor((string)varkey.Value);
+									ForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BackColor":
-									BackColor = _utl.HexColor((string)varkey.Value);
+									BackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "HoverColor":
-									HoverColor = _utl.HexColor((string)varkey.Value);
+									HoverColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BorderColor":
-									BorderColor = _utl.HexColor((string)varkey.Value);
+									BorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "WatermarkText":
@@ -330,15 +287,15 @@ namespace MetroSet.UI.Controls
 									break;
 
 								case "DisabledBackColor":
-									DisabledBackColor = _utl.HexColor((string)varkey.Value);
+									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledBorderColor":
-									DisabledBorderColor = _utl.HexColor((string)varkey.Value);
+									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledForeColor":
-									DisabledForeColor = _utl.HexColor((string)varkey.Value);
+									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -355,14 +312,9 @@ namespace MetroSet.UI.Controls
 			Invalidate();
 		}
 
-		#endregion Theme Changing
-
-		#region Events
-
 		public new event EventHandler TextChanged;
 		public event KeyPressEventHandler KeyPressed;
 		public new event EventHandler Leave;
-
 
 		/// <summary>
 		/// Handling textbox leave event and raising the same event here.
@@ -465,7 +417,6 @@ namespace MetroSet.UI.Controls
 			Invalidate();
 		}
 
-
 		/// <summary>
 		/// Handling Keydown event of text box control.
 		/// </summary>
@@ -480,7 +431,6 @@ namespace MetroSet.UI.Controls
 			_textBox.Copy();
 			e.SuppressKeyPress = true;
 		}
-
 
 		/// <summary>
 		/// An System.EventArgs that contains the event data.
@@ -504,7 +454,6 @@ namespace MetroSet.UI.Controls
 				Controls.Add(_textBox);
 		}
 
-
 		/// <summary>
 		/// Appends text to the current text of a text box.
 		/// </summary>
@@ -513,7 +462,6 @@ namespace MetroSet.UI.Controls
 		{
 			_textBox?.AppendText(text);
 		}
-
 
 		/// <summary>
 		/// Undoes the last edit operation in the text box.
@@ -528,7 +476,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Retrieves the line number from the specified character position within the text of the control.
 		/// </summary>
@@ -538,7 +485,6 @@ namespace MetroSet.UI.Controls
 		{
 			return _textBox?.GetLineFromCharIndex(index) ?? 0;
 		}
-
 
 		/// <summary>
 		/// Retrieves the location within the control at the specified character index.
@@ -550,7 +496,6 @@ namespace MetroSet.UI.Controls
 			return _textBox.GetPositionFromCharIndex(index);
 		}
 
-
 		/// <summary>
 		/// Retrieves the index of the character nearest to the specified location.
 		/// </summary>
@@ -561,7 +506,6 @@ namespace MetroSet.UI.Controls
 			return _textBox?.GetCharIndexFromPosition(pt) ?? 0;
 		}
 
-
 		/// <summary>
 		/// Clears information about the most recent operation from the undo buffer of the text box.
 		/// </summary>
@@ -569,7 +513,6 @@ namespace MetroSet.UI.Controls
 		{
 			_textBox?.ClearUndo();
 		}
-
 
 		/// <summary>
 		/// Copies the current selection in the text box to the Clipboard.
@@ -579,7 +522,6 @@ namespace MetroSet.UI.Controls
 			_textBox?.Copy();
 		}
 
-
 		/// <summary>
 		/// Moves the current selection in the text box to the Clipboard.
 		/// </summary>
@@ -587,7 +529,6 @@ namespace MetroSet.UI.Controls
 		{
 			_textBox?.Cut();
 		}
-
 
 		/// <summary>
 		/// Selects all text in the text box.
@@ -597,7 +538,6 @@ namespace MetroSet.UI.Controls
 			_textBox?.SelectAll();
 		}
 
-
 		/// <summary>
 		/// Specifies that the value of the TextBoxBase.SelectionLength property is zero so that no characters are selected in the control.
 		/// </summary>
@@ -605,7 +545,6 @@ namespace MetroSet.UI.Controls
 		{
 			_textBox?.DeselectAll();
 		}
-
 
 		/// <summary>
 		/// Replaces the current selection in the text box with the contents of the Clipboard.
@@ -616,7 +555,6 @@ namespace MetroSet.UI.Controls
 			_textBox?.Paste(clipFormat);
 		}
 
-
 		/// <summary>
 		/// Selects a range of text in the text box.
 		/// </summary>
@@ -626,10 +564,6 @@ namespace MetroSet.UI.Controls
 		{
 			_textBox?.Select(start, length);
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the border style.
@@ -656,7 +590,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets how text is aligned in a TextBox control.
 		/// </summary>
@@ -675,7 +608,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the background color of the control.
 		/// </summary>
@@ -692,7 +624,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the color of the control whenever hovered.
 		/// </summary>
@@ -708,7 +639,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the border color of the control.
 		/// </summary>
@@ -723,7 +653,6 @@ namespace MetroSet.UI.Controls
 				Invalidate();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the foreground color of the control.
@@ -742,7 +671,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets a value indicating whether text in the text box is read-only.
 		/// </summary>
@@ -760,7 +688,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets a value indicating whether the text in the TextBox control should appear as the default password character.
 		/// </summary>
@@ -777,7 +704,6 @@ namespace MetroSet.UI.Controls
 				}
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets a value indicating whether this is a multiline TextBox control.
@@ -803,13 +729,11 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the background image.
 		/// </summary>
 		[Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public override Image BackgroundImage => null;
-
 
 		/// <summary>
 		/// Gets or sets the current text in the TextBox.
@@ -828,7 +752,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the text in the TextBox while being empty.
 		/// </summary>
@@ -844,7 +767,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the image of the control.
 		/// </summary>
@@ -858,7 +780,6 @@ namespace MetroSet.UI.Controls
 				Invalidate();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets a value specifying the source of complete strings used for automatic completion.
@@ -878,7 +799,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets a value specifying the source of complete strings used for automatic completion.
 		/// </summary>
@@ -896,7 +816,6 @@ namespace MetroSet.UI.Controls
 				Invalidate();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets an option that controls how automatic completion works for the TextBox.
@@ -952,7 +871,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the ContextMenuStrip associated with this control.
 		/// </summary>
@@ -984,7 +902,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets disabled backcolor used by the control
 		/// </summary>
@@ -998,7 +915,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the border color while the control disabled.
@@ -1032,9 +948,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
-
-		#endregion
 
 	}
 }

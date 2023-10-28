@@ -3,6 +3,7 @@
 * 
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of 
 * this software and associated documentation files (the "Software"), to deal in the 
@@ -49,8 +50,6 @@ namespace MetroSet.UI.Controls
 	public class MetroSetRadioButton : Control, IMetroSetControl, IDisposable
 	{
 
-		#region Interfaces
-
 		/// <summary>
 		/// Gets or sets the style associated with the control.
 		/// </summary>
@@ -93,42 +92,16 @@ namespace MetroSet.UI.Controls
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
 		private bool _checked;
-		private IntAnimate _animator;
+		private readonly IntAnimate _animator;
 
 		private int _group;
 		private Color _backgroundColor;
 		private Color _borderColor;
 		private Color _disabledBorderColor;
 		private Color _checkSignColor;
-
-		#endregion Internal Vars
-
-		#region Constructors
 
 		public MetroSetRadioButton()
 		{
@@ -138,16 +111,12 @@ namespace MetroSet.UI.Controls
 				ControlStyles.SupportsTransparentBackColor, true);
 			UpdateStyles();
 			base.Font = MetroSetFonts.SemiBold(10);
-			_utl = new Utilites();
+			
 			_animator = new IntAnimate();
 			_animator.Setting(100, 0, 255);
 			_animator.Update = (alpha) => Invalidate();
 			ApplyTheme();
 		}
-
-		#endregion Constructors
-
-		#region ApplyTheme
 
 		/// <summary>
 		/// Gets or sets the style provided by the user.
@@ -166,8 +135,6 @@ namespace MetroSet.UI.Controls
 					BorderColor = Color.FromArgb(155, 155, 155);
 					DisabledBorderColor = Color.FromArgb(205, 205, 205);
 					CheckSignColor = Color.FromArgb(65, 177, 225);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
@@ -177,8 +144,6 @@ namespace MetroSet.UI.Controls
 					BorderColor = Color.FromArgb(155, 155, 155);
 					DisabledBorderColor = Color.FromArgb(85, 85, 85);
 					CheckSignColor = Color.FromArgb(65, 177, 225);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -189,23 +154,23 @@ namespace MetroSet.UI.Controls
 							switch (varkey.Key)
 							{
 								case "ForeColor":
-									ForeColor = _utl.HexColor((string)varkey.Value);
+									ForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BackColor":
-									BackgroundColor = _utl.HexColor((string)varkey.Value);
+									BackgroundColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BorderColor":
-									BorderColor = _utl.HexColor((string)varkey.Value);
+									BorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledBorderColor":
-									DisabledBorderColor = _utl.HexColor((string)varkey.Value);
+									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "CheckColor":
-									CheckSignColor = _utl.HexColor((string)varkey.Value);
+									CheckSignColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -232,10 +197,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-		#endregion Theme Changing
-
-		#region Draw Control
-
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			var g = e.Graphics;
@@ -247,38 +208,26 @@ namespace MetroSet.UI.Controls
 
 			using (var backBrush = new SolidBrush(Enabled ? BackgroundColor : Color.FromArgb(238, 238, 238)))
 			{
-				using (var checkMarkBrush = new SolidBrush(Enabled ? Checked || _animator.Active ? Color.FromArgb(alpha, CheckSignColor) : BackgroundColor : Checked || _animator.Active ? Color.FromArgb(alpha, DisabledBorderColor) : Color.FromArgb(238, 238, 238)))
-				{
-					using (var p = new Pen(Enabled ? BorderColor : DisabledBorderColor))
-					{
-						g.FillEllipse(backBrush, rect);
-						if (Enabled)
-						{
-							g.DrawEllipse(p, rect);
-							g.FillEllipse(checkMarkBrush, new Rectangle(3, 3, 11, 10));
-						}
-						else
-						{
-							g.FillEllipse(checkMarkBrush, new Rectangle(3, 3, 11, 10));
-							g.DrawEllipse(p, rect);
-						}
-					}
-				}
+                using var checkMarkBrush = new SolidBrush(Enabled ? Checked || _animator.Active ? Color.FromArgb(alpha, CheckSignColor) : BackgroundColor : Checked || _animator.Active ? Color.FromArgb(alpha, DisabledBorderColor) : Color.FromArgb(238, 238, 238));
+                using var p = new Pen(Enabled ? BorderColor : DisabledBorderColor);
+                g.FillEllipse(backBrush, rect);
+                if (Enabled)
+                {
+                    g.DrawEllipse(p, rect);
+                    g.FillEllipse(checkMarkBrush, new Rectangle(3, 3, 11, 10));
+                }
+                else
+                {
+                    g.FillEllipse(checkMarkBrush, new Rectangle(3, 3, 11, 10));
+                    g.DrawEllipse(p, rect);
+                }
 
-			}
+            }
 			g.SmoothingMode = SmoothingMode.Default;
-			using (var tb = new SolidBrush(ForeColor))
-			{
-				using (var sf = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center })
-				{
-					g.DrawString(Text, Font, tb, new Rectangle(19, 2, Width, Height - 4), sf);
-				}
-			}
-		}
-
-		#endregion Draw Control
-
-		#region Events
+            using var tb = new SolidBrush(ForeColor);
+            using var sf = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center };
+            g.DrawString(Text, Font, tb, new Rectangle(19, 2, Width, Height - 4), sf);
+        }
 
 		public event CheckedChangedEventHandler CheckedChanged;
 		public delegate void CheckedChangedEventHandler(object sender);
@@ -310,15 +259,11 @@ namespace MetroSet.UI.Controls
 		/// </summary>
 		private void UpdateState()
 		{
-			if (!IsHandleCreated || !Checked)
-				return;
+			if (!IsHandleCreated || !Checked) return;
 			foreach (Control c in Parent.Controls)
-			{
-				if (!ReferenceEquals(c, this) && c is MetroSetRadioButton && ((MetroSetRadioButton)c).Group == Group)
-				{
-					((MetroSetRadioButton)c).Checked = false;
-				}
-			}
+				if (!ReferenceEquals(c, this) && c is MetroSetRadioButton btn && btn.Group == Group)
+					btn.Checked = false;
+
 			CheckedChanged?.Invoke(this);
 		}
 
@@ -337,10 +282,6 @@ namespace MetroSet.UI.Controls
 
 			base.WndProc(ref m);
 		}
-
-		#endregion Events
-
-		#region Properties
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the control is checked.
@@ -378,7 +319,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets fore color used by the control
 		/// </summary>
@@ -406,7 +346,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the border color.
 		/// </summary>
@@ -421,7 +360,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the border color while the control disabled.
 		/// </summary>
@@ -435,7 +373,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the color of the check symbol.
@@ -470,11 +407,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
-		#endregion Properties
-
-		#region Disposing
-
 		/// <summary>
 		/// Disposing Methods.
 		/// </summary>
@@ -483,8 +415,6 @@ namespace MetroSet.UI.Controls
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
-
-		#endregion
 
 	}
 }

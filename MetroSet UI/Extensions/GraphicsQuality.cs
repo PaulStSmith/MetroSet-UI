@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace MetroSet.UI.Extensions
 {
-    public class GraphicsQuality
+    public static class GraphicsQuality
     {
 	    /// <summary>
 	    /// sets The quality of the drawing to the given graphics.
@@ -17,7 +17,7 @@ namespace MetroSet.UI.Extensions
 	    /// <param name="pixelOffsetMode">Gets or set a value specifying how pixels are offset during rendering of this </param>
 	    /// <param name="interpolationMode">Gets or sets the interpolation mode associated with this System.Drawing.Graphics.</param>
 	    /// <param name="compositingQuality">Gets or sets the rendering quality of composited images drawn to this System.Drawing.Graphics.</param>
-	    public void SetQuality(Graphics e, 
+	    public static void SetQuality(Graphics e, 
 	                           SmoothingMode smoothingMode = SmoothingMode.Default,
 	                           TextRenderingHint textRenderingHint = TextRenderingHint.ClearTypeGridFit, 
 	                           PixelOffsetMode pixelOffsetMode = PixelOffsetMode.Default,

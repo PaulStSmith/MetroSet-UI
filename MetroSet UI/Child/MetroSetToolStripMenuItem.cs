@@ -3,6 +3,7 @@
 * 
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of 
 * this software and associated documentation files (the "Software"), to deal in the 
@@ -31,17 +32,12 @@ namespace MetroSet.UI.Child
 
 	public sealed class MetroSetToolStripMenuItem : ToolStripMenuItem
 	{
-		#region Constructors
 
 		public MetroSetToolStripMenuItem()
 		{
 			AutoSize = false;
 			Size = new Size(160, 30);
 		}
-
-		#endregion Constructors
-
-		#region Adding DropDowns
 
 		protected override ToolStripDropDown CreateDefaultDropDown()
 		{
@@ -52,6 +48,5 @@ namespace MetroSet.UI.Child
 			return dp;
 		}
 
-		#endregion Adding DropDowns
 	}
 }

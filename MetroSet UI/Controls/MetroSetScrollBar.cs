@@ -3,6 +3,7 @@
 * 
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of 
 * this software and associated documentation files (the "Software"), to deal in the 
@@ -40,8 +41,6 @@ namespace MetroSet.UI.Controls
 	[DefaultProperty("Value")]
 	public class MetroSetScrollBar : Control, IMetroSetControl
 	{
-
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -85,28 +84,6 @@ namespace MetroSet.UI.Controls
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
 		private int _minimum;
@@ -125,10 +102,6 @@ namespace MetroSet.UI.Controls
 		private Color _disabledForeColor;
 		private Color _disabledBackColor;
 
-		#endregion Internal Vars
-
-		#region Constructors
-
 		public MetroSetScrollBar()
 		{
 			SetStyle(
@@ -140,7 +113,7 @@ namespace MetroSet.UI.Controls
 				ControlStyles.SupportsTransparentBackColor, true);
 			UpdateStyles();
 			SetDefaults();
-			_utl = new Utilites();
+			
 			ApplyTheme();
 
 		}
@@ -152,10 +125,6 @@ namespace MetroSet.UI.Controls
 			_value = 0;
 			_thumbSize = 20;
 		}
-
-		#endregion Constructors
-
-		#region ApplyTheme
 
 		/// <summary>
 		/// Gets or sets the style provided by the user.
@@ -173,8 +142,6 @@ namespace MetroSet.UI.Controls
 					BackColor = Color.White;
 					DisabledBackColor = Color.FromArgb(204, 204, 204);
 					DisabledForeColor = Color.FromArgb(136, 136, 136);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
@@ -183,8 +150,6 @@ namespace MetroSet.UI.Controls
 					BackColor = Color.FromArgb(30, 30, 30);
 					DisabledBackColor = Color.FromArgb(80, 80, 80);
 					DisabledForeColor = Color.FromArgb(109, 109, 109);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -196,19 +161,19 @@ namespace MetroSet.UI.Controls
 							{
 
 								case "ForeColor":
-									ForeColor = _utl.HexColor((string)varkey.Value);
+									ForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BackColor":
-									BackColor = _utl.HexColor((string)varkey.Value);
+									BackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledBackColor":
-									DisabledBackColor = _utl.HexColor((string)varkey.Value);
+									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledForeColor":
-									DisabledForeColor = _utl.HexColor((string)varkey.Value);
+									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -227,29 +192,17 @@ namespace MetroSet.UI.Controls
 			Invalidate();
 		}
 
-		#endregion Theme Changing
-
-		#region Draw Control
-
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			var g = e.Graphics;
 
 			var r = new Rectangle(0, 0, Width, Height);
 
-			using (var bg = new SolidBrush(Enabled ? BackColor : DisabledBackColor))
-			{
-				using (var thumbBrush = new SolidBrush(Enabled ? ForeColor : DisabledForeColor))
-				{
-					g.FillRectangle(bg, r);
-					g.FillRectangle(thumbBrush, _thumb);
-				}
-			}
-		}
-
-		#endregion
-
-		#region Properties
+            using var bg = new SolidBrush(Enabled ? BackColor : DisabledBackColor);
+            using var thumbBrush = new SolidBrush(Enabled ? ForeColor : DisabledForeColor);
+            g.FillRectangle(bg, r);
+            g.FillRectangle(thumbBrush, _thumb);
+        }
 
 		/// <summary>
 		/// Gets or sets the lower limit of the scrollable range.
@@ -272,7 +225,6 @@ namespace MetroSet.UI.Controls
 				InvalidateLayout();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the upper limit of the scrollable range.
@@ -308,7 +260,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets a numeric value that represents the current position of the scroll bar box.
 		/// </summary>
@@ -335,7 +286,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the distance to move a scroll bar in response to a small scroll command.
 		/// </summary>
@@ -350,8 +300,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
-
 
 		/// <summary>
 		/// Gets or sets the distance to move a scroll bar in response to a large scroll command.
@@ -368,7 +316,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the scroll bar orientation.
 		/// </summary>
@@ -383,7 +330,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets fore color used by the control
@@ -410,7 +356,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets disabled back color used by the control
@@ -444,11 +389,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
-
-		#endregion
-
-		#region Events
 
 		protected override void OnSizeChanged(EventArgs e)
 		{
@@ -515,19 +455,13 @@ namespace MetroSet.UI.Controls
 				Invalidate();
 				return;
 			}
-			switch (Orientation)
-			{
-				case ScrollOrientate.Vertical:
-					_val = e.Y < _thumb.Y ? Value - LargeChange : Value + LargeChange;
-					break;
-				case ScrollOrientate.Horizontal:
-					_val = e.X < _thumb.X ? Value - LargeChange : Value + LargeChange;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-
-			Value = Math.Min(Math.Max(_val, Minimum), Maximum);
+            _val = Orientation switch
+            {
+                ScrollOrientate.Vertical => e.Y < _thumb.Y ? Value - LargeChange : Value + LargeChange,
+                ScrollOrientate.Horizontal => e.X < _thumb.X ? Value - LargeChange : Value + LargeChange,
+                _ => throw new InvalidOperationException($@"Invalid value in Orientation property."),
+            };
+            Value = Math.Min(Math.Max(_val, Minimum), Maximum);
 			InvalidatePosition();
 		}
 
@@ -603,10 +537,6 @@ namespace MetroSet.UI.Controls
 			return (double)(Value - Minimum) / (Maximum - Minimum);
 		}
 
-		#endregion
-
 	}
-
-
 
 }

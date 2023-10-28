@@ -3,6 +3,7 @@
 * 
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of 
 * this software and associated documentation files (the "Software"), to deal in the 
@@ -45,7 +46,6 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetSwitch : Control, IMetroSetControl, IDisposable
 	{
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -89,28 +89,6 @@ namespace MetroSet.UI.Controls
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private StyleManager _styleManager;
 		private bool _switched;
 		private Style _style;
@@ -127,10 +105,6 @@ namespace MetroSet.UI.Controls
 		private Color _symbolColor;
 		private Color _unCheckColor;
 
-		#endregion Internal Vars
-
-		#region Constructors
-
 		public MetroSetSwitch()
 		{
 			SetStyle(
@@ -139,7 +113,7 @@ namespace MetroSet.UI.Controls
 				ControlStyles.SupportsTransparentBackColor, true);
 			UpdateStyles();
 			base.Cursor = Cursors.Hand;
-			_utl = new Utilites();
+			
 			_animator = new IntAnimate();
 			_animator.Setting(100, 0, 132);
 			_animator.Update = (alpha) =>
@@ -149,10 +123,6 @@ namespace MetroSet.UI.Controls
 			};
 			ApplyTheme();
 		}
-
-		#endregion Constructors
-
-		#region ApplyTheme
 
 		private void UpdateProperties()
 		{
@@ -180,8 +150,6 @@ namespace MetroSet.UI.Controls
 					CheckColor = Color.FromArgb(65, 177, 225);
 					DisabledUnCheckColor = Color.FromArgb(200, 205, 205, 205);
 					DisabledCheckColor = Color.FromArgb(100, 65, 177, 225);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
@@ -195,8 +163,6 @@ namespace MetroSet.UI.Controls
 					CheckColor = Color.FromArgb(65, 177, 225);
 					DisabledUnCheckColor = Color.FromArgb(200, 205, 205, 205);
 					DisabledCheckColor = Color.FromArgb(100, 65, 177, 225);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -208,35 +174,35 @@ namespace MetroSet.UI.Controls
 							switch (varkey.Key)
 							{
 								case "BackColor":
-									BackColor = _utl.HexColor((string)varkey.Value);
+									BackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BorderColor":
-									BorderColor = _utl.HexColor((string)varkey.Value);
+									BorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledBorderColor":
-									DisabledBorderColor = _utl.HexColor((string)varkey.Value);
+									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "SymbolColor":
-									SymbolColor = _utl.HexColor((string)varkey.Value);
+									SymbolColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "UnCheckColor":
-									UnCheckColor = _utl.HexColor((string)varkey.Value);
+									UnCheckColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "CheckColor":
-									CheckColor = _utl.HexColor((string)varkey.Value);
+									CheckColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledUnCheckColor":
-									DisabledUnCheckColor = _utl.HexColor((string)varkey.Value);
+									DisabledUnCheckColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledCheckColor":
-									DisabledCheckColor = _utl.HexColor((string)varkey.Value);
+									DisabledCheckColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -249,10 +215,6 @@ namespace MetroSet.UI.Controls
 					throw new ArgumentOutOfRangeException(nameof(style), style, null);
 			}
 		}
-
-		#endregion ApplyTheme
-
-		#region Draw Control
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
@@ -283,10 +245,6 @@ namespace MetroSet.UI.Controls
 				}
 			}
 		}
-
-		#endregion Draw Control
-
-		#region Events
 
 		public delegate void SwitchedChangedEventHandler(object sender);
 
@@ -320,14 +278,10 @@ namespace MetroSet.UI.Controls
 		/// <param name="m"></param>
 		protected override void WndProc(ref Message m)
 		{
-			_utl.SmoothCursor(ref m);
+			Utilites.SmoothCursor(ref m);
 
 			base.WndProc(ref m);
 		}
-
-		#endregion Events
-
-		#region Properties
 
 		/// <summary>
 		/// Specifies the state of a control, such as a check box, that can be checked, unchecked.
@@ -374,7 +328,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the Checked backColor.
 		/// </summary>
@@ -388,7 +341,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the border color while the control disabled.
@@ -404,7 +356,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the CheckedBackColor while disabled.
 		/// </summary>
@@ -419,7 +370,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the Unchecked BackColor while disabled.
 		/// </summary>
@@ -433,7 +383,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets fore color used by the control
@@ -462,7 +411,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the color of the check symbol.
 		/// </summary>
@@ -476,7 +424,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the Unchecked backColor.
@@ -511,11 +458,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
-		#endregion Properties
-
-		#region Disposing
-
 		/// <summary>
 		/// Disposing Methods.
 		/// </summary>
@@ -524,8 +466,6 @@ namespace MetroSet.UI.Controls
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
-
-		#endregion
 
 	}
 }

@@ -3,6 +3,7 @@
 * 
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of 
 * this software and associated documentation files (the "Software"), to deal in the 
@@ -42,7 +43,6 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetDivider : Control, IMetroSetControl
 	{
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -86,37 +86,11 @@ namespace MetroSet.UI.Controls
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
 
 		private DividerStyle _orientation;
 		private int _thickness;
-
-		#endregion Internal Vars
-
-		#region Constructors
 
 		public MetroSetDivider()
 		{
@@ -124,14 +98,10 @@ namespace MetroSet.UI.Controls
 				ControlStyles.OptimizedDoubleBuffer |
 				ControlStyles.SupportsTransparentBackColor, true);
 			UpdateStyles();
-			_utl = new Utilites();
+			
 			ApplyTheme();
 			Orientation = DividerStyle.Horizontal;
 		}
-
-		#endregion Constructors
-
-		#region ApplyTheme
 
 		/// <summary>
 		/// Gets or sets the style provided by the user.
@@ -147,16 +117,12 @@ namespace MetroSet.UI.Controls
 				case Style.Light:
 					Thickness = 1;
 					ForeColor = Color.Black;
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
 				case Style.Dark:
 					Thickness = 1;
 					ForeColor = Color.FromArgb(170, 170, 170);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -182,7 +148,7 @@ namespace MetroSet.UI.Controls
 									break;
 
 								case "ForeColor":
-									ForeColor = _utl.HexColor((string)varkey.Value);
+									ForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -201,10 +167,6 @@ namespace MetroSet.UI.Controls
 			Invalidate();
 		}
 
-		#endregion ApplyTheme
-
-		#region Draw Control
-
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			var g = e.Graphics;
@@ -216,10 +178,6 @@ namespace MetroSet.UI.Controls
 					g.DrawLine(p, Thickness, 0, Thickness, Height);
 			}
 		}
-
-		#endregion Draw Control
-
-		#region Properties
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -235,7 +193,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the divider thickness.
 		/// </summary>
@@ -249,7 +206,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// I make BackColor inaccessible cause I want it to be just transparent and I used another property for the same job in following properties. 
@@ -282,10 +238,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-		#endregion Properties
-
-		#region Events
-
 		/// <summary>
 		/// Here we handle the width and height while resizing.
 		/// </summary>
@@ -303,6 +255,5 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-		#endregion Events
 	}
 }

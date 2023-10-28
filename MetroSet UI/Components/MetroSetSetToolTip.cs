@@ -3,6 +3,7 @@
  * 
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of 
  * this software and associated documentation files (the "Software"), to deal in the 
@@ -41,8 +42,6 @@ namespace MetroSet.UI.Components
 	[DefaultEvent("Popup")]
 	public class MetroSetSetToolTip : ToolTip, IMetroSetControl
 	{
-
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -85,70 +84,30 @@ namespace MetroSet.UI.Components
 			set => _styleManager = value;
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Methods _mth;
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private StyleManager _styleManager;
 		private Style _style;
-
-		#endregion Internal Vars
-
-		#region Constructors
 
 		public MetroSetSetToolTip()
 		{
 			OwnerDraw = true;
 			Draw += OnDraw;
 			Popup += ToolTip_Popup;
-			_mth = new Methods();
-			_utl = new Utilites();
 			ApplyTheme();
 		}
-
-		#endregion Constructors
-
-		#region Draw Control
-
 
 		private void OnDraw(object sender, DrawToolTipEventArgs e)
 		{
 			var g = e.Graphics;
 			g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 			var rect = new Rectangle(e.Bounds.X, e.Bounds.Y, e.Bounds.Width - 1, e.Bounds.Height - 1);
-			using (var bg = new SolidBrush(BackColor))
-			using (var stroke = new Pen(BorderColor))
-			using (var tb = new SolidBrush(ForeColor))
-			{
-				g.FillRectangle(bg, rect);
-				g.DrawString(e.ToolTipText, MetroSetFonts.Light(11), tb, rect, _mth.SetPosition());
-				g.DrawRectangle(stroke, rect);
-			}
+            using var bg = new SolidBrush(BackColor);
+            using var stroke = new Pen(BorderColor);
+            using var tb = new SolidBrush(ForeColor);
+            g.FillRectangle(bg, rect);
+            g.DrawString(e.ToolTipText, MetroSetFonts.Light(11), tb, rect, Methods.SetPosition());
+            g.DrawRectangle(stroke, rect);
 
-		}
-
-		#endregion
-
-		#region ApplyTheme
+        }
 
 		/// <summary>
 		/// Gets or sets the style provided by the user.
@@ -165,16 +124,12 @@ namespace MetroSet.UI.Components
 					ForeColor = Color.FromArgb(170, 170, 170);
 					BackColor = Color.White;
 					BorderColor = Color.FromArgb(204, 204, 204);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					break;
 
 				case Style.Dark:
 					ForeColor = Color.FromArgb(204, 204, 204);
 					BackColor = Color.FromArgb(32, 32, 32);
 					BorderColor = Color.FromArgb(64, 64, 64);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					break;
 
 				case Style.Custom:
@@ -186,15 +141,15 @@ namespace MetroSet.UI.Components
 							{
 
 								case "BackColor":
-									BackColor = _utl.HexColor((string)varkey.Value);
+									BackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BorderColor":
-									BorderColor = _utl.HexColor((string)varkey.Value);
+									BorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "ForeColor":
-									ForeColor = _utl.HexColor((string)varkey.Value);
+									ForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -207,16 +162,11 @@ namespace MetroSet.UI.Components
 			}
 		}
 
-		#endregion ApplyTheme
-
-		#region Properties
-
 		/// <summary>
 		/// Gets or sets a value indicating whether a ToolTip window is displayed, even when its parent control is not active.
 		/// </summary>
 		[Browsable(false)]
 		public new bool ShowAlways { get; } = false;
-
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the ToolTip is drawn by the operating system or by code that you provide.
@@ -231,13 +181,11 @@ namespace MetroSet.UI.Components
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets a value indicating whether the ToolTip should use a balloon window.
 		/// </summary>
 		[Browsable(false)]
 		public new bool IsBalloon { get; } = false;
-
 
 		/// <summary>
 		/// Gets or sets the background color for the ToolTip.
@@ -245,13 +193,11 @@ namespace MetroSet.UI.Components
 		[Browsable(false)]
 		public new Color BackColor { get; set; }
 
-
 		/// <summary>
 		/// Gets or sets the foreground color for the ToolTip.
 		/// </summary>
 		[Category("MetroSet Framework"), Description("Gets or sets the foreground color for the ToolTip.")]
 		public new Color ForeColor { get; set; }
-
 
 		/// <summary>
 		/// Gets or sets a title for the ToolTip window.
@@ -259,13 +205,11 @@ namespace MetroSet.UI.Components
 		[Category("MetroSet Framework"), Description("Gets or sets a title for the ToolTip window.")]
 		public new string ToolTipTitle { get; } = string.Empty;
 
-
 		/// <summary>
 		/// Defines a set of standardized icons that can be associated with a ToolTip.
 		/// </summary>
 		[Browsable(false)]
 		public new ToolTipIcon ToolTipIcon { get; } = ToolTipIcon.None;
-
 
 		/// <summary>
 		/// Gets or sets the border color for the ToolTip.
@@ -276,7 +220,7 @@ namespace MetroSet.UI.Components
 		private bool _isDerivedStyle = true;
 
 		/// <summary>
-		/// Gets or sets the whether this control reflect to parent form style.
+		/// Gets or sets the whether this control reflect to parent metroForm style.
 		/// Set it to false if you want the style of this control be independent. 
 		/// </summary>
 		[Category("MetroSet Framework")]
@@ -290,10 +234,6 @@ namespace MetroSet.UI.Components
 				_isDerivedStyle = value;
 			}
 		}
-
-		#endregion
-
-		#region Methods
 
 		/// <summary>
 		/// The ToolTip text to display when the pointer is on the control.
@@ -310,10 +250,6 @@ namespace MetroSet.UI.Components
 			}
 		}
 
-		#endregion
-
-		#region Events 
-
 		/// <summary>
 		/// Here we handle popup event and we set the style of controls for tooltip.
 		/// </summary>
@@ -325,21 +261,15 @@ namespace MetroSet.UI.Components
 			if (control is IMetroSetControl iControl)
 			{
 				Style = iControl.Style;
-				ThemeAuthor = iControl.ThemeAuthor;
-				ThemeName = iControl.ThemeName;
 				StyleManager = iControl.StyleManager;
 			}
-			else if (control is IMetroForm)
+			else if (control is IMetroForm metroForm)
 			{
-				Style = ((IMetroForm)control).Style;
-				ThemeAuthor = ((IMetroForm)control).ThemeAuthor;
-				ThemeName = ((IMetroForm)control).ThemeName;
-				StyleManager = ((IMetroForm)control).StyleManager;
+				Style = metroForm.Style;
+				StyleManager = metroForm.StyleManager;
 			}
 			e.ToolTipSize = new Size(e.ToolTipSize.Width + 30, e.ToolTipSize.Height + 6);
 		}
-
-		#endregion
 
 	}
 }

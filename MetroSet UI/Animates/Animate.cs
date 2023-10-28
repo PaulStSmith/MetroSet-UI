@@ -17,16 +17,13 @@ namespace MetroSet.UI.Animates
 		/// </summary>
 		public MethodInvoker Complete { get; set; }
 
-		#region Internal Vars
 		// a bad way to record time...
 		private DateTime _lastUpdateTime;
 		// I use timer instead of thread, so you can modify control without Control.Invoke
 		private Timer _animateTimer;
 		// reverse animate
 		private bool _reverse;
-		#endregion
 
-		#region Constructors
 		// choose best interval for yourself
 		public Animate(int updateInterval = 16)
 		{
@@ -39,9 +36,7 @@ namespace MetroSet.UI.Animates
 			_reverse = false;
 			Alpha = 0.0;
 		}
-		#endregion
 
-		#region Functions
 		// just set once, and use start, back or reverse to play animate
 		public void Setting(int duration, T initial, T end, EasingType easing = EasingType.Linear)
 		{
@@ -135,9 +130,7 @@ namespace MetroSet.UI.Animates
 			Setting(duration, initial, end, easing);
 			Back();
 		}
-		#endregion
 
-		#region Events
 		// process frame
 		private void OnFrameUpdate(object sender, EventArgs e)
 		{
@@ -159,9 +152,7 @@ namespace MetroSet.UI.Animates
 			Pause();
 			Complete?.Invoke();
 		}
-		#endregion
 
-		#region Properties
 		// progress. value between 0 and 1
 		public double Alpha { get; set; }
 
@@ -187,13 +178,10 @@ namespace MetroSet.UI.Animates
 
 		// store you own variable here
 		public object Tag { get; set; }
-		#endregion
 
-		#region Dispose
 		public void Dispose()
 		{
 			_animateTimer.Dispose();
 		}
-		#endregion
 	}
 }

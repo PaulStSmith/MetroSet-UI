@@ -9,6 +9,7 @@ using MetroSet.UI.Enums;
  *
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -30,61 +31,53 @@ using MetroSet.UI.Enums;
 
 namespace MetroSet.UI.Actions
 {
-	internal class MetroSetControlBoxActionList : DesignerActionList
-	{
-		private readonly MetroSetControlBox _metroSetControBox;
+    internal class MetroSetControlBoxActionList : DesignerActionList
+    {
+        private readonly MetroSetControlBox _metroSetControBox;
 
-		public MetroSetControlBoxActionList(IComponent component) : base(component)
-		{
-			_metroSetControBox = (MetroSetControlBox)component;
-		}
+        public MetroSetControlBoxActionList(IComponent component) : base(component)
+        {
+            _metroSetControBox = (MetroSetControlBox)component;
+        }
 
-		public Style Style
-		{
-			get => _metroSetControBox.Style;
-			set => _metroSetControBox.Style = value;
-		}
+        public Style Style
+        {
+            get => _metroSetControBox.Style;
+            set => _metroSetControBox.Style = value;
+        }
 
-		public string ThemeAuthor => _metroSetControBox.ThemeAuthor;
+        public StyleManager StyleManager
+        {
+            get => _metroSetControBox.StyleManager;
+            set => _metroSetControBox.StyleManager = value;
+        }
 
-		public string ThemeName => _metroSetControBox.ThemeName;
+        public bool MaximizeBox
+        {
+            get => _metroSetControBox.MaximizeBox;
+            set => _metroSetControBox.MaximizeBox = value;
+        }
 
-		public StyleManager StyleManager
-		{
-			get => _metroSetControBox.StyleManager;
-			set => _metroSetControBox.StyleManager = value;
-		}
+        public bool MinimizeBox
+        {
+            get => _metroSetControBox.MinimizeBox;
+            set => _metroSetControBox.MinimizeBox = value;
+        }
 
-		public bool MaximizeBox
-		{
-			get => _metroSetControBox.MaximizeBox;
-			set => _metroSetControBox.MaximizeBox = value;
-		}
+        public override DesignerActionItemCollection GetSortedActionItems()
+        {
+            DesignerActionItemCollection items = new()
+            {
+                new DesignerActionHeaderItem("MetroSet Framework"),
+                new DesignerActionPropertyItem("StyleManager", "StyleManager", "MetroSet Framework", "Gets or sets the stylemanager for the control."),
+                new DesignerActionPropertyItem("Style", "Style", "MetroSet Framework", "Gets or sets the style."),
 
-		public bool MinimizeBox
-		{
-			get => _metroSetControBox.MinimizeBox;
-			set => _metroSetControBox.MinimizeBox = value;
-		}
+                new DesignerActionHeaderItem("Appearance"),
+                new DesignerActionPropertyItem("MaximizeBox", "Enable MaximizeBox", "Appearance", "Gets or sets a value indicating whether the Maximize button is Enabled in the caption bar of the form."),
+                new DesignerActionPropertyItem("MinimizeBox", "Enable MinimizeBox", "Appearance", "Gets or sets a value indicating whether the Minimize button is Enabled in the caption bar of the form.")
+            };
 
-		public override DesignerActionItemCollection GetSortedActionItems()
-		{
-			DesignerActionItemCollection items = new DesignerActionItemCollection
-		{
-			new DesignerActionHeaderItem("MetroSet Framework"),
-			new DesignerActionPropertyItem("StyleManager", "StyleManager", "MetroSet Framework", "Gets or sets the stylemanager for the control."),
-			new DesignerActionPropertyItem("Style", "Style", "MetroSet Framework", "Gets or sets the style."),
-
-			new DesignerActionHeaderItem("Informations"),
-			new DesignerActionPropertyItem("ThemeName", "ThemeName", "Informations", "Gets or sets the The Theme name associated with the theme."),
-			new DesignerActionPropertyItem("ThemeAuthor", "ThemeAuthor", "Informations", "Gets or sets the The Author name associated with the theme."),
-
-			new DesignerActionHeaderItem("Appearance"),
-			new DesignerActionPropertyItem("MaximizeBox", "Enable MaximizeBox", "Appearance", "Gets or sets a value indicating whether the Maximize button is Enabled in the caption bar of the form."),
-			new DesignerActionPropertyItem("MinimizeBox", "Enable MinimizeBox", "Appearance", "Gets or sets a value indicating whether the Minimize button is Enabled in the caption bar of the form.")
-		};
-
-			return items;
-		}
-	}
+            return items;
+        }
+    }
 }

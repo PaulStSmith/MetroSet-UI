@@ -3,6 +3,7 @@
 * 
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of 
 * this software and associated documentation files (the "Software"), to deal in the 
@@ -42,8 +43,6 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetComboBox : ComboBox, IMetroSetControl
 	{
-
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -87,29 +86,6 @@ namespace MetroSet.UI.Controls
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Methods _mth;
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
 		private int _startIndex;
@@ -122,10 +98,6 @@ namespace MetroSet.UI.Controls
 		private Color _disabledBackColor;
 		private Color _disabledForeColor;
 		private Color _disabledBorderColor;
-
-		#endregion Internal Vars
-
-		#region Constructors
 
 		public MetroSetComboBox()
 		{
@@ -146,15 +118,9 @@ namespace MetroSet.UI.Controls
 			_startIndex = 0;
 			CausesValidation = false;
 			DropDownStyle = ComboBoxStyle.DropDownList;
-			_mth = new Methods();
-			_utl = new Utilites();
 
 			ApplyTheme();
 		}
-
-		#endregion Constructors
-
-		#region Properties
 
 		/// <summary>
 		/// Gets or sets the index specifying the currently selected item.
@@ -206,7 +172,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets border color used by the control
 		/// </summary>
@@ -220,7 +185,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets arrow color used by the control
@@ -236,7 +200,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets ForeColor of the selected item used by the control
 		/// </summary>
@@ -250,7 +213,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets BackColor of the selected item used by the control
@@ -266,7 +228,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets BackColor used by the control while disabled.
 		/// </summary>
@@ -281,7 +242,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the ForeColor of the control whenever while disabled.
 		/// </summary>
@@ -295,7 +255,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the border color of the control while disabled.
@@ -330,11 +289,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
-		#endregion
-
-		#region Draw Control
-
 		/// <summary>
 		/// Here we draw the items.
 		/// </summary>
@@ -356,7 +310,7 @@ namespace MetroSet.UI.Controls
 				using (var f = new Font(Font.Name, 9))
 				{
 					g.FillRectangle(bg, e.Bounds);
-					g.DrawString(GetItemText(Items[e.Index]), f, tc, e.Bounds, _mth.SetPosition(StringAlignment.Near));
+					g.DrawString(GetItemText(Items[e.Index]), f, tc, e.Bounds, Methods.SetPosition(StringAlignment.Near));
 				}
 			}
 		}
@@ -386,7 +340,7 @@ namespace MetroSet.UI.Controls
 								g.TextRenderingHint = TextRenderingHint.AntiAlias;
 								g.DrawString(downArrow.ToString(), f, s, new Point(Width - 22, 8));
 								g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-								g.DrawString(Text, f, tb, new Rectangle(7, 0, Width - 1, Height - 1), _mth.SetPosition(StringAlignment.Near));
+								g.DrawString(Text, f, tb, new Rectangle(7, 0, Width - 1, Height - 1), Methods.SetPosition(StringAlignment.Near));
 								g.DrawRectangle(p, rect);
 							}
 						}
@@ -394,10 +348,6 @@ namespace MetroSet.UI.Controls
 				}
 			}
 		}
-
-		#endregion
-
-		#region ApplyTheme
 
 		/// <summary>
 		/// Gets or sets the style provided by the user.
@@ -420,8 +370,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(204, 204, 204);
 					DisabledBorderColor = Color.FromArgb(155, 155, 155);
 					DisabledForeColor = Color.FromArgb(136, 136, 136);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
@@ -435,8 +383,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(80, 80, 80);
 					DisabledBorderColor = Color.FromArgb(109, 109, 109);
 					DisabledForeColor = Color.FromArgb(109, 109, 109);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -448,39 +394,39 @@ namespace MetroSet.UI.Controls
 							{
 
 								case "ForeColor":
-									ForeColor = _utl.HexColor((string)varkey.Value);
+									ForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BackColor":
-									BackgroundColor = _utl.HexColor((string)varkey.Value);
+									BackgroundColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BorderColor":
-									BorderColor = _utl.HexColor((string)varkey.Value);
+									BorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "ArrowColor":
-									ArrowColor = _utl.HexColor((string)varkey.Value);
+									ArrowColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "SelectedItemBackColor":
-									SelectedItemBackColor = _utl.HexColor((string)varkey.Value);
+									SelectedItemBackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "SelectedItemForeColor":
-									SelectedItemForeColor = _utl.HexColor((string)varkey.Value);
+									SelectedItemForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledBackColor":
-									DisabledBackColor = _utl.HexColor((string)varkey.Value);
+									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledBorderColor":
-									DisabledBorderColor = _utl.HexColor((string)varkey.Value);
+									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledForeColor":
-									DisabledForeColor = _utl.HexColor((string)varkey.Value);
+									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -498,8 +444,6 @@ namespace MetroSet.UI.Controls
 		{
 			Invalidate();
 		}
-
-		#endregion Theme Changing
 
 	}
 }

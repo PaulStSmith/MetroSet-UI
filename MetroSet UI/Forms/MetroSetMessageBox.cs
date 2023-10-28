@@ -3,6 +3,7 @@
  * 
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of 
  * this software and associated documentation files (the "Software"), to deal in the 
@@ -25,6 +26,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Windows.Forms;
 using MetroSet.UI.Controls;
 using MetroSet.UI.Extensions;
@@ -34,9 +36,7 @@ namespace MetroSet.UI.Forms
 	public class MetroSetMessageBox : MetroSetForm
 	{
 
-		#region Internal vars
-
-		private Size _buttonSize;
+		private readonly Size DefaulButtonSize;
 		private MetroSetDefaultButton _okButton;
 		private MetroSetDefaultButton _yesButton;
 		private MetroSetDefaultButton _noButton;
@@ -44,15 +44,12 @@ namespace MetroSet.UI.Forms
 		private MetroSetDefaultButton _retryButton;
 		private MetroSetDefaultButton _abortButton;
 		private MetroSetDefaultButton _ignoreButton;
+		private MetroSetDefaultButton _continueButton;
 
-		#endregion
-
-		#region Properties
-
-		/// <summary>
-		/// Get or sets the parent form.
-		/// </summary>
-		private Form OwnerForm { get; set; }
+        /// <summary>
+        /// Get or sets the parent owner.
+        /// </summary>
+        private Form OwnerForm { get; set; }
 
 		/// <summary>
 		/// Gets or sets the content of the message.
@@ -72,73 +69,43 @@ namespace MetroSet.UI.Forms
 		/// <summary>
 		/// Gets or sets the MessageBoxIcon.
 		/// </summary>
-		public new MessageBoxIcon Icon { get; set; }
-
-		/// <summary>
-		/// Gets or sets the BackgroundColor
-		/// </summary>
-		[Browsable(false)]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		private new static Color BackgroundColor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the BorderColor
-		/// </summary>
-		[Browsable(false)]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		private new static Color BorderColor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the ForegroundColor
-		/// </summary>
-		[Browsable(false)]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		private static Color ForegroundColor { get; set; }
-
-
-		#endregion
-
-		#region Constructor
+		public MessageBoxIcon MessageIcon { get; set; }
 
 		/// <summary>
 		/// The Constructor.
 		/// </summary>
 		private MetroSetMessageBox()
 		{
-			base.Font = MetroSetFonts.Regular(9.5f);
+			Font = new Font("Calibri", 14);
 			ShowInTaskbar = false;
+			ForeColor = Color.Transparent;
 			StartPosition = FormStartPosition.CenterParent;
-			_buttonSize = new Size(95, 32);
+			DefaulButtonSize = new Size(95, 32);
+			KeyPreview = true;
 			ApplyTheme();
-			EvaluateControls();
+			ConfigureControls();
 			AddControls();
-			//HideControls();
 		}
 
 		/// <summary>
 		/// Here we set the buttons properties value.
 		/// </summary>
-		private void EvaluateControls()
+		private void ConfigureControls()
 		{
-			EvaluateOkeyButton();
+            ConfigureButton(ref _okButton, "OK", DefaulButtonSize, DialogResult.OK);
+            ConfigureButton(ref _yesButton, "Yes", DefaulButtonSize, DialogResult.Yes);
+            ConfigureButton(ref _noButton, "No", DefaulButtonSize, DialogResult.No);
+            ConfigureButton(ref _cancelButton, "Cancel", DefaulButtonSize, DialogResult.Cancel);
+            ConfigureButton(ref _retryButton, "Retry", DefaulButtonSize, DialogResult.Retry);
+            ConfigureButton(ref _abortButton, "Abort", DefaulButtonSize, DialogResult.Abort);
+            ConfigureButton(ref _ignoreButton, "Ignore", DefaulButtonSize, DialogResult.Ignore);
+            ConfigureButton(ref _continueButton, "Continue", DefaulButtonSize, DialogResult.Ignore);
+        }
 
-			EvaluateYesButton();
-
-			EvaluateNoButton();
-
-			EvaluateCancelButton();
-
-			EvaluateRetryButton();
-
-			EvaluateAbortButton();
-
-			EvaluateIgnoreButton();
-		}
-
-		/// <summary>
-		/// Adding the controls just to be exist in form but we don't need them all at the moment.
-		/// </summary>
-		private void AddControls()
+        /// <summary>
+        /// Adding the controls just to be exist in owner but we don't need them all at the moment.
+        /// </summary>
+        private void AddControls()
 		{
 			Controls.Add(_okButton);
 			Controls.Add(_yesButton);
@@ -146,369 +113,208 @@ namespace MetroSet.UI.Forms
 			Controls.Add(_cancelButton);
 			Controls.Add(_retryButton);
 			Controls.Add(_abortButton);
-			Controls.Add(_ignoreButton);
-		}
+            Controls.Add(_ignoreButton);
+            Controls.Add(_continueButton);
+        }
 
-		/// <summary>
-		/// Set the required properties values and click event of retry button.
-		/// </summary>
-		private void EvaluateRetryButton()
+        /// <summary>
+        /// Configures the specified button, with the specified parameters.
+        /// </summary>
+        /// <param name="button">The button to be configured.</param>
+        /// <param name="text">The text of the button.</param>
+        /// <param name="size">The size of the button.</param>
+        /// <param name="result">The <see cref="DialogResult"/> set up at the click of the button.</param>
+        private void ConfigureButton(ref MetroSetDefaultButton button, string text, Size size, DialogResult result)
 		{
-			_retryButton = new MetroSetDefaultButton
+			button = new MetroSetDefaultButton()
 			{
-				Text = @"Retry",
-				Size = _buttonSize,
+				Text = text,
+				Size = size,
 				Visible = false
 			};
-			_retryButton.Click += RetryButton_Click;
-		}
-
-		/// <summary>
-		/// Set the required properties values and click event of cancel button.
-		/// </summary>
-		private void EvaluateCancelButton()
-		{
-			_cancelButton = new MetroSetDefaultButton
+			button.Click += (s, e) =>
 			{
-				Text = @"Cancel",
-				Size = _buttonSize,
-				Visible = false
+				this.DialogResult = result;
 			};
-			_cancelButton.Click += CancelButton_Click;
-		}
-
-		/// <summary>
-		/// Set the required properties values and click event of no button.
-		/// </summary>
-		private void EvaluateNoButton()
-		{
-			_noButton = new MetroSetDefaultButton
-			{
-				Text = @"No",
-				Size = _buttonSize,
-				Visible = false
-			};
-			_noButton.Click += NoButton_Click;
-		}
-
-		/// <summary>
-		/// Set the required properties values and click event of yes button.
-		/// </summary>
-		private void EvaluateYesButton()
-		{
-			_yesButton = new MetroSetDefaultButton
-			{
-				Text = @"Yes",
-				Size = _buttonSize,
-				Visible = false
-			};
-			_yesButton.Click += YesButton_Click;
-		}
-
-		/// <summary>
-		/// Set the required properties values and click event of ok button.
-		/// </summary>
-		private void EvaluateOkeyButton()
-		{
-			_okButton = new MetroSetDefaultButton
-			{
-				Text = @"Ok",
-				Size = _buttonSize,
-				Visible = false
-			};
-			_okButton.Click += OkButton_Click;
-		}
-
-		/// <summary>
-		/// Set the required properties values and click event of abort button.
-		/// </summary>
-		private void EvaluateAbortButton()
-		{
-			_abortButton = new MetroSetDefaultButton
-			{
-				Text = @"Abort",
-				Size = _buttonSize,
-				Visible = false
-
-			};
-			_abortButton.Click += AbortButton_Click;
-		}
-
-		/// <summary>
-		/// Set the required properties values and click event of ignore button.
-		/// </summary>
-		private void EvaluateIgnoreButton()
-		{
-			_ignoreButton = new MetroSetDefaultButton
-			{
-				Text = @"Ignore",
-				Size = _buttonSize,
-				Visible = false
-			};
-			_ignoreButton.Click += IgnoreButton_Click;
-		}
-
-		#endregion
-
-		#region Events
-
-		/// <summary>
-		/// Handling the retry button click.
-		/// </summary>
-		/// <param name="sender">sender</param>
-		/// <param name="e">EventArgs</param>
-		private void RetryButton_Click(object sender, EventArgs e)
-		{
-			DialogResult = DialogResult.Retry;
-		}
-
-		/// <summary>
-		/// Handling the cancel button click.
-		/// </summary>
-		/// <param name="sender">sender</param>
-		/// <param name="e">EventArgs</param>
-		private void CancelButton_Click(object sender, EventArgs e)
-		{
-			DialogResult = DialogResult.Cancel;
-		}
-
-		/// <summary>
-		/// Handling the no button click.
-		/// </summary>
-		/// <param name="sender">sender</param>
-		/// <param name="e">EventArgs</param>
-		private void NoButton_Click(object sender, EventArgs e)
-		{
-			DialogResult = DialogResult.No;
-		}
-
-		/// <summary>
-		/// Handling the yes button click.
-		/// </summary>
-		/// <param name="sender">sender</param>
-		/// <param name="e">EventArgs</param>
-		private void YesButton_Click(object sender, EventArgs e)
-		{
-			DialogResult = DialogResult.Yes;
-		}
-
-		/// <summary>
-		/// Handling the okey button click.
-		/// </summary>
-		/// <param name="sender">sender</param>
-		/// <param name="e">EventArgs</param>
-		private void OkButton_Click(object sender, EventArgs e)
-		{
-			DialogResult = DialogResult.OK;
-		}
-
-		/// <summary>
-		/// Handling the abort button click.
-		/// </summary>
-		/// <param name="sender">sender</param>
-		/// <param name="e">EventArgs</param>
-		private void AbortButton_Click(object sender, EventArgs e)
-		{
-			DialogResult = DialogResult.Abort;
-		}
-
-		/// <summary>
-		/// Handling the ignore button click.
-		/// </summary>
-		/// <param name="sender">sender</param>
-		/// <param name="e">EventArgs</param>
-		private void IgnoreButton_Click(object sender, EventArgs e)
-		{
-			DialogResult = DialogResult.Ignore;
 		}
 
 		/// <summary>
 		/// When the user just provides the content of message to appear.
 		/// </summary>
-		/// <param name="form">The Form that messagebox will be showed from.</param>
+		/// <param name="owner">The Form that messagebox will be showed from.</param>
 		/// <param name="content">The Content of the message.</param>
 		/// <returns>The MessageBox with just the content and an ok button.</returns>
-		public static DialogResult Show(MetroSetForm form, string content)
+		public static DialogResult Show(MetroSetForm owner, string content)
 		{
-			return Show(form, content, form.Text, MessageBoxButtons.OK, MessageBoxIcon.None);
+			return Show(owner, content, owner.Text, MessageBoxButtons.OK, MessageBoxIcon.None);
 		}
 
 		/// <summary>
 		///  When the user provides the content of message and the message title to appear.
 		/// </summary>
-		/// <param name="form">The Form that messagebox will be showed from.</param>
+		/// <param name="owner">The Form that messagebox will be showed from.</param>
 		/// <param name="content">The Content of the message.</param>
 		/// <param name="caption">The MesageBox title.</param>
 		/// <returns>The MessageBox with the content and title and an ok button.</returns>
-		public static DialogResult Show(MetroSetForm form, string content, string caption)
+		public static DialogResult Show(MetroSetForm owner, string content, string caption)
 		{
-			return Show(form, content, caption, MessageBoxButtons.OK, MessageBoxIcon.None);
+			return Show(owner, content, caption, MessageBoxButtons.OK, MessageBoxIcon.None);
 		}
 
 		/// <summary>
 		/// When the user provides the content of message and the message title and also which type of buttons to appear.
 		/// </summary>
-		/// <param name="form">The Form that messagebox will be showed from.</param>
+		/// <param name="owner">The Form that messagebox will be showed from.</param>
 		/// <param name="content">The Content of the message.</param>
 		/// <param name="caption">The MesageBox title.</param>
 		/// <param name="buttons">The Type of buttons to appear.</param>
 		/// <returns>The MessageBox with the content and title and provided button(s) type.</returns>
-		public static DialogResult Show(MetroSetForm form, string content, string caption, MessageBoxButtons buttons)
+		public static DialogResult Show(MetroSetForm owner, string content, string caption, MessageBoxButtons buttons)
 		{
-			return Show(form, content, caption, buttons, MessageBoxIcon.None);
+			return Show(owner, content, caption, buttons, MessageBoxIcon.None);
 		}
 
 		/// <summary>
 		/// When the user provides the content of message and the message title and also which type message and buttons to appear.
 		/// </summary>
-		/// <param name="form">The Form that messagebox will be showed from.</param>
+		/// <param name="owner">The Form that messagebox will be showed from.</param>
 		/// <param name="content">The Content of the message.</param>
 		/// <param name="caption">The MesageBox title.</param>
 		/// <param name="buttons">The Type of buttons to appear.</param>
 		/// <param name="icon">The MessageBox type.</param>
 		/// <returns>The MessageBox with the content and title and provided button(s) and type.</returns>
-		public static DialogResult Show(MetroSetForm form, string content, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+		public static DialogResult Show(MetroSetForm owner, string content, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
 			const string message = @"MetroSetMessageBox requires a form, use 'this' as the first parameter in the place you use MetroSetMessageBox.";
 			var msgBox = new MetroSetMessageBox
 			{
-				OwnerForm = form ?? throw new ArgumentNullException(message),
+				OwnerForm = owner ?? throw new ArgumentNullException(nameof(owner), message),
 				Content = content,
 				Caption = caption,
 				Buttons = buttons,
-				Size = new Size(form.Width - 2, (form.Height / 3) - 1),
-				Location = new Point(form.Location.X, (form.Height / 2) - 1)
+				Size = new Size(owner.Width - 2, (owner.Height / 3) - 1),
+				Location = new Point(owner.Location.X, (owner.Height / 2) - 1)
 			};
 
-			if (icon == MessageBoxIcon.Error || icon == MessageBoxIcon.Stop)
-			{
-				BackgroundColor = Color.FromArgb(210, 50, 45);
-				BorderColor = Color.FromArgb(210, 50, 45);
-				ForegroundColor = Color.White;
-			}
-
-			else if (icon == MessageBoxIcon.Information)
-			{
-				BackgroundColor = Color.FromArgb(60, 180, 218);
-				BorderColor = Color.FromArgb(60, 180, 218);
-				ForegroundColor = Color.White;
-			}
-
+			if (icon == MessageBoxIcon.Hand)
+                msgBox.BackColor = Color.FromArgb(210, 50, 45);
+			else if (icon == MessageBoxIcon.Asterisk)
+                msgBox.BackColor = Color.FromArgb(60, 180, 218);
 			else if (icon == MessageBoxIcon.Question)
-			{
-				BackgroundColor = Color.FromArgb(70, 165, 70);
-				BorderColor = Color.FromArgb(70, 165, 70);
-				ForegroundColor = Color.White;
-			}
+                msgBox.BackColor = Color.FromArgb(50, 65, 120);
+			else if (icon == MessageBoxIcon.Exclamation)
+                msgBox.BackColor = Color.FromArgb(237, 156, 40);
+			else // (icon == MessageBoxIcon.None || icon == MessageBoxIcon.Asterisk || icon == MessageBoxIcon.Hand)
+                msgBox.BackgroundColor = Color.White;
 
-			else if (icon == MessageBoxIcon.Exclamation || icon == MessageBoxIcon.Warning)
-			{
-				BackgroundColor = Color.FromArgb(237, 156, 40);
-				BorderColor = Color.FromArgb(237, 156, 40);
-				ForegroundColor = Color.White;
-			}
+			msgBox.MessageIcon = icon;
+            msgBox.ForeColor = msgBox.BackColor.GetContrastingColor();
+            msgBox.BorderColor = msgBox.BackColor.AdjustLuminance(-50);
 
-			else if (icon == MessageBoxIcon.None || icon == MessageBoxIcon.Asterisk || icon == MessageBoxIcon.Hand)
-			{
-				BackgroundColor = Color.White;
-				BorderColor = Color.FromArgb(65, 177, 225);
-				ForegroundColor = Color.Black;
-			}
-
-			return msgBox.ShowDialog();
+            return msgBox.ShowDialog();
 		}
 
-		/// <summary>
-		/// Here we handle the user provided buttons appearance.
-		/// </summary>
-		/// <returns>The MessageBox with provided buttons.</returns>
-		protected new DialogResult ShowDialog()
+		private void SetupButton(MetroSetDefaultButton button, int position)
 		{
+			button.Location = new Point(Width - DefaulButtonSize.Width * position - 10 * position, Height - 45); ;
+			button.Visible = true;
+		}
 
-			var buttonHeight = Height - 45;
-			var firstButton = (Width - _buttonSize.Width) - 10;
-			var secondButoon = (Width - (_buttonSize.Width * 2)) - 20;
-			switch (Buttons)
+		private void SetupButtons(MetroSetDefaultButton btn)
+		{
+			SetupButton(btn, 1);
+			Button1 = btn;
+		}
+        private MetroSetDefaultButton Button1;
+
+        private void SetupButtons(MetroSetDefaultButton btn2, MetroSetDefaultButton btn1)
+        {
+            SetupButtons(btn1);
+            SetupButton(btn2, 2);
+            Button2 = btn2;
+        }
+        private MetroSetDefaultButton Button2;
+
+        private void SetupButtons(MetroSetDefaultButton btn3, MetroSetDefaultButton btn2, MetroSetDefaultButton btn1)
+		{
+			SetupButtons(btn1, btn2);
+            SetupButton(btn3, 3);
+            Button3 = btn3;
+        }
+        private MetroSetDefaultButton Button3;
+
+        /// <summary>
+        /// Here we handle the user provided buttons appearance.
+        /// </summary>
+        /// <returns>The MessageBox with provided buttons.</returns>
+        protected new DialogResult ShowDialog()
+		{
+            switch (Buttons)
 			{
-				case MessageBoxButtons.OK:
-					_okButton.Location = new Point(firstButton, buttonHeight);
-					_okButton.Visible = true;
-					break;
-
 				case MessageBoxButtons.OKCancel:
-					_okButton.Location = new Point(secondButoon, buttonHeight);
-					_okButton.Visible = true;
-					_cancelButton.Location = new Point(firstButton, buttonHeight);
-					_cancelButton.Visible = true;
+					SetupButtons(_okButton, _cancelButton);
 					break;
 
-				case MessageBoxButtons.YesNo:
-					_yesButton.Location = new Point(secondButoon, buttonHeight);
-					_yesButton.Visible = true;
-					_noButton.Location = new Point(firstButton, buttonHeight);
-					_noButton.Visible = true;
+                case MessageBoxButtons.AbortRetryIgnore:
+                    SetupButtons(_abortButton, _retryButton, _ignoreButton);
+                    break;
+
+                case MessageBoxButtons.YesNo:
+					SetupButtons(_yesButton, _noButton);
 					break;
 
 				case MessageBoxButtons.YesNoCancel:
-					_yesButton.Location = new Point((Width - (_buttonSize.Width * 3)) - 30, buttonHeight);
-					_yesButton.Visible = true;
-					_noButton.Location = new Point(secondButoon, buttonHeight);
-					_noButton.Visible = true;
-					_cancelButton.Location = new Point(firstButton, buttonHeight);
-					_cancelButton.Visible = true;
+					SetupButtons(_yesButton, _noButton, _cancelButton);
 					break;
 
-				case MessageBoxButtons.RetryCancel:
-					_retryButton.Location = new Point(secondButoon, buttonHeight);
-					_retryButton.Visible = true;
-					_cancelButton.Location = new Point(firstButton, buttonHeight);
-					_cancelButton.Visible = true;
-					break;
+                case MessageBoxButtons.RetryCancel:
+                    SetupButtons(_retryButton, _cancelButton);
+                    break;
 
-				case MessageBoxButtons.AbortRetryIgnore:
-					_abortButton.Location = new Point((Width - (_buttonSize.Width * 3)) - 30, buttonHeight);
-					_abortButton.Visible = true;
-					_retryButton.Location = new Point(secondButoon, buttonHeight);
-					_retryButton.Visible = true;
-					_ignoreButton.Location = new Point(firstButton, buttonHeight);
-					_ignoreButton.Visible = true;
-					break;
+                case MessageBoxButtons.CancelTryContinue:
+                    SetupButtons(_cancelButton, _retryButton, _continueButton);
+                    break;
 
-				default:
-					_okButton.Location = new Point(firstButton, buttonHeight);
-					_okButton.Visible = true;
-					break;
+                default:
+                    SetupButtons(_okButton);
+                    break;
 			}
 			return base.ShowDialog();
 		}
 
-		#endregion
+        /// <inheritdoc/>
+        protected override void OnKeyPress(KeyPressEventArgs e)
+        {
+			if (e.KeyChar == '\r')
+				Button1.OnClickInternal(EventArgs.Empty);
+			if (e.KeyChar == '\x1B')
+                (Button2 ?? Button1).OnClickInternal(EventArgs.Empty);
+            base.OnKeyPress(e);
+        }
 
-		#region Draw Dialog
-
-		protected override void OnPaint(PaintEventArgs e)
+		/// <inheritdoc/>
+        protected override void OnPaint(PaintEventArgs e)
 		{
 			var G = e.Graphics;
-			G.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+			G.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
 
-			var rect = new Rectangle(0, ((OwnerForm.Height - (OwnerForm.Height / 2)) / 250), OwnerForm.Width - 3, (OwnerForm.Height / 3) - 3);
-
-			using (var bg = new SolidBrush(BackgroundColor))
+            var lft = ClientRectangle.X + 104;
+			var rgt = ClientRectangle.Width - lft - 10;
+            using var bgBrush = new SolidBrush(BackColor);
+			using var fgBrush = new SolidBrush(ForeColor == Color.Transparent ? Utilites.GetContrastingColor(BackColor) : ForeColor);
+            using var borderPen = new Pen(BorderColor, 3);
+            G.FillRectangle(bgBrush, ClientRectangle);
+            var bmp = Utilites.GetMessageBoxIcon(this.MessageIcon);
+			if (bmp != null)
+				G.DrawImage(bmp, new Point(10, ClientRectangle.Y + 10));
+			else
 			{
-				using (var CTNT = new SolidBrush(ForegroundColor))
-				{
-					using (var p = new Pen(BorderColor))
-					{
-						G.FillRectangle(bg, rect);
-						G.DrawString(Caption, Font, CTNT, new PointF(rect.X + 10, rect.Y + 10));
-						G.DrawString(Content, Font, CTNT, new PointF(rect.X + 10, rect.Y + 50));
-						G.DrawRectangle(p, rect);
-					}
-				}
+				lft -= 94;
+				rgt += 94;
 			}
-		}
-
-		#endregion
-
+			G.DrawString(Caption, GlobalFont.SemiBold((float)(Font.Size * 1.5)), fgBrush, new RectangleF(lft, ClientRectangle.Y + 10, rgt, 40));
+			G.DrawString(Content, Font, fgBrush, new RectangleF(lft, ClientRectangle.Y + 50, rgt, ClientRectangle.Height - 60));
+            G.DrawRectangle(borderPen, ClientRectangle);
+        }
 	}
 }

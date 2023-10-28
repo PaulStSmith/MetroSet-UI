@@ -3,6 +3,7 @@
 * 
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of 
 * this software and associated documentation files (the "Software"), to deal in the 
@@ -45,8 +46,6 @@ namespace MetroSet.UI.Controls
 	public class MetroSetTile : Control, IMetroSetControl
 	{
 
-		#region Interfaces
-
 		/// <summary>
 		/// Gets or sets the style associated with the control.
 		/// </summary>
@@ -81,18 +80,6 @@ namespace MetroSet.UI.Controls
 		}
 
 		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		/// <summary>
 		/// Gets or sets the Style Manager associated with the control.
 		/// </summary>
 		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
@@ -105,16 +92,6 @@ namespace MetroSet.UI.Controls
 				Invalidate();
 			}
 		}
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
 
 		private MouseMode _state;
 		private Style _style;
@@ -134,10 +111,6 @@ namespace MetroSet.UI.Controls
 		private Color _disabledForeColor;
 		private Color _disabledBorderColor;
 
-		#endregion Internal Vars
-
-		#region Constructors
-
 		public MetroSetTile()
 		{
 			SetStyle(
@@ -147,13 +120,9 @@ namespace MetroSet.UI.Controls
 				ControlStyles.SupportsTransparentBackColor, true);
 			UpdateStyles();
 			base.Font = MetroSetFonts.Light(10);
-			_utl = new Utilites();
+			
 			ApplyTheme();
 		}
-
-		#endregion Constructors
-
-		#region Draw Control
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
@@ -279,10 +248,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-		#endregion Draw Control
-
-		#region ApplyTheme
-
 		/// <summary>
 		/// Gets or sets the style provided by the user.
 		/// </summary>
@@ -307,8 +272,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(204, 204, 204);
 					DisabledBorderColor = Color.FromArgb(155, 155, 155);
 					DisabledForeColor = Color.FromArgb(136, 136, 136);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					break;
 
 				case Style.Dark:
@@ -324,8 +287,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(80, 80, 80);
 					DisabledBorderColor = Color.FromArgb(109, 109, 109);
 					DisabledForeColor = Color.FromArgb(109, 109, 109);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					break;
 
 				case Style.Custom:
@@ -339,51 +300,51 @@ namespace MetroSet.UI.Controls
 
 							if (varkey.Key == "NormalColor")
 							{
-								NormalColor = _utl.HexColor((string)varkey.Value);
+								NormalColor = Utilites.HexColor((string)varkey.Value);
 							}
 							else if (varkey.Key == "NormalBorderColor")
 							{
-								NormalBorderColor = _utl.HexColor((string)varkey.Value);
+								NormalBorderColor = Utilites.HexColor((string)varkey.Value);
 							}
 							else if (varkey.Key == "NormalTextColor")
 							{
-								NormalTextColor = _utl.HexColor((string)varkey.Value);
+								NormalTextColor = Utilites.HexColor((string)varkey.Value);
 							}
 							else if (varkey.Key == "HoverColor")
 							{
-								HoverColor = _utl.HexColor((string)varkey.Value);
+								HoverColor = Utilites.HexColor((string)varkey.Value);
 							}
 							else if (varkey.Key == "HoverBorderColor")
 							{
-								HoverBorderColor = _utl.HexColor((string)varkey.Value);
+								HoverBorderColor = Utilites.HexColor((string)varkey.Value);
 							}
 							else if (varkey.Key == "HoverTextColor")
 							{
-								HoverTextColor = _utl.HexColor((string)varkey.Value);
+								HoverTextColor = Utilites.HexColor((string)varkey.Value);
 							}
 							else if (varkey.Key == "PressColor")
 							{
-								PressColor = _utl.HexColor((string)varkey.Value);
+								PressColor = Utilites.HexColor((string)varkey.Value);
 							}
 							else if (varkey.Key == "PressBorderColor")
 							{
-								PressBorderColor = _utl.HexColor((string)varkey.Value);
+								PressBorderColor = Utilites.HexColor((string)varkey.Value);
 							}
 							else if (varkey.Key == "PressTextColor")
 							{
-								PressTextColor = _utl.HexColor((string)varkey.Value);
+								PressTextColor = Utilites.HexColor((string)varkey.Value);
 							}
 							else if (varkey.Key == "DisabledBackColor")
 							{
-								DisabledBackColor = _utl.HexColor((string)varkey.Value);
+								DisabledBackColor = Utilites.HexColor((string)varkey.Value);
 							}
 							else if (varkey.Key == "DisabledBorderColor")
 							{
-								DisabledBorderColor = _utl.HexColor((string)varkey.Value);
+								DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
 							}
 							else if (varkey.Key == "DisabledForeColor")
 							{
-								DisabledForeColor = _utl.HexColor((string)varkey.Value);
+								DisabledForeColor = Utilites.HexColor((string)varkey.Value);
 							}
 						}
 					Refresh();
@@ -392,10 +353,6 @@ namespace MetroSet.UI.Controls
 					throw new ArgumentOutOfRangeException(nameof(style), style, null);
 			}
 		}
-
-		#endregion Theme Changing
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the background color.
@@ -456,7 +413,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the control border color in normal mouse sate.
 		/// </summary>
@@ -471,7 +427,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the control Text color in normal mouse sate.
@@ -488,7 +443,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the control background color in hover mouse sate.
 		/// </summary>
@@ -503,7 +457,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the control border color in hover mouse sate.
@@ -520,7 +473,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the control Text color in hover mouse sate.
 		/// </summary>
@@ -535,7 +487,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the control background color in pushed mouse sate.
@@ -552,7 +503,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the control border color in pushed mouse sate.
 		/// </summary>
@@ -567,7 +517,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the control Text color in pushed mouse sate.
@@ -584,7 +533,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets back color used by the control while disabled.
 		/// </summary>
@@ -600,7 +548,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the fore color of the control whenever while disabled.
 		/// </summary>
@@ -615,7 +562,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the border color of the control while disabled.
@@ -650,11 +596,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
-
-		#endregion
-
-		#region Events
 
 		/// <summary>
 		/// Handling mouse up event of the control.
@@ -699,8 +640,6 @@ namespace MetroSet.UI.Controls
 			_state = MouseMode.Normal;
 			Invalidate();
 		}
-
-		#endregion Events
 
 	}
 

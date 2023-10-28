@@ -10,6 +10,7 @@ using MetroSet.UI.Enums;
  * 
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of 
  * this software and associated documentation files (the "Software"), to deal in the 
@@ -46,10 +47,6 @@ namespace MetroSet.UI.Actions
 			set => _styleManger.Style = value;
 		}
 
-		public string ThemeAuthor => _styleManger.ThemeAuthor;
-
-		public string ThemeName => _styleManger.ThemeName;
-
 		[Editor(typeof(StyleManager.FileNamesEditor), typeof(UITypeEditor)), Category("MetroSet Framework"), Description("Gets or sets the custom theme file.")]
 		public string CustomTheme
 		{
@@ -71,10 +68,6 @@ namespace MetroSet.UI.Actions
 			new DesignerActionPropertyItem("OwnerForm", "OwnerForm", "MetroSet Framework", "Gets or sets the form (MetroForm) to Apply themes for."),
 			new DesignerActionPropertyItem("Style", "Style", "MetroSet Framework", "Gets or sets the style."),
 			new DesignerActionPropertyItem("CustomTheme", "CustomTheme", "MetroSet Framework", "Gets or sets the custom theme file."),
-
-			new DesignerActionHeaderItem("Information"),
-			new DesignerActionPropertyItem("ThemeName", "ThemeName", "Information", "Gets or sets the The Theme name associated with the theme."),
-			new DesignerActionPropertyItem("ThemeAuthor", "ThemeAuthor", "Information", "Gets or sets the The Author name associated with the theme."),
 
 		};
 

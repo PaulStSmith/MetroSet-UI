@@ -7,6 +7,7 @@ using MetroSet.UI.Enums; /*
  * 
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of 
  * this software and associated documentation files (the "Software"), to deal in the 
@@ -43,10 +44,6 @@ namespace MetroSet.UI.Actions
 			set => _metroSetScrollBar.Style = value;
 		}
 
-		public string ThemeAuthor => _metroSetScrollBar.ThemeAuthor;
-
-		public string ThemeName => _metroSetScrollBar.ThemeName;
-
 		public StyleManager StyleManager
 		{
 			get => _metroSetScrollBar.StyleManager;
@@ -65,20 +62,17 @@ namespace MetroSet.UI.Actions
 			set => _metroSetScrollBar.Minimum = value;
 		}
 
-
 		public int Value
 		{
 			get => _metroSetScrollBar.Value;
 			set => _metroSetScrollBar.Value = value;
 		}
 
-
 		public int SmallChange
 		{
 			get => _metroSetScrollBar.SmallChange;
 			set => _metroSetScrollBar.SmallChange = value;
 		}
-
 
 		public int LargeChange
 		{
@@ -99,10 +93,6 @@ namespace MetroSet.UI.Actions
 			new DesignerActionHeaderItem("MetroSet Framework"),
 			new DesignerActionPropertyItem("StyleManager", "StyleManager", "MetroSet Framework", "Gets or sets the stylemanager for the control."),
 			new DesignerActionPropertyItem("Style", "Style", "MetroSet Framework", "Gets or sets the style."),
-
-			new DesignerActionHeaderItem("Informations"),
-			new DesignerActionPropertyItem("ThemeName", "ThemeName", "Informations", "Gets or sets the The Theme name associated with the theme."),
-			new DesignerActionPropertyItem("ThemeAuthor", "ThemeAuthor", "Informations", "Gets or sets the The Author name associated with the theme."),
 
 			new DesignerActionHeaderItem("Appearance"),
 			new DesignerActionPropertyItem("Orientation", "Orientation", "Appearance", "Gets or sets the scroll bar orientation."),

@@ -3,6 +3,7 @@
  * 
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of 
  * this software and associated documentation files (the "Software"), to deal in the 
@@ -72,7 +73,6 @@ namespace MetroSet.UI.Extensions
             return GetFont(Properties.Resources.SegoeWP_Bold, size);
         }
 
-
         /// <summary>
         /// Gets or sets the font of the most controls.
         /// </summary>
@@ -105,7 +105,6 @@ namespace MetroSet.UI.Extensions
                 return new Font(privateFontCollection.Families[0].Name, size);
             }
         }
-
 
     }
 }

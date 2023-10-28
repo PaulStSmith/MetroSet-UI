@@ -3,6 +3,7 @@
 * 
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of 
 * this software and associated documentation files (the "Software"), to deal in the 
@@ -32,7 +33,9 @@ using MetroSet.UI.Components;
 using MetroSet.UI.Design;
 using MetroSet.UI.Enums;
 using MetroSet.UI.Extensions;
+using MetroSet.UI.Forms;
 using MetroSet.UI.Interfaces;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace MetroSet.UI.Controls
 {
@@ -43,8 +46,6 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetControlBox : Control, IMetroSetControl
 	{
-
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -88,28 +89,6 @@ namespace MetroSet.UI.Controls
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
 
@@ -125,10 +104,6 @@ namespace MetroSet.UI.Controls
 		private Color _minimizeNormalForeColor;
 		private Color _disabledForeColor;
 
-		#endregion Internal Vars
-
-		#region Constructors
-
 		public MetroSetControlBox()
 		{
 			SetStyle(
@@ -136,14 +111,10 @@ namespace MetroSet.UI.Controls
 				ControlStyles.OptimizedDoubleBuffer |
 				ControlStyles.SupportsTransparentBackColor, true);
 			UpdateStyles();
-			_utl = new Utilites();
+			
 			base.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			ApplyTheme();
 		}
-
-		#endregion Constructors
-
-		#region ApplyTheme
 
 		/// <summary>
 		/// Gets or sets the style provided by the user.
@@ -167,8 +138,6 @@ namespace MetroSet.UI.Controls
 					MinimizeHoverForeColor = Color.Gray;
 					MinimizeNormalForeColor = Color.Gray;
 					DisabledForeColor = Color.DimGray;
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					break;
 
 				case Style.Dark:
@@ -182,8 +151,6 @@ namespace MetroSet.UI.Controls
 					MinimizeHoverForeColor = Color.Gray;
 					MinimizeNormalForeColor = Color.Gray;
 					DisabledForeColor = Color.Silver;
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					break;
 
 				case Style.Custom:
@@ -193,43 +160,43 @@ namespace MetroSet.UI.Controls
 							switch (varkey.Key)
 							{
 								case "CloseHoverBackColor":
-									CloseHoverBackColor = _utl.HexColor((string)varkey.Value);
+									CloseHoverBackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "CloseHoverForeColor":
-									CloseHoverForeColor = _utl.HexColor((string)varkey.Value);
+									CloseHoverForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "CloseNormalForeColor":
-									CloseNormalForeColor = _utl.HexColor((string)varkey.Value);
+									CloseNormalForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "MaximizeHoverBackColor":
-									MaximizeHoverBackColor = _utl.HexColor((string)varkey.Value);
+									MaximizeHoverBackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "MaximizeHoverForeColor":
-									MaximizeHoverForeColor = _utl.HexColor((string)varkey.Value);
+									MaximizeHoverForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "MaximizeNormalForeColor":
-									MaximizeNormalForeColor = _utl.HexColor((string)varkey.Value);
+									MaximizeNormalForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "MinimizeHoverBackColor":
-									MinimizeHoverBackColor = _utl.HexColor((string)varkey.Value);
+									MinimizeHoverBackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "MinimizeHoverForeColor":
-									MinimizeHoverForeColor = _utl.HexColor((string)varkey.Value);
+									MinimizeHoverForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "MinimizeNormalForeColor":
-									MinimizeNormalForeColor = _utl.HexColor((string)varkey.Value);
+									MinimizeNormalForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledForeColor":
-									DisabledForeColor = _utl.HexColor((string)varkey.Value);
+									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -244,12 +211,6 @@ namespace MetroSet.UI.Controls
 			}
 			Invalidate();
 		}
-
-		#endregion Theme Changing
-
-		#region Properties
-
-		#region Public
 
 		private bool _isDerivedStyle = true;
 
@@ -284,7 +245,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets a value indicating whether the Minimize button is Enabled in the caption bar of the form.
 		/// </summary>
@@ -300,7 +260,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets Close ForeColor used by the control
 		/// </summary>
@@ -314,7 +273,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets Close ForeColor used by the control
@@ -330,7 +288,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets Close BackColor used by the control
 		/// </summary>
@@ -344,7 +301,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets Maximize ForeColor used by the control
@@ -360,7 +316,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets Maximize BackColor used by the control
 		/// </summary>
@@ -374,7 +329,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets Maximize ForeColor used by the control
@@ -390,7 +344,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets Minimize ForeColor used by the control
 		/// </summary>
@@ -404,7 +357,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets Minimize BackColor used by the control
@@ -420,7 +372,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets Minimize ForeColor used by the control
 		/// </summary>
@@ -434,7 +385,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets disabled ForeColor used by the control
@@ -456,21 +406,11 @@ namespace MetroSet.UI.Controls
 		[Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
 		public override Color BackColor => Color.Transparent;
 
-		#endregion
-
-		#region Private 
-
 		private bool MinimizeHovered { get; set; }
 
 		private bool MaximizeHovered { get; set; }
 
 		private bool CloseHovered { get; set; }
-
-		#endregion
-
-		#endregion
-
-		#region Draw Control
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
@@ -504,10 +444,6 @@ namespace MetroSet.UI.Controls
             }
 
 		}
-
-		#endregion
-
-		#region Events
 
 		/// <summary>
 		/// Here we provide the fixed size while resizing.
@@ -568,9 +504,10 @@ namespace MetroSet.UI.Controls
 		{
 			base.OnMouseDown(e);
 			if (CloseHovered)
-			{
-				Parent.FindForm()?.Close();
-			}
+            {
+                if (Parent.FindForm() is MetroSetForm mf && mf.CanClose(CloseReason.UserClosing))
+                    mf.Close();
+            }
 			else if (MinimizeHovered)
 			{
 				if (!MinimizeBox)
@@ -609,8 +546,6 @@ namespace MetroSet.UI.Controls
 			base.OnMouseDown(e);
 			Focus();
 		}
-
-		#endregion
 
 	}
 }

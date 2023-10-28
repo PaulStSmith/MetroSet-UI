@@ -3,6 +3,7 @@
  * 
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of 
  * this software and associated documentation files (the "Software"), to deal in the 
@@ -43,10 +44,6 @@ namespace MetroSet.UI.Actions
 			get => _metroSetSetToolTip.Style;
 			set => _metroSetSetToolTip.Style = value;
 		}
-
-		public string ThemeAuthor => _metroSetSetToolTip.ThemeAuthor;
-
-		public string ThemeName => _metroSetSetToolTip.ThemeName;
 
 		public StyleManager StyleManager
 		{
@@ -103,10 +100,6 @@ namespace MetroSet.UI.Actions
 			new DesignerActionHeaderItem("MetroSet Framework"),
 			new DesignerActionPropertyItem("StyleManager", "StyleManager", "MetroSet Framework", "Gets or sets the stylemanager for the control."),
 			new DesignerActionPropertyItem("Style", "Style", "MetroSet Framework", "Gets or sets the style."),
-
-			new DesignerActionHeaderItem("Informations"),
-			new DesignerActionPropertyItem("ThemeName", "ThemeName", "Informations", "Gets or sets the The Theme name associated with the theme."),
-			new DesignerActionPropertyItem("ThemeAuthor", "ThemeAuthor", "Informations", "Gets or sets the The Author name associated with the theme."),
 
 			new DesignerActionHeaderItem("Misc"),
 				new DesignerActionPropertyItem("Active", "Active", "Misc", "Gets or sets a value indicating whether the ToolTip is currently active."),

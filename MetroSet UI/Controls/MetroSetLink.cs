@@ -3,6 +3,7 @@
 * 
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of 
 * this software and associated documentation files (the "Software"), to deal in the 
@@ -42,7 +43,6 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetLink : LinkLabel, IMetroSetControl
 	{
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -86,34 +86,8 @@ namespace MetroSet.UI.Controls
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
-
-		#endregion Internal Vars
-
-		#region Constructors
 
 		public MetroSetLink()
 		{
@@ -125,15 +99,11 @@ namespace MetroSet.UI.Controls
 			UpdateStyles();
 			base.Font = MetroSetFonts.Light(10);
 			base.Cursor = Cursors.Hand;
-			_utl = new Utilites();
+			
 			_style = Style.Dark;
 			ApplyTheme();
 			LinkBehavior = LinkBehavior.HoverUnderline;
 		}
-
-		#endregion Constructors
-
-		#region ApplyTheme
 
 		/// <summary>
 		/// Gets or sets the style provided by the user.
@@ -152,8 +122,6 @@ namespace MetroSet.UI.Controls
 					ActiveLinkColor = Color.FromArgb(85, 197, 245);
 					LinkColor = Color.FromArgb(65, 177, 225);
 					VisitedLinkColor = Color.FromArgb(45, 157, 205);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
@@ -163,8 +131,6 @@ namespace MetroSet.UI.Controls
 					ActiveLinkColor = Color.FromArgb(85, 197, 245);
 					LinkColor = Color.FromArgb(65, 177, 225);
 					VisitedLinkColor = Color.FromArgb(45, 157, 205);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -175,23 +141,23 @@ namespace MetroSet.UI.Controls
 							switch (varkey.Key)
 							{
 								case "ForeColor":
-									ForeColor = _utl.HexColor((string)varkey.Value);
+									ForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BackColor":
-									BackColor = _utl.HexColor((string)varkey.Value);
+									BackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "LinkColor":
-									LinkColor = _utl.HexColor((string)varkey.Value);
+									LinkColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "ActiveLinkColor":
-									ActiveLinkColor = _utl.HexColor((string)varkey.Value);
+									ActiveLinkColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "VisitedLinkColor":
-									VisitedLinkColor = _utl.HexColor((string)varkey.Value);
+									VisitedLinkColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "LinkBehavior":
@@ -228,24 +194,16 @@ namespace MetroSet.UI.Controls
 			Invalidate();
 		}
 
-		#endregion ApplyTheme
-
-		#region Events
-
 		/// <summary>
 		/// Here we set the smooth mouse hand.
 		/// </summary>
 		/// <param name="m"></param>
 		protected override void WndProc(ref Message m)
 		{
-			_utl.SmoothCursor(ref m);
+			Utilites.SmoothCursor(ref m);
 
 			base.WndProc(ref m);
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets or sets ForeColor used by the control
@@ -307,8 +265,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
-		#endregion Properties
 
 	}
 }

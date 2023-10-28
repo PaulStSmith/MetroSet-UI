@@ -3,6 +3,7 @@
 * 
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of 
 * this software and associated documentation files (the "Software"), to deal in the 
@@ -42,7 +43,6 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetLabel : Label, IMetroSetControl
 	{
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -86,35 +86,8 @@ namespace MetroSet.UI.Controls
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private Methods mth;
-		private Utilites utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
-
-		#endregion Internal Vars
-
-		#region Constructors
 
 		public MetroSetLabel()
 		{
@@ -124,14 +97,8 @@ namespace MetroSet.UI.Controls
 				ControlStyles.SupportsTransparentBackColor, true);
 			UpdateStyles();
 			base.Font = MetroSetFonts.Light(10);
-			mth = new Methods();
-			utl = new Utilites();
 			ApplyTheme();
 		}
-
-		#endregion Constructors
-
-		#region ApplyTheme
 
 		/// <summary>
 		/// Gets or sets the style provided by the user.
@@ -147,16 +114,12 @@ namespace MetroSet.UI.Controls
 				case Style.Light:
 					ForeColor = Color.Black;
 					BackColor = Color.Transparent;
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
 				case Style.Dark:
 					ForeColor = Color.FromArgb(170, 170, 170);
 					BackColor = Color.Transparent;
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -167,11 +130,11 @@ namespace MetroSet.UI.Controls
 							switch (varkey.Key)
 							{
 								case "ForeColor":
-									ForeColor = utl.HexColor((string)varkey.Value);
+									ForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BackColor":
-									BackColor = utl.HexColor((string)varkey.Value);
+									BackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -189,10 +152,6 @@ namespace MetroSet.UI.Controls
 		{
 			Invalidate();
 		}
-
-		#endregion Theme Changing
-
-		#region Properties
 
 		/// <summary>
 		/// Gets or sets ForeColor used by the control
@@ -224,8 +183,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
-		#endregion Properties
 
 	}
 }

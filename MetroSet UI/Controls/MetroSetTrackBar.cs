@@ -3,6 +3,7 @@
 * 
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of 
 * this software and associated documentation files (the "Software"), to deal in the 
@@ -43,8 +44,6 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetTrackBar : Control, IMetroSetControl
 	{
-
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -88,28 +87,6 @@ namespace MetroSet.UI.Controls
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
 		private bool _variable;
@@ -127,10 +104,6 @@ namespace MetroSet.UI.Controls
 		private Color _disabledBorderColor;
 		private Color _disabledHandlerColor;
 
-		#endregion Internal Vars
-
-		#region Constructors
-
 		public MetroSetTrackBar()
 		{
 			SetStyle(
@@ -142,13 +115,9 @@ namespace MetroSet.UI.Controls
 			_value = 0;
 			_currentValue = Convert.ToInt32(Value / (double)(Maximum) - (2 * Width));
 			UpdateStyles();
-			_utl = new Utilites();
+			
 			ApplyTheme();
 		}
-
-		#endregion Constructors
-
-		#region ApplyTheme
 
 		/// <summary>
 		/// Gets or sets the style provided by the user.
@@ -168,8 +137,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(235, 235, 235);
 					DisabledValueColor = Color.FromArgb(205, 205, 205);
 					DisabledHandlerColor = Color.FromArgb(196, 196, 196);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
@@ -180,8 +147,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(80, 80, 80);
 					DisabledValueColor = Color.FromArgb(109, 109, 109);
 					DisabledHandlerColor = Color.FromArgb(90, 90, 90);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -193,27 +158,27 @@ namespace MetroSet.UI.Controls
 							{
 
 								case "HandlerColor":
-									HandlerColor = _utl.HexColor((string)varkey.Value);
+									HandlerColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BackColor":
-									BackgroundColor = _utl.HexColor((string)varkey.Value);
+									BackgroundColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "ValueColor":
-									ValueColor = _utl.HexColor((string)varkey.Value);
+									ValueColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledBackColor":
-									DisabledBackColor = _utl.HexColor((string)varkey.Value);
+									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledValueColor":
-									DisabledValueColor = _utl.HexColor((string)varkey.Value);
+									DisabledValueColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledHandlerColor":
-									DisabledHandlerColor = _utl.HexColor((string)varkey.Value);
+									DisabledHandlerColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -231,10 +196,6 @@ namespace MetroSet.UI.Controls
 		{
 			Invalidate();
 		}
-
-		#endregion Theme Changing
-
-		#region Draw Control
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
@@ -256,10 +217,6 @@ namespace MetroSet.UI.Controls
 				}
 			}
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets or sets the upper limit of the range this TrackBar is working with.
@@ -333,7 +290,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the handler color.
 		/// </summary>
@@ -347,7 +303,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the control BackColor.
@@ -364,7 +319,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the value of the control whenever while disabled
 		/// </summary>
@@ -378,7 +332,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets disabled BackColor used by the control
@@ -394,7 +347,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the border color while the control disabled.
 		/// </summary>
@@ -408,7 +360,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the handler color while the control disabled.
@@ -442,11 +393,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
-
-		#endregion
-
-		#region Events
 
 		public event ScrollEventHandler Scroll;
 		public delegate void ScrollEventHandler(object sender);
@@ -543,8 +489,6 @@ namespace MetroSet.UI.Controls
 			_currentValue = Convert.ToInt32(Math.Round((double)(Value - Minimum) / (Maximum - Minimum) * (Width - 6)));
 			Invalidate();
 		}
-
-		#endregion
 
 	}
 }

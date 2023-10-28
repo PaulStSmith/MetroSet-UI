@@ -3,6 +3,7 @@
 * 
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of 
 * this software and associated documentation files (the "Software"), to deal in the 
@@ -39,7 +40,6 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetPanel : Panel, IMetroSetControl
 	{
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -83,38 +83,12 @@ namespace MetroSet.UI.Controls
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
 
 		private int _borderThickness = 1;
 		private Color _borderColor;
 		private Color _backgroundColor;
-
-		#endregion Internal Vars
-
-		#region Constructors 
 
 		public MetroSetPanel()
 		{
@@ -126,13 +100,9 @@ namespace MetroSet.UI.Controls
 				ControlStyles.SupportsTransparentBackColor, true);
 			BorderStyle = BorderStyle.None;
 			UpdateStyles();
-			_utl = new Utilites();
+			
 			ApplyTheme();
 		}
-
-		#endregion Constructors
-
-		#region ApplyTheme
 
 		/// <summary>
 		/// Gets or sets the style provided by the user.
@@ -148,16 +118,12 @@ namespace MetroSet.UI.Controls
 				case Style.Light:
 					BorderColor = Color.FromArgb(150, 150, 150);
 					BackgroundColor = Color.White;
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
 				case Style.Dark:
 					BorderColor = Color.FromArgb(110, 110, 110);
 					BackgroundColor = Color.FromArgb(30, 30, 30);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -168,11 +134,11 @@ namespace MetroSet.UI.Controls
 							switch (varkey.Key)
 							{
 								case "BorderColor":
-									BorderColor = _utl.HexColor((string)varkey.Value);
+									BorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BackColor":
-									BackgroundColor = _utl.HexColor((string)varkey.Value);
+									BackgroundColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -191,10 +157,6 @@ namespace MetroSet.UI.Controls
 			Invalidate();
 		}
 
-		#endregion Theme Changing
-
-		#region Draw Control
-
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			var g = e.Graphics;
@@ -210,10 +172,6 @@ namespace MetroSet.UI.Controls
 			}
 
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the background color.
@@ -247,7 +205,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets BorderColor used by the control
 		/// </summary>
@@ -261,7 +218,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets BackColor used by the control
@@ -297,7 +253,5 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
-		#endregion
 	}
 }

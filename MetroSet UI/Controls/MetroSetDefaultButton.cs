@@ -3,6 +3,7 @@
  * 
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of 
  * this software and associated documentation files (the "Software"), to deal in the 
@@ -45,8 +46,6 @@ namespace MetroSet.UI.Controls
 	public class MetroSetDefaultButton : Control, IMetroSetControl
 	{
 
-		#region Interfaces
-
 		/// <summary>
 		/// Gets or sets the style associated with the control.
 		/// </summary>
@@ -59,10 +58,6 @@ namespace MetroSet.UI.Controls
 				_style = value;
 				switch (value)
 				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
 					case Style.Dark:
 						ApplyTheme(Style.Dark);
 						break;
@@ -81,18 +76,6 @@ namespace MetroSet.UI.Controls
 		}
 
 		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		/// <summary>
 		/// Gets or sets the Style Manager associated with the control.
 		/// </summary>
 		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
@@ -105,17 +88,6 @@ namespace MetroSet.UI.Controls
 				Invalidate();
 			}
 		}
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Methods _mth;
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
 
 		private MouseMode _state;
 		private Style _style;
@@ -134,10 +106,6 @@ namespace MetroSet.UI.Controls
 		private Color _disabledForeColor;
 		private Color _disabledBorderColor;
 
-		#endregion Internal Vars
-
-		#region Constructors
-
 		public MetroSetDefaultButton()
 		{
 			SetStyle(
@@ -147,14 +115,9 @@ namespace MetroSet.UI.Controls
 				ControlStyles.SupportsTransparentBackColor, true);
 			UpdateStyles();
 			base.Font = MetroSetFonts.Light(10);
-			_utl = new Utilites();
-			_mth = new Methods();
+			
 			ApplyTheme();
 		}
-
-		#endregion Constructors
-
-		#region Draw Control
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
@@ -172,7 +135,7 @@ namespace MetroSet.UI.Controls
 					{
 						g.FillRectangle(bg, r);
 						g.DrawRectangle(p, r);
-						g.DrawString(Text, Font, tb, new Rectangle(0, 0, Width, Height), _mth.SetPosition());
+						g.DrawString(Text, Font, tb, new Rectangle(0, 0, Width, Height), Methods.SetPosition());
 					}
 
 					break;
@@ -186,7 +149,7 @@ namespace MetroSet.UI.Controls
 					{
 						g.FillRectangle(bg, r);
 						g.DrawRectangle(p, r);
-						g.DrawString(Text, Font, tb, new Rectangle(0, 0, Width, Height), _mth.SetPosition());
+						g.DrawString(Text, Font, tb, new Rectangle(0, 0, Width, Height), Methods.SetPosition());
 					}
 
 					break;
@@ -199,7 +162,7 @@ namespace MetroSet.UI.Controls
 					{
 						g.FillRectangle(bg, r);
 						g.DrawRectangle(p, r);
-						g.DrawString(Text, Font, tb, new Rectangle(0, 0, Width, Height), _mth.SetPosition());
+						g.DrawString(Text, Font, tb, new Rectangle(0, 0, Width, Height), Methods.SetPosition());
 					}
 
 					break;
@@ -211,15 +174,11 @@ namespace MetroSet.UI.Controls
 					{
 						g.FillRectangle(bg, r);
 						g.DrawRectangle(p, r);
-						g.DrawString(Text, Font, tb, new Rectangle(0, 0, Width, Height), _mth.SetPosition());
+						g.DrawString(Text, Font, tb, new Rectangle(0, 0, Width, Height), Methods.SetPosition());
 					}
 					break;
 			}
 		}
-
-		#endregion Draw Control
-
-		#region ApplyTheme
 
 		/// <summary>
 		/// Gets or sets the style provided by the user.
@@ -245,8 +204,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(204, 204, 204);
 					DisabledBorderColor = Color.FromArgb(155, 155, 155);
 					DisabledForeColor = Color.FromArgb(136, 136, 136);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					break;
 
 				case Style.Dark:
@@ -262,8 +219,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(80, 80, 80);
 					DisabledBorderColor = Color.FromArgb(109, 109, 109);
 					DisabledForeColor = Color.FromArgb(109, 109, 109);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					break;
 
 				case Style.Custom:
@@ -278,40 +233,40 @@ namespace MetroSet.UI.Controls
 							switch (varkey.Key)
 							{
 								case "NormalColor":
-									NormalColor = _utl.HexColor((string)varkey.Value);
+									NormalColor = Utilites.HexColor((string)varkey.Value);
 									break;
 								case "NormalBorderColor":
-									NormalBorderColor = _utl.HexColor((string)varkey.Value);
+									NormalBorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 								case "NormalTextColor":
-									NormalTextColor = _utl.HexColor((string)varkey.Value);
+									NormalTextColor = Utilites.HexColor((string)varkey.Value);
 									break;
 								case "HoverColor":
-									HoverColor = _utl.HexColor((string)varkey.Value);
+									HoverColor = Utilites.HexColor((string)varkey.Value);
 									break;
 								case "HoverBorderColor":
-									HoverBorderColor = _utl.HexColor((string)varkey.Value);
+									HoverBorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 								case "HoverTextColor":
-									HoverTextColor = _utl.HexColor((string)varkey.Value);
+									HoverTextColor = Utilites.HexColor((string)varkey.Value);
 									break;
 								case "PressColor":
-									PressColor = _utl.HexColor((string)varkey.Value);
+									PressColor = Utilites.HexColor((string)varkey.Value);
 									break;
 								case "PressBorderColor":
-									PressBorderColor = _utl.HexColor((string)varkey.Value);
+									PressBorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 								case "PressTextColor":
-									PressTextColor = _utl.HexColor((string)varkey.Value);
+									PressTextColor = Utilites.HexColor((string)varkey.Value);
 									break;
 								case "DisabledBackColor":
-									DisabledBackColor = _utl.HexColor((string)varkey.Value);
+									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 								case "DisabledBorderColor":
-									DisabledBorderColor = _utl.HexColor((string)varkey.Value);
+									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 								case "DisabledForeColor":
-									DisabledForeColor = _utl.HexColor((string)varkey.Value);
+									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 							}
 						}
@@ -321,10 +276,6 @@ namespace MetroSet.UI.Controls
 					throw new ArgumentOutOfRangeException(nameof(style), style, null);
 			}
 		}
-
-		#endregion Theme Changing
-
-		#region Properties
 
 		/// <summary>
 		/// I make BackColor inaccessible cause we have not use of it. 
@@ -549,55 +500,42 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
+		/// <inheritdoc/>
+        internal void OnClickInternal(EventArgs e)
+        {
+            base.OnClick(e);
+        }
 
-		#endregion
-
-		#region Events
-
-		/// <summary>
-		/// Handling mouse up event of the control.
-		/// </summary>
-		/// <param name="e">MouseEventArgs</param>
-		protected override void OnMouseUp(MouseEventArgs e)
+        /// <inheritdoc/>
+        protected override void OnMouseUp(MouseEventArgs e)
 		{
 			base.OnMouseUp(e);
 			_state = MouseMode.Hovered;
 			Invalidate();
 		}
 
-		/// <summary>
-		/// Handling mouse down event of the control.
-		/// </summary>
-		/// <param name="e">MouseEventArgs</param>
-		protected override void OnMouseDown(MouseEventArgs e)
+        /// <inheritdoc/>
+        protected override void OnMouseDown(MouseEventArgs e)
 		{
 			base.OnMouseUp(e);
 			_state = MouseMode.Pushed;
 			Invalidate();
 		}
 
-		/// <summary>
-		/// Handling mouse entering event of the control.
-		/// </summary>
-		/// <param name="e">MouseEventArgs</param>
-		protected override void OnMouseEnter(EventArgs e)
+        /// <inheritdoc/>
+        protected override void OnMouseEnter(EventArgs e)
 		{
 			base.OnMouseEnter(e);
 			_state = MouseMode.Hovered;
 			Invalidate();
 		}
 
-		/// <summary>
-		/// Handling mouse leave event of the control.
-		/// </summary>
-		/// <param name="e">EventArgs</param>
-		protected override void OnMouseLeave(EventArgs e)
+        /// <inheritdoc/>
+        protected override void OnMouseLeave(EventArgs e)
 		{
 			base.OnMouseEnter(e);
 			_state = MouseMode.Normal;
 			Invalidate();
 		}
-
-		#endregion Events
 	}
 }

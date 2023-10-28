@@ -3,6 +3,7 @@
  * 
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of 
  * this software and associated documentation files (the "Software"), to deal in the 
@@ -30,61 +31,53 @@ using MetroSet.UI.Enums;
 
 namespace MetroSet.UI.Actions
 {
-	internal class MetroSetDividerActionList : DesignerActionList
-	{
-		private readonly MetroSetDivider _metroSetDivider;
+    internal class MetroSetDividerActionList : DesignerActionList
+    {
+        private readonly MetroSetDivider _metroSetDivider;
 
-		public MetroSetDividerActionList(IComponent component) : base(component)
-		{
-			_metroSetDivider = (MetroSetDivider)component;
-		}
+        public MetroSetDividerActionList(IComponent component) : base(component)
+        {
+            _metroSetDivider = (MetroSetDivider)component;
+        }
 
-		public Style Style
-		{
-			get => _metroSetDivider.Style;
-			set => _metroSetDivider.Style = value;
-		}
+        public Style Style
+        {
+            get => _metroSetDivider.Style;
+            set => _metroSetDivider.Style = value;
+        }
 
-		public string ThemeAuthor => _metroSetDivider.ThemeAuthor;
+        public StyleManager StyleManager
+        {
+            get => _metroSetDivider.StyleManager;
+            set => _metroSetDivider.StyleManager = value;
+        }
 
-		public string ThemeName => _metroSetDivider.ThemeName;
+        public DividerStyle Orientation
+        {
+            get => _metroSetDivider.Orientation;
+            set => _metroSetDivider.Orientation = value;
+        }
 
-		public StyleManager StyleManager
-		{
-			get => _metroSetDivider.StyleManager;
-			set => _metroSetDivider.StyleManager = value;
-		}
+        public int Thickness
+        {
+            get => _metroSetDivider.Thickness;
+            set => _metroSetDivider.Thickness = value;
+        }
 
-		public DividerStyle Orientation
-		{
-			get => _metroSetDivider.Orientation;
-			set => _metroSetDivider.Orientation = value;
-		}
+        public override DesignerActionItemCollection GetSortedActionItems()
+        {
+            DesignerActionItemCollection items = new()
+            {
+            new DesignerActionHeaderItem("MetroSet Framework"),
+            new DesignerActionPropertyItem("StyleManager", "StyleManager", "MetroSet Framework", "Gets or sets the stylemanager for the control."),
+            new DesignerActionPropertyItem("Style", "Style", "MetroSet Framework", "Gets or sets the style."),
 
-		public int Thickness
-		{
-			get => _metroSetDivider.Thickness;
-			set => _metroSetDivider.Thickness = value;
-		}
+            new DesignerActionHeaderItem("Appearance"),
+            new DesignerActionPropertyItem("Orientation", "Orientation", "Appearance", "Gets or sets Orientation of the control."),
+            new DesignerActionPropertyItem("Thickness", "Thickness", "Appearance", "Gets or sets the divider thickness."),
+            };
 
-		public override DesignerActionItemCollection GetSortedActionItems()
-		{
-			DesignerActionItemCollection items = new DesignerActionItemCollection
-		{
-			new DesignerActionHeaderItem("MetroSet Framework"),
-			new DesignerActionPropertyItem("StyleManager", "StyleManager", "MetroSet Framework", "Gets or sets the stylemanager for the control."),
-			new DesignerActionPropertyItem("Style", "Style", "MetroSet Framework", "Gets or sets the style."),
-
-			new DesignerActionHeaderItem("Informations"),
-			new DesignerActionPropertyItem("ThemeName", "ThemeName", "Informations", "Gets or sets the The Theme name associated with the theme."),
-			new DesignerActionPropertyItem("ThemeAuthor", "ThemeAuthor", "Informations", "Gets or sets the The Author name associated with the theme."),
-
-			new DesignerActionHeaderItem("Appearance"),
-			new DesignerActionPropertyItem("Orientation", "Orientation", "Appearance", "Gets or sets Orientation of the control."),
-			new DesignerActionPropertyItem("Thickness", "Thickness", "Appearance", "Gets or sets the divider thickness."),
-			};
-
-			return items;
-		}
-	}
+            return items;
+        }
+    }
 }

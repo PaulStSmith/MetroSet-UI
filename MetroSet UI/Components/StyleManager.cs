@@ -3,6 +3,7 @@
  * 
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of 
  * this software and associated documentation files (the "Software"), to deal in the 
@@ -44,8 +45,6 @@ namespace MetroSet.UI.Components
 	public class StyleManager : Component
 	{
 
-		#region Constructor
-
 		public StyleManager()
 		{
 			_style = Style.Light;
@@ -57,10 +56,6 @@ namespace MetroSet.UI.Components
 			InitializeDictionaries();
 		}
 
-		#endregion
-
-		#region Methods
-
 		/// <summary>
 		/// The Method to update the form with the style manager style and it's controls.
 		/// </summary>
@@ -70,8 +65,6 @@ namespace MetroSet.UI.Components
 			{
 				case IMetroForm form:
 					form.Style = Style;
-					form.ThemeAuthor = ThemeAuthor;
-					form.ThemeName = ThemeName;
 					form.StyleManager = this;
 					break;
 			}
@@ -94,8 +87,6 @@ namespace MetroSet.UI.Components
 				if (control != null && CustomTheme != null)
 				{
 					control.Style = Style;
-					control.ThemeAuthor = ThemeAuthor;
-					control.ThemeName = ThemeName;
 					control.StyleManager = this;
 				}
 				if (control is TabControl tabControl)
@@ -106,8 +97,6 @@ namespace MetroSet.UI.Components
 						{
 							control.Style = Style;
 							control.StyleManager = this;
-							control.ThemeAuthor = ThemeAuthor;
-							control.ThemeName = ThemeName;
 						}
 						UpdateControls(c.Controls);
 					}
@@ -119,8 +108,6 @@ namespace MetroSet.UI.Components
 						continue;
 					((IMetroSetControl)child).Style = Style;
 					((IMetroSetControl)child).StyleManager = this;
-					((IMetroSetControl)child).ThemeAuthor = ThemeAuthor;
-					((IMetroSetControl)child).ThemeName = ThemeName;
 
 				}
 			}
@@ -136,8 +123,6 @@ namespace MetroSet.UI.Components
 				if (!control.IsDerivedStyle)
 					return;
 				control.Style = Style;
-				control.ThemeAuthor = ThemeAuthor;
-				control.ThemeName = ThemeName;
 				control.StyleManager = this;
 			}
 			else
@@ -146,30 +131,9 @@ namespace MetroSet.UI.Components
 			}
 		}
 
-		#endregion
-
-		#region Internal Vars
-
 		private Style _style;
 		private Form _metroForm;
 		private string _customTheme;
-
-		#endregion Internal Vars
-
-		#region Properties
-
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
 
 		/// <summary>
 		/// Gets or sets the form (MetroForm) to Apply themes for.
@@ -200,22 +164,9 @@ namespace MetroSet.UI.Components
 			set
 			{
 				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ThemeAuthor = "Narwin";
-						ThemeName = "MetroLight";
-						break;
-					case Style.Dark:
-						ThemeAuthor = "Narwin";
-						ThemeName = "MetroDark";
-						break;
-				}
-
 				UpdateForm();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the custom theme file controls.
@@ -235,10 +186,6 @@ namespace MetroSet.UI.Components
 				_customTheme = value;
 			}
 		}
-
-		#endregion Properties
-
-		#region Open Theme
 
 		/// <summary>
 		/// The Method to execute the FileNamesEditor and open the dialog of importing the custom theme.
@@ -273,12 +220,6 @@ namespace MetroSet.UI.Components
 			File.WriteAllText(path, str);
 			return path;
 		}
-
-		#endregion Open Theme
-
-		#region Dictionaries
-
-		#region Declartions
 
 		/// <summary>
 		/// The Button properties from custom theme will be stored into this dictionary.
@@ -410,11 +351,6 @@ namespace MetroSet.UI.Components
 		/// </summary>
 		public Dictionary<string, object> DataGridDictionary;
 
-
-		#endregion
-
-		#region Methods 
-
 		private void Clear()
 		{
 			ButtonDictionary.Clear();
@@ -446,10 +382,6 @@ namespace MetroSet.UI.Components
 			DataGridDictionary.Clear();
 		}
 
-		#endregion
-
-		#region Evaluate
-
 		private void InitializeDictionaries()
 		{
 			ButtonDictionary = new Dictionary<string, object>();
@@ -479,12 +411,6 @@ namespace MetroSet.UI.Components
 			ListBoxDictionary = new Dictionary<string, object>();
 			DataGridDictionary = new Dictionary<string, object>();
 		}
-
-		#endregion
-
-		#endregion
-
-		#region Reader
 
 		/// <summary>
 		/// Reads the theme file and put elements properties to dictionaries.
@@ -556,7 +482,6 @@ namespace MetroSet.UI.Components
 
 		}
 
-
 		/// <summary>
 		/// The Method get the custom theme name and author.
 		/// </summary>
@@ -577,6 +502,15 @@ namespace MetroSet.UI.Components
 			}
 		}
 
+        /// <summary>
+        /// Gets or sets the the name of the theme.
+        /// </summary>
+        public string ThemeName { get; protected internal set; }
+
+        /// <summary>
+        /// Gets or sets the the author's name associated with the theme.
+        /// </summary>
+		public string ThemeAuthor { get; protected internal set; }
 
 		/// <summary>
 		/// The Method to load the custom xml theme file and add a childnodes from a specific node into a dectionary. 
@@ -608,11 +542,6 @@ namespace MetroSet.UI.Components
 			}
 		}
 
-
-		#endregion Reader
-
-		#region UITypeEditor
-
 		/// <summary>
 		/// Dialog Type For Opening the theme.
 		/// </summary>
@@ -641,8 +570,6 @@ namespace MetroSet.UI.Components
 				return _ofd.ShowDialog() == DialogResult.OK ? _ofd.FileName : base.EditValue(context, provider, value);
 			}
 		}
-
-		#endregion
 
 	}
 }

@@ -3,6 +3,7 @@
  * 
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of 
  * this software and associated documentation files (the "Software"), to deal in the 
@@ -43,7 +44,6 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetProgressBar : Control, IMetroSetControl
 	{
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -87,28 +87,6 @@ namespace MetroSet.UI.Controls
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
 		private int _value;
@@ -124,10 +102,6 @@ namespace MetroSet.UI.Controls
 		private Color _disabledBackColor;
 		private Color _disabledBorderColor;
 
-		#endregion Internal Vars
-
-		#region Constructors
-
 		public MetroSetProgressBar()
 		{
 			SetStyle(
@@ -135,13 +109,9 @@ namespace MetroSet.UI.Controls
 				ControlStyles.OptimizedDoubleBuffer |
 				ControlStyles.SupportsTransparentBackColor, true);
 			UpdateStyles();
-			_utl = new Utilites();
+			
 			ApplyTheme();
 		}
-
-		#endregion Constructors
-
-		#region ApplyTheme
 
 		/// <summary>
 		/// Gets or sets the style provided by the user.
@@ -161,8 +131,6 @@ namespace MetroSet.UI.Controls
 					DisabledProgressColor = Color.FromArgb(120, 65, 177, 225);
 					DisabledBorderColor = Color.FromArgb(238, 238, 238);
 					DisabledBackColor = Color.FromArgb(238, 238, 238);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
@@ -173,8 +141,6 @@ namespace MetroSet.UI.Controls
 					DisabledProgressColor = Color.FromArgb(120, 65, 177, 225);
 					DisabledBackColor = Color.FromArgb(38, 38, 38);
 					DisabledBorderColor = Color.FromArgb(38, 38, 38);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -185,27 +151,27 @@ namespace MetroSet.UI.Controls
 							switch (varkey.Key)
 							{
 								case "ProgressColor":
-									ProgressColor = _utl.HexColor((string)varkey.Value);
+									ProgressColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BorderColor":
-									BorderColor = _utl.HexColor((string)varkey.Value);
+									BorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BackColor":
-									BackgroundColor = _utl.HexColor((string)varkey.Value);
+									BackgroundColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledBackColor":
-									DisabledBackColor = _utl.HexColor((string)varkey.Value);
+									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledBorderColor":
-									DisabledBorderColor = _utl.HexColor((string)varkey.Value);
+									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledProgressColor":
-									DisabledProgressColor = _utl.HexColor((string)varkey.Value);
+									DisabledProgressColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -224,45 +190,31 @@ namespace MetroSet.UI.Controls
 			Invalidate();
 		}
 
-		#endregion Theme Changing
-
-		#region Draw Control
-
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			var g = e.Graphics;
 			var rect = new Rectangle(0, 0, Width - 1, Height - 1);
 
-			using (var bg = new SolidBrush(Enabled ? BackgroundColor : DisabledBackColor))
-			{
-				using (var p = new Pen(Enabled ? BorderColor : DisabledBorderColor))
-				{
-					using (var ps = new SolidBrush(Enabled ? ProgressColor : DisabledProgressColor))
-					{
-						g.FillRectangle(bg, rect);
-						if (_currentValue != 0)
-						{
-							switch (Orientation)
-							{
-								case ProgressOrientation.Horizontal:
-									g.FillRectangle(ps, new Rectangle(0, 0, _currentValue - 1, Height - 1));
-									break;
-								case ProgressOrientation.Vertical:
-									g.FillRectangle(ps, new Rectangle(0, Height - _currentValue, Width - 1, _currentValue - 1));
-									break;
-								default:
-									throw new ArgumentOutOfRangeException();
-							}
-						}
-						g.DrawRectangle(p, rect);
-					}
-				}
-			}
-		}
-
-		#endregion
-
-		#region Properties
+            using var bg = new SolidBrush(Enabled ? BackgroundColor : DisabledBackColor);
+            using var p = new Pen(Enabled ? BorderColor : DisabledBorderColor);
+            using var ps = new SolidBrush(Enabled ? ProgressColor : DisabledProgressColor);
+            g.FillRectangle(bg, rect);
+            if (_currentValue != 0)
+            {
+                switch (Orientation)
+                {
+                    case ProgressOrientation.Horizontal:
+                        g.FillRectangle(ps, new Rectangle(0, 0, _currentValue - 1, Height - 1));
+                        break;
+                    case ProgressOrientation.Vertical:
+                        g.FillRectangle(ps, new Rectangle(0, Height - _currentValue, Width - 1, _currentValue - 1));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            g.DrawRectangle(p, rect);
+        }
 
 		/// <summary>
 		/// Gets or sets the current position of the progressbar.
@@ -298,7 +250,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the minimum value of the progressbar.
 		/// </summary>
@@ -312,7 +263,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		[Browsable(false)]
 		public override Color BackColor => Color.Transparent;
@@ -331,7 +281,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the control BackColor.
 		/// </summary>
@@ -347,7 +296,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the border color.
 		/// </summary>
@@ -361,7 +309,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the progress color of the control.
@@ -377,7 +324,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the Progress color of the control whenever while disabled
 		/// </summary>
@@ -392,7 +338,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets disabled BackColor used by the control
 		/// </summary>
@@ -406,7 +351,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the border color while the control disabled.
@@ -441,11 +385,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
-		#endregion
-
-		#region Events
-
 		public event ValueChangedEventHandler ValueChanged;
 		public delegate void ValueChangedEventHandler(object sender);
 
@@ -459,8 +398,6 @@ namespace MetroSet.UI.Controls
 			else
 				_currentValue = Convert.ToInt32(Value / (double)Maximum * Height - 1);
 		}
-
-		#endregion
 
 	}
 }

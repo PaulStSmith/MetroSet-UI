@@ -3,6 +3,7 @@
  * 
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of 
  * this software and associated documentation files (the "Software"), to deal in the 
@@ -45,10 +46,6 @@ namespace MetroSet.UI.Actions
 			set => _metroSetSwitch.Style = value;
 		}
 
-		public string ThemeAuthor => _metroSetSwitch.ThemeAuthor;
-
-		public string ThemeName => _metroSetSwitch.ThemeName;
-
 		public StyleManager StyleManager
 		{
 			get => _metroSetSwitch.StyleManager;
@@ -74,10 +71,6 @@ namespace MetroSet.UI.Actions
 			new DesignerActionHeaderItem("MetroSet Framework"),
 			new DesignerActionPropertyItem("StyleManager", "StyleManager", "MetroSet Framework", "Gets or sets the stylemanager for the control."),
 			new DesignerActionPropertyItem("Style", "Style", "MetroSet Framework", "Gets or sets the style."),
-
-			new DesignerActionHeaderItem("Informations"),
-			new DesignerActionPropertyItem("ThemeName", "ThemeName", "Informations", "Gets or sets the The Theme name associated with the theme."),
-			new DesignerActionPropertyItem("ThemeAuthor", "ThemeAuthor", "Informations", "Gets or sets the The Author name associated with the theme."),
 
 			new DesignerActionHeaderItem("Appearance"),
 			new DesignerActionPropertyItem("Text", "Text", "Appearance", "Gets or sets the The text associated with the control."),

@@ -3,6 +3,7 @@
  * 
  * The MIT License (MIT)
  * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of 
  * this software and associated documentation files (the "Software"), to deal in the 
@@ -26,10 +27,11 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
 
 namespace MetroSet.UI.Extensions
 {
-	internal class Methods
+	internal static class Methods
 	{
 		/// <summary>
 		/// The Method to draw the image from encoded base64 string.
@@ -37,10 +39,10 @@ namespace MetroSet.UI.Extensions
 		/// <param name="graphics">The Graphics to draw the image.</param>
 		/// <param name="base64Image">The Encoded base64 image.</param>
 		/// <param name="rect">The Rectangle area for the image.</param>
-		public void DrawImageFromBase64(Graphics graphics, string base64Image, Rectangle rect)
+		public static void DrawImageFromBase64(Graphics graphics, string base64Image, Rectangle rect)
 		{
 			Image im;
-			using (var ms = new System.IO.MemoryStream(Convert.FromBase64String(base64Image)))
+			using (var ms = new MemoryStream(Convert.FromBase64String(base64Image)))
 			{
 				im = Image.FromStream(ms);
 				ms.Close();
@@ -56,21 +58,21 @@ namespace MetroSet.UI.Extensions
 		/// <param name="image"> The image that the custom color applies on it.</param>
 		/// <param name="c">The Color that be applied to the image.</param>
 		/// <remarks></remarks>
-		public void DrawImageWithColor(Graphics G, Rectangle r, Image image, Color c)
+		public static void DrawImageWithColor(Graphics G, Rectangle r, Image image, Color c)
 		{
 			var ptsArray = new[]
 			{
-			new[] {Convert.ToSingle(c.R / 255.0), 0f, 0f, 0f, 0f},
-			new[] {0f, Convert.ToSingle(c.G / 255.0), 0f, 0f, 0f},
-			new[] {0f, 0f, Convert.ToSingle(c.B / 255.0), 0f, 0f},
-			new[] {0f, 0f, 0f, Convert.ToSingle(c.A / 255.0), 0f},
-			new[]
-			{
-				Convert.ToSingle( c.R/255.0),
-				Convert.ToSingle( c.G/255.0),
-				Convert.ToSingle( c.B/255.0), 0f,
-				Convert.ToSingle( c.A/255.0)
-			}
+				new[] {Convert.ToSingle(c.R / 255.0), 0f, 0f, 0f, 0f},
+				new[] {0f, Convert.ToSingle(c.G / 255.0), 0f, 0f, 0f},
+				new[] {0f, 0f, Convert.ToSingle(c.B / 255.0), 0f, 0f},
+				new[] {0f, 0f, 0f, Convert.ToSingle(c.A / 255.0), 0f},
+				new[]
+				{
+					Convert.ToSingle( c.R/255.0),
+					Convert.ToSingle( c.G/255.0),
+					Convert.ToSingle( c.B/255.0), 0f,
+					Convert.ToSingle( c.A/255.0)
+				}
 			};
 			var imageAttributes = new ImageAttributes();
 			imageAttributes.SetColorMatrix(new ColorMatrix(ptsArray), ColorMatrixFlag.Default, ColorAdjustType.Default);
@@ -86,22 +88,22 @@ namespace MetroSet.UI.Extensions
 		/// <param name="image"> The Encoded base64 image that the custom color applies on it.</param>
 		/// <param name="c">The Color that be applied to the image.</param>
 		/// <remarks></remarks>
-		public void DrawImageWithColor(Graphics G, Rectangle r, string image, Color c)
+		public static void DrawImageWithColor(Graphics G, Rectangle r, string image, Color c)
 		{
 			var im = ImageFromBase64(image);
 			var ptsArray = new[]
 			{
-			new[] {Convert.ToSingle(c.R / 255.0), 0f, 0f, 0f, 0f},
-			new[] {0f, Convert.ToSingle(c.G / 255.0), 0f, 0f, 0f},
-			new[] {0f, 0f, Convert.ToSingle(c.B / 255.0), 0f, 0f},
-			new[] {0f, 0f, 0f, Convert.ToSingle(c.A / 255.0), 0f},
-			new[]
-			{
-				Convert.ToSingle( c.R/255.0),
-				Convert.ToSingle( c.G/255.0),
-				Convert.ToSingle( c.B/255.0), 0f,
-				Convert.ToSingle( c.A/255.0)
-			}
+				new[] {Convert.ToSingle(c.R / 255.0), 0f, 0f, 0f, 0f},
+				new[] {0f, Convert.ToSingle(c.G / 255.0), 0f, 0f, 0f},
+				new[] {0f, 0f, Convert.ToSingle(c.B / 255.0), 0f, 0f},
+				new[] {0f, 0f, 0f, Convert.ToSingle(c.A / 255.0), 0f},
+				new[]
+				{
+					Convert.ToSingle( c.R/255.0),
+					Convert.ToSingle( c.G/255.0),
+					Convert.ToSingle( c.B/255.0), 0f,
+					Convert.ToSingle( c.A/255.0)
+				}
 			};
 			var imageAttributes = new ImageAttributes();
 			imageAttributes.SetColorMatrix(new ColorMatrix(ptsArray), ColorMatrixFlag.Default, ColorAdjustType.Default);
@@ -114,7 +116,7 @@ namespace MetroSet.UI.Extensions
 		/// <param name="horizontal">Horizontal alignment.</param>
 		/// <param name="vertical">Horizontal alignment. alignment.</param>
 		/// <returns>The String format.</returns>
-		public StringFormat SetPosition(StringAlignment horizontal = StringAlignment.Center, StringAlignment vertical = StringAlignment.Center)
+		public static StringFormat SetPosition(StringAlignment horizontal = StringAlignment.Center, StringAlignment vertical = StringAlignment.Center)
 		{
 			return new StringFormat
 			{
@@ -127,28 +129,27 @@ namespace MetroSet.UI.Extensions
 		/// The Matrix array of single from color.
 		/// </summary>
 		/// <param name="c">The Color.</param>
-		/// /// <param name="alpha">The Opacity.</param>
+		/// <param name="alpha">The Opacity.</param>
 		/// <returns>The Matrix array of single from the given color</returns>
-		public float[][] ColorToMatrix(float alpha, Color c)
+		public static float[][] ColorToMatrix(float alpha, Color c)
 		{
 			return new[]
 			{
-			new [] {Convert.ToSingle(c.R / 255),0,0,0,0},
-			new [] {0,Convert.ToSingle(c.G / 255),0,0,0},
-			new [] {0,0,Convert.ToSingle(c.B / 255),0,0},
-			new [] {0,0,0,Convert.ToSingle(c.A / 255),0},
-			new [] {
-				Convert.ToSingle(c.R / 255),
-				Convert.ToSingle(c.G / 255),
-				Convert.ToSingle(c.B / 255),
-				alpha,
-				Convert.ToSingle(c.A / 255)
-			}
-		};
+				new [] {Convert.ToSingle(c.R / 255),0,0,0,0},
+				new [] {0,Convert.ToSingle(c.G / 255),0,0,0},
+				new [] {0,0,Convert.ToSingle(c.B / 255),0,0},
+				new [] {0,0,0,Convert.ToSingle(c.A / 255),0},
+				new [] {
+					Convert.ToSingle(c.R / 255),
+					Convert.ToSingle(c.G / 255),
+					Convert.ToSingle(c.B / 255),
+					alpha,
+					Convert.ToSingle(c.A / 255)
+				}
+			};
 		}
 
-
-		public void DrawImageWithTransparency(Graphics G, float alpha, Image image, Rectangle rect)
+		public static void DrawImageWithTransparency(Graphics G, float alpha, Image image, Rectangle rect)
 		{
 			var colorMatrix = new ColorMatrix { Matrix33 = alpha };
 			var imageAttributes = new ImageAttributes();
@@ -157,72 +158,60 @@ namespace MetroSet.UI.Extensions
 			imageAttributes.Dispose();
 		}
 
-
-
 		/// <summary>
 		/// The Image from encoded base64 image.
 		/// </summary>
 		/// <param name="base64Image">The Encoded base64 image</param>
 		/// <returns>The Image from encoded base64.</returns>
-		public Image ImageFromBase64(string base64Image)
+		public static Image ImageFromBase64(string base64Image)
 		{
-			using (var ms = new System.IO.MemoryStream(Convert.FromBase64String(base64Image)))
-			{
-				return Image.FromStream(ms);
-			}
-		}
+            using var ms = new System.IO.MemoryStream(Convert.FromBase64String(base64Image));
+            return Image.FromStream(ms);
+        }
 
-		/// <summary>
-		/// Turns the rectangle to rounded rectangle.
-		/// Credits : Aeonhack
-		/// <param name="r">The Rectangle to fill.</param>
-		/// <param name="curve">The Rounding border radius.</param>
-		/// <param name="topLeft">Wether the top left of rectangle be round or not.</param>
-		/// <param name="topRight">Wether the top right of rectangle be round or not.</param>
-		/// <param name="bottomLeft">Wether the bottom left of rectangle be round or not.</param>
-		/// <param name="bottomRight">Wether the bottom right of rectangle be round or not.</param>
-		/// <returns>the rounded rectangle base one given rectangle</returns>
-		/// </summary>
+        /// <summary>
+        /// Turns the rectangle to rounded rectangle.
+        /// Credits : Aeonhack
+        /// <param name="r">The Rectangle to fill.</param>
+        /// <param name="curve">The Rounding border radius.</param>
+        /// <param name="topLeft">Wether the top left of rectangle be round or not.</param>
+        /// <param name="topRight">Wether the top right of rectangle be round or not.</param>
+        /// <param name="bottomLeft">Wether the bottom left of rectangle be round or not.</param>
+        /// <param name="bottomRight">Wether the bottom right of rectangle be round or not.</param>
+        /// <returns>the rounded rectangle base one given rectangle</returns>
+        /// </summary>
 
-		public GraphicsPath RoundRec(Rectangle r, int curve, bool topLeft = true, bool topRight = true,
-		  bool bottomLeft = true, bool bottomRight = true)
+        public static GraphicsPath RoundRec(Rectangle r,
+                                            int curve,
+                                            bool topLeft = true,
+                                            bool topRight = true,
+                                            bool bottomLeft = true,
+                                            bool bottomRight = true)
 		{
-			var createRoundPath = new GraphicsPath(FillMode.Winding);
-			if (topLeft)
-			{
-				createRoundPath.AddArc(r.X, r.Y, curve, curve, 180f, 90f);
-			}
-			else
-			{
-				createRoundPath.AddLine(r.X, r.Y, r.X, r.Y);
-			}
-			if (topRight)
-			{
-				createRoundPath.AddArc(r.Right - curve, r.Y, curve, curve, 270f, 90f);
-			}
-			else
-			{
-				createRoundPath.AddLine(r.Right - r.Width, r.Y, r.Width, r.Y);
-			}
-			if (bottomRight)
-			{
-				createRoundPath.AddArc(r.Right - curve, r.Bottom - curve, curve, curve, 0f, 90f);
-			}
-			else
-			{
-				createRoundPath.AddLine(r.Right, r.Bottom, r.Right, r.Bottom);
-			}
-			if (bottomLeft)
-			{
-				createRoundPath.AddArc(r.X, r.Bottom - curve, curve, curve, 90f, 90f);
-			}
-			else
-			{
-				createRoundPath.AddLine(r.X, r.Bottom, r.X, r.Bottom);
-			}
-			createRoundPath.CloseFigure();
-			return createRoundPath;
-		}
+            var createRoundPath = new GraphicsPath(FillMode.Winding);
+            if (topLeft)
+                createRoundPath.AddArc(r.X, r.Y, curve, curve, 180f, 90f);
+            else
+                createRoundPath.AddLine(r.X, r.Y, r.X, r.Y);
+
+            if (topRight)
+                createRoundPath.AddArc(r.Right - curve, r.Y, curve, curve, 270f, 90f);
+            else
+                createRoundPath.AddLine(r.Right - r.Width, r.Y, r.Width, r.Y);
+
+            if (bottomRight)
+                createRoundPath.AddArc(r.Right - curve, r.Bottom - curve, curve, curve, 0f, 90f);
+            else
+                createRoundPath.AddLine(r.Right, r.Bottom, r.Right, r.Bottom);
+
+            if (bottomLeft)
+                createRoundPath.AddArc(r.X, r.Bottom - curve, curve, curve, 90f, 90f);
+            else
+                createRoundPath.AddLine(r.X, r.Bottom, r.X, r.Bottom);
+
+            createRoundPath.CloseFigure();
+            return createRoundPath;
+        }
 
 		/// <summary>
 		/// Turns the rectangle to rounded rectangle.
@@ -239,45 +228,14 @@ namespace MetroSet.UI.Extensions
 		/// <returns>the rounded rectangle base one given dimensions</returns>
 		/// <returns>the rounded rectangle base one given details</returns>
 		/// </summary>
-		public GraphicsPath RoundRec(int x, int y, int width, int height, int curve, bool topLeft = true, bool topRight = true,
-									 bool bottomLeft = true, bool bottomRight = true)
-		{
-			var r = new Rectangle(x, y, width, height);
-			var createRoundPath = new GraphicsPath(FillMode.Winding);
-			if (topLeft)
-			{
-				createRoundPath.AddArc(r.X, r.Y, curve, curve, 180f, 90f);
-			}
-			else
-			{
-				createRoundPath.AddLine(r.X, r.Y, r.X, r.Y);
-			}
-			if (topRight)
-			{
-				createRoundPath.AddArc(r.Right - curve, r.Y, curve, curve, 270f, 90f);
-			}
-			else
-			{
-				createRoundPath.AddLine(r.Right - r.Width, r.Y, r.Width, r.Y);
-			}
-			if (bottomRight)
-			{
-				createRoundPath.AddArc(r.Right - curve, r.Bottom - curve, curve, curve, 0f, 90f);
-			}
-			else
-			{
-				createRoundPath.AddLine(r.Right, r.Bottom, r.Right, r.Bottom);
-			}
-			if (bottomLeft)
-			{
-				createRoundPath.AddArc(r.X, r.Bottom - curve, curve, curve, 90f, 90f);
-			}
-			else
-			{
-				createRoundPath.AddLine(r.X, r.Bottom, r.X, r.Bottom);
-			}
-			createRoundPath.CloseFigure();
-			return createRoundPath;
-		}
+		public static GraphicsPath RoundRec(int x,
+											int y,
+											int width,
+											int height,
+											int curve,
+											bool topLeft = true,
+											bool topRight = true,
+											bool bottomLeft = true,
+											bool bottomRight = true) => RoundRec(new Rectangle(x, y, width, height), curve, topLeft, topRight, bottomLeft, bottomRight);
 	}
 }

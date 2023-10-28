@@ -3,6 +3,7 @@
 * 
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of 
 * this software and associated documentation files (the "Software"), to deal in the 
@@ -44,8 +45,6 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetNumeric : Control, IMetroSetControl
 	{
-
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -89,29 +88,6 @@ namespace MetroSet.UI.Controls
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Methods _mth;
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
 		private Point _point;
@@ -127,10 +103,6 @@ namespace MetroSet.UI.Controls
 		private Color _borderColor;
 		private Color _symbolsColor;
 
-		#endregion Internal Vars
-
-		#region Constructors
-
 		public MetroSetNumeric()
 		{
 			SetStyle(
@@ -140,8 +112,8 @@ namespace MetroSet.UI.Controls
 			UpdateStyles();
 			base.Font = MetroSetFonts.SemiLight(10);
 			BackColor = Color.Transparent;
-			_mth = new Methods();
-			_utl = new Utilites();
+			
+			
 			ApplyTheme();
 			_point = new Point(0, 0);
 			_holdTimer = new Timer()
@@ -153,11 +125,6 @@ namespace MetroSet.UI.Controls
 			_holdTimer.Elapsed += HoldTimer_Tick;
 		}
 
-
-		#endregion Constructors
-
-		#region Draw Control
-
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			var g = e.Graphics;
@@ -167,35 +134,19 @@ namespace MetroSet.UI.Controls
 			const char plus = '+';
 			const char minus = '-';
 
-			using (var bg = new SolidBrush(Enabled ? BackColor : DisabledBackColor))
-			{
-				using (var p = new Pen(Enabled ? BorderColor : DisabledBorderColor))
-				{
-					using (var s = new SolidBrush(Enabled ? SymbolsColor : DisabledForeColor))
-					{
-						using (var tb = new SolidBrush(Enabled ? ForeColor : DisabledForeColor))
-						{
-							using (var f2 = MetroSetFonts.SemiBold(18))
-							{
-								using (var sf = new StringFormat { LineAlignment = StringAlignment.Center })
-								{
-									g.FillRectangle(bg, rect);
-									g.DrawString(plus.ToString(), f2, s, new Rectangle(Width - 45, 1, 25, Height - 1), sf);
-									g.DrawString(minus.ToString(), f2, s, new Rectangle(Width - 25, -1, 20, Height - 1), sf);
-									g.DrawString(Value.ToString(), Font, tb, new Rectangle(0, 0, Width - 50, Height - 1), _mth.SetPosition(StringAlignment.Far));
-									g.DrawRectangle(p, rect);
-								}
-							}
-						}
-					}
-				}
-			}
+            using var bg = new SolidBrush(Enabled ? BackColor : DisabledBackColor);
+            using var p = new Pen(Enabled ? BorderColor : DisabledBorderColor);
+            using var s = new SolidBrush(Enabled ? SymbolsColor : DisabledForeColor);
+            using var tb = new SolidBrush(Enabled ? ForeColor : DisabledForeColor);
+            using var f2 = MetroSetFonts.SemiBold(18);
+            using var sf = new StringFormat { LineAlignment = StringAlignment.Center };
+            g.FillRectangle(bg, rect);
+            g.DrawString(plus.ToString(), f2, s, new Rectangle(Width - 45, 1, 25, Height - 1), sf);
+            g.DrawString(minus.ToString(), f2, s, new Rectangle(Width - 25, -1, 20, Height - 1), sf);
+            g.DrawString(Value.ToString(), Font, tb, new Rectangle(0, 0, Width - 50, Height - 1), Methods.SetPosition(StringAlignment.Far));
+            g.DrawRectangle(p, rect);
 
-		}
-
-		#endregion
-
-		#region ApplyTheme
+        }
 
 		/// <summary>
 		/// Gets or sets the style provided by the user.
@@ -216,8 +167,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(204, 204, 204);
 					DisabledBorderColor = Color.FromArgb(155, 155, 155);
 					DisabledForeColor = Color.FromArgb(136, 136, 136);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
@@ -229,8 +178,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(80, 80, 80);
 					DisabledBorderColor = Color.FromArgb(109, 109, 109);
 					DisabledForeColor = Color.FromArgb(109, 109, 109);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -242,31 +189,31 @@ namespace MetroSet.UI.Controls
 							{
 
 								case "ForeColor":
-									ForeColor = _utl.HexColor((string)varkey.Value);
+									ForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BackColor":
-									BackColor = _utl.HexColor((string)varkey.Value);
+									BackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BorderColor":
-									BorderColor = _utl.HexColor((string)varkey.Value);
+									BorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "SymbolsColor":
-									SymbolsColor = _utl.HexColor((string)varkey.Value);
+									SymbolsColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledBackColor":
-									DisabledBackColor = _utl.HexColor((string)varkey.Value);
+									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledBorderColor":
-									DisabledBorderColor = _utl.HexColor((string)varkey.Value);
+									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledForeColor":
-									DisabledForeColor = _utl.HexColor((string)varkey.Value);
+									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -285,10 +232,6 @@ namespace MetroSet.UI.Controls
 			Invalidate();
 		}
 
-		#endregion Theme Changing
-
-		#region Properties
-
 		/// <summary>
 		/// Gets or sets the maximum number of the Numeric.
 		/// </summary>
@@ -303,7 +246,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the minimum number of the Numeric.
 		/// </summary>
@@ -317,7 +259,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the current number of the Numeric.
@@ -352,7 +293,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the forecolor of the control whenever while disabled
 		/// </summary>
@@ -366,7 +306,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets disabled backcolor used by the control
@@ -382,7 +321,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the border color while the control disabled.
 		/// </summary>
@@ -397,7 +335,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the border color.
 		/// </summary>
@@ -411,7 +348,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets ForeColor used by the control
@@ -452,11 +388,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
-		#endregion
-
-		#region Events
-
 		/// <summary>
 		/// Handling the mouse moving event so that we can detect if the cursor located in the postion of our need.
 		/// </summary>
@@ -467,7 +398,6 @@ namespace MetroSet.UI.Controls
 			_point = e.Location;
 			Invalidate();
 			Cursor = _point.X > Width - 50 ? Cursors.Hand : Cursors.IBeam;
-
 
 		}
 
@@ -545,8 +475,6 @@ namespace MetroSet.UI.Controls
 					Value -= 1;
 			}
 		}
-
-		#endregion
 
 	}
 }

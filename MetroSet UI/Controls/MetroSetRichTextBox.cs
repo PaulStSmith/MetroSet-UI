@@ -3,6 +3,7 @@
 * 
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of 
 * this software and associated documentation files (the "Software"), to deal in the 
@@ -43,7 +44,6 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetRichTextBox : Control, IMetroSetControl
 	{
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -87,28 +87,6 @@ namespace MetroSet.UI.Controls
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
 		private int _maxLength;
@@ -126,15 +104,7 @@ namespace MetroSet.UI.Controls
 		private Color _disabledForeColor = Color.FromArgb(136, 136, 136);
 		private Color _disabledBorderColor = Color.FromArgb(155, 155, 155);
 
-		#region Base RichTextBox
-
-		private RichTextBox _richTextBox = new RichTextBox();
-
-		#endregion Base RichTextBox
-
-		#endregion Internal Vars
-
-		#region Constructors
+		private readonly RichTextBox _richTextBox = new();
 
 		public MetroSetRichTextBox()
 		{
@@ -147,15 +117,15 @@ namespace MetroSet.UI.Controls
 			base.Font = MetroSetFonts.Regular(10);
 			EvaluateVars();
 			ApplyTheme();
-			T_Defaults();
+			Defaults();
 		}
 
 		private void EvaluateVars()
 		{
-			_utl = new Utilites();
+			
 		}
 
-		private void T_Defaults()
+		private void Defaults()
 		{
 			_wordWrap = true;
 			_autoWordSelection = false;
@@ -184,10 +154,6 @@ namespace MetroSet.UI.Controls
 			_richTextBox.TextChanged += T_TextChanged;
 
 		}
-
-		#endregion Constructors
-
-		#region Draw Control
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
@@ -239,10 +205,6 @@ namespace MetroSet.UI.Controls
 
 		}
 
-		#endregion Draw Control
-
-		#region ApplyTheme
-
 		/// <summary>
 		/// Gets or sets the style provided by the user.
 		/// </summary>
@@ -262,8 +224,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(204, 204, 204);
 					DisabledBorderColor = Color.FromArgb(155, 155, 155);
 					DisabledForeColor = Color.FromArgb(136, 136, 136);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
@@ -275,8 +235,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(80, 80, 80);
 					DisabledBorderColor = Color.FromArgb(109, 109, 109);
 					DisabledForeColor = Color.FromArgb(109, 109, 109);
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -287,31 +245,31 @@ namespace MetroSet.UI.Controls
 							switch (varkey.Key)
 							{
 								case "ForeColor":
-									ForeColor = _utl.HexColor((string)varkey.Value);
+									ForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BackColor":
-									BackColor = _utl.HexColor((string)varkey.Value);
+									BackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "HoverColor":
-									HoverColor = _utl.HexColor((string)varkey.Value);
+									HoverColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BorderColor":
-									BorderColor = _utl.HexColor((string)varkey.Value);
+									BorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledBackColor":
-									DisabledBackColor = _utl.HexColor((string)varkey.Value);
+									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledBorderColor":
-									DisabledBorderColor = _utl.HexColor((string)varkey.Value);
+									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledForeColor":
-									DisabledForeColor = _utl.HexColor((string)varkey.Value);
+									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -334,10 +292,6 @@ namespace MetroSet.UI.Controls
 			_richTextBox.Invalidate();
 		}
 
-		#endregion ApplyTheme
-
-		#region Events
-
 		public new event TextChangedEventHandler TextChanged;
 
 		public delegate void TextChangedEventHandler(object sender);
@@ -353,7 +307,6 @@ namespace MetroSet.UI.Controls
 		public event ProtectedEventHandler Protected;
 
 		public delegate void ProtectedEventHandler(object sender, EventArgs e);
-
 
 		/// <summary>
 		/// Handling richtextbox selection changed event and raising the same event here.
@@ -427,10 +380,8 @@ namespace MetroSet.UI.Controls
 		{
 			base.OnMouseUp(e);
 			if (e.Button == MouseButtons.Right)
-			{
-				if (ContextMenuStrip != null)
-					ContextMenuStrip.Show(_richTextBox, new Point(e.X, e.Y));
-			}
+				ContextMenuStrip?.Show(_richTextBox, new Point(e.X, e.Y));
+
 			Invalidate();
 		}
 
@@ -526,31 +477,20 @@ namespace MetroSet.UI.Controls
 				Controls.Add(_richTextBox);
 		}
 
-		/// <summary>
-		/// Appends text to the current text of a text box.
-		/// </summary>
-		/// <param name="text"></param>
-		public void AppendText(string text)
-		{
-			if (_richTextBox != null)
-			{
-				_richTextBox.AppendText(text);
-			}
-		}
+        /// <summary>
+        /// Appends text to the current text of a text box.
+        /// </summary>
+        /// <param name="text"></param>
+        public void AppendText(string text) => _richTextBox?.AppendText(text);
 
-		/// <summary>
-		/// Undoes the last edit operation in the text box.
-		/// </summary>
-		public void Undo()
+        /// <summary>
+        /// Undoes the last edit operation in the text box.
+        /// </summary>
+        public void Undo()
 		{
-			if (_richTextBox != null)
-			{
-				if (_richTextBox.CanUndo)
-				{
-					_richTextBox.Undo();
-				}
-			}
-		}
+            if (_richTextBox != null && _richTextBox.CanUndo)
+                _richTextBox.Undo();
+        }
 
 		/// <summary>
 		/// Retrieves the line number from the specified character position within the text of the control.
@@ -744,7 +684,6 @@ namespace MetroSet.UI.Controls
 			return _richTextBox.CanPaste(clipFormat);
 		}
 
-
 		/// <summary>
 		/// Searches the text of the control for the first instance of a character from a list of characters.
 		/// </summary>
@@ -838,10 +777,6 @@ namespace MetroSet.UI.Controls
 			return _richTextBox.Find(str, start, options);
 		}
 
-		#endregion Events
-
-		#region Properties
-
 		[Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public BorderStyle BorderStyle => BorderStyle.None;
 
@@ -862,8 +797,6 @@ namespace MetroSet.UI.Controls
 				Invalidate();
 			}
 		}
-
-
 
 		/// <summary>
 		/// Gets or sets the background color of the control.
@@ -895,7 +828,6 @@ namespace MetroSet.UI.Controls
 				Invalidate();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the border color of the control.
@@ -1069,7 +1001,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-
 		/// <summary>
 		/// Gets or sets the fore color of the control whenever while disabled.
 		/// </summary>
@@ -1084,7 +1015,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the border color of the control while disabled.
@@ -1119,9 +1049,6 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
-
-		#endregion Properties
 
 	}
 }

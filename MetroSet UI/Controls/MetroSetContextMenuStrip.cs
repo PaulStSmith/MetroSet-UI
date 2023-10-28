@@ -3,6 +3,7 @@
 * 
 * The MIT License (MIT)
 * Copyright (c) 2017 Narwin, https://github.com/N-a-r-w-i-n
+ * Copyright (c) 2023 Paulo Santos, https://github.com/PaulStSmith
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of 
 * this software and associated documentation files (the "Software"), to deal in the 
@@ -41,8 +42,6 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetContextMenuStrip : ContextMenuStrip, IMetroSetControl
 	{
-
-		#region Interfaces
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.
@@ -86,46 +85,16 @@ namespace MetroSet.UI.Controls
 			set { _styleManager = value; Invalidate(); }
 		}
 
-		/// <summary>
-		/// Gets or sets the The Author name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Author name associated with the theme.")]
-		public string ThemeAuthor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the The Theme name associated with the theme.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the The Theme name associated with the theme.")]
-		public string ThemeName { get; set; }
-
-		#endregion Interfaces
-
-		#region Global Vars
-
-		private readonly Utilites _utl;
-
-		#endregion Global Vars
-
-		#region Internal Vars
-
 		private Style _style;
 		private StyleManager _styleManager;
 		private ToolStripItemClickedEventArgs _clickedEventArgs;
 
-		#endregion Internal Vars
-
-		#region Constructors
-
 		public MetroSetContextMenuStrip()
 		{
-			_utl = new Utilites();
+			
 			ApplyTheme();
 			Renderer = new MetroSetToolStripRender();
 		}
-
-		#endregion Constructors
-
-		#region ApplyTheme
 
 		/// <summary>
 		/// Gets or sets the style provided by the user.
@@ -146,8 +115,6 @@ namespace MetroSet.UI.Controls
 					SelectedItemColor = Color.White;
 					SeparatorColor = Color.LightGray;
 					DisabledForeColor = Color.Silver;
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroLite";
 					UpdateProperties();
 					break;
 
@@ -159,8 +126,6 @@ namespace MetroSet.UI.Controls
 					SelectedItemColor = Color.White;
 					SeparatorColor = Color.Gray;
 					DisabledForeColor = Color.Silver;
-					ThemeAuthor = "Narwin";
-					ThemeName = "MetroDark";
 					UpdateProperties();
 					break;
 
@@ -171,31 +136,31 @@ namespace MetroSet.UI.Controls
 							switch (varkey.Key)
 							{
 								case "ForeColor":
-									ForegroundColor = _utl.HexColor((string)varkey.Value);
+									ForegroundColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "BackColor":
-									BackgroundColor = _utl.HexColor((string)varkey.Value);
+									BackgroundColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "ArrowColor":
-									ArrowColor = _utl.HexColor((string)varkey.Value);
+									ArrowColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "SeparatorColor":
-									SeparatorColor = _utl.HexColor((string)varkey.Value);
+									SeparatorColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "SelectedItemColor":
-									SelectedItemColor = _utl.HexColor((string)varkey.Value);
+									SelectedItemColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "SelectedItemBackColor":
-									SelectedItemBackColor = _utl.HexColor((string)varkey.Value);
+									SelectedItemBackColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledForeColor":
-									DisabledForeColor = _utl.HexColor((string)varkey.Value);
+									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
 									break;
 
 								default:
@@ -213,10 +178,6 @@ namespace MetroSet.UI.Controls
 		{
 			Invalidate();
 		}
-
-		#endregion Theme Changing
-
-		#region Properties
 
 		/// <summary>
 		/// Gets or sets ForegroundColor used by the control
@@ -283,10 +244,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-		#endregion
-
-		#region Events
-
 		public event ClickedEventHandler Clicked;
 		public delegate void ClickedEventHandler(object sender);
 
@@ -329,14 +286,8 @@ namespace MetroSet.UI.Controls
 			Invalidate();
 		}
 
-		#endregion
-
-		#region Child
-
 		private sealed class MetroSetToolStripRender : ToolStripProfessionalRenderer
 		{
-
-			#region Drawing Text
 
 			/// <summary>
 			/// Here we draw item text.
@@ -351,10 +302,6 @@ namespace MetroSet.UI.Controls
 					e.Graphics.DrawString(e.Text, Font, b, textRect);
 				}
 			}
-
-			#endregion Drawing Text
-
-			#region Drawing Backgrounds
 
 			/// <summary>
 			/// Here we draw toolstrip background.
@@ -381,19 +328,11 @@ namespace MetroSet.UI.Controls
 				}
 			}
 
-			#endregion Drawing Backgrounds
-
-			#region Set Image Margin
-
 			protected override void OnRenderImageMargin(ToolStripRenderEventArgs e)
 			{
 				//MyBase.OnRenderImageMargin(e)
 				//I Make above line comment which makes users to be able to add images to ToolStrips
 			}
-
-			#endregion Set Image Margin
-
-			#region Drawing Seperators & Borders
 
 			/// <summary>
 			/// Here we draw toolstrip separators.
@@ -406,10 +345,6 @@ namespace MetroSet.UI.Controls
 					e.Graphics.DrawLine(p, new Point(e.Item.Bounds.Left, e.Item.Bounds.Height / 2), new Point(e.Item.Bounds.Right - 5, e.Item.Bounds.Height / 2));
 				}
 			}
-
-			#endregion Drawing Seperators & Borders
-
-			#region Drawing DropDown Arrows
 
 			/// <summary>
 			/// Here we draw the toolstrip arrows.
@@ -432,10 +367,7 @@ namespace MetroSet.UI.Controls
 				}
 			}
 
-			#endregion Drawing DropDown Arrows
 		}
-
-		#endregion
 
 	}
 }
