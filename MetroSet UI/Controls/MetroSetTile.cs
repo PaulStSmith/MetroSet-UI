@@ -43,60 +43,10 @@ namespace MetroSet.UI.Controls
 	[DefaultEvent("Click")]
 	[DefaultProperty("Text")]
 	[ComVisible(true)]
-	public class MetroSetTile : Control, IMetroSetControl
+	public class MetroSetTile : MetroSetControl
 	{
 
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set
-			{
-				_styleManager = value;
-				Invalidate();
-			}
-		}
-
-		private MouseMode _state;
-		private Style _style;
-		private StyleManager _styleManager;
-
+		private MouseMode _MouseMode;
 		private TileAlign _textAlign;
 		private Color _normalColor;
 		private Color _normalBorderColor;
@@ -111,7 +61,7 @@ namespace MetroSet.UI.Controls
 		private Color _disabledForeColor;
 		private Color _disabledBorderColor;
 
-		public MetroSetTile()
+		public MetroSetTile() : base(ControlKind.Tile)
 		{
 			SetStyle(
 				ControlStyles.AllPaintingInWmPaint |
@@ -129,134 +79,92 @@ namespace MetroSet.UI.Controls
 			var g = e.Graphics;
 			var r = new Rectangle(1, 1, Width - 2, Height - 2);
 			g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-
-			StringFormat sf;
-
-			switch (TileAlign)
+			StringFormat sf = TileAlign switch
 			{
-				case TileAlign.BottmLeft:
-					sf = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Far };
-					break;
-				case TileAlign.BottomRight:
-					sf = new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Far };
-					break;
-				case TileAlign.Topleft:
-					sf = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near };
-					break;
-				case TileAlign.TopRight:
-					sf = new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Near };
-					break;
-				case TileAlign.TopCenter:
-					sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Near };
-					break;
-				case TileAlign.BottomCenter:
-					sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Far };
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-
-			switch (_state)
+				TileAlign.BottmLeft => new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Far },
+				TileAlign.BottomRight => new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Far },
+				TileAlign.Topleft => new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near },
+				TileAlign.TopRight => new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Near },
+				TileAlign.TopCenter => new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Near },
+				TileAlign.BottomCenter => new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Far },
+				_ => throw new InvalidOperationException()
+			};
+            switch (_MouseMode)
 			{
 				case MouseMode.Normal:
-
-					using (var bg = new SolidBrush(NormalColor))
 					{
-						using (var p = new Pen(NormalBorderColor, 2))
-						{
-							using (var tb = new SolidBrush(NormalTextColor))
-							{
-								if (BackgroundImage != null)
-								{
-									g.DrawImage(BackgroundImage, r);
-								}
-								else
-								{
-									g.FillRectangle(bg, r);
-									g.DrawRectangle(p, r);
-								}
-								g.DrawString(Text, Font, tb, r, sf);
-							}
-						}
-					}
+                        using var p = new Pen(NormalBorderColor, 2);
+                        using var tb = new SolidBrush(NormalTextColor);
+                        if (BackgroundImage != null)
+                        {
+                            g.DrawImage(BackgroundImage, r);
+                        }
+                        else
+                        {
+							using var bg = new SolidBrush(NormalColor);
+                            g.FillRectangle(bg, r);
+                            g.DrawRectangle(p, r);
+                        }
+                        g.DrawString(Text, Font, tb, r, sf);
+                    }
 					break;
-
 				case MouseMode.Hovered:
-
-					Cursor = Cursors.Hand;
-					using (var bg = new SolidBrush(HoverColor))
 					{
-						using (var p = new Pen(HoverBorderColor, 2))
-						{
-							using (var tb = new SolidBrush(HoverTextColor))
-							{
-								if (BackgroundImage != null)
-								{
-									g.DrawImage(BackgroundImage, r);
-								}
-								else
-								{
-									g.FillRectangle(bg, r);
-								}
-								g.DrawString(Text, Font, tb, r, sf);
-								g.DrawRectangle(p, r);
-							}
-						}
-					}
+						Cursor = Cursors.Hand;
+                        using var p = new Pen(HoverBorderColor, 2);
+                        using var tb = new SolidBrush(HoverTextColor);
+                        if (BackgroundImage != null)
+                        {
+                            g.DrawImage(BackgroundImage, r);
+                        }
+                        else
+                        {
+                            using var bg = new SolidBrush(HoverColor);
+                            g.FillRectangle(bg, r);
+                        }
+                        g.DrawString(Text, Font, tb, r, sf);
+                        g.DrawRectangle(p, r);
+                    }
 					break;
-
 				case MouseMode.Pushed:
-
-					using (var bg = new SolidBrush(PressColor))
 					{
-						using (var p = new Pen(PressBorderColor, 2))
-						{
-							using (var tb = new SolidBrush(PressTextColor))
-							{
-								if (BackgroundImage != null)
-								{
-									g.DrawImage(BackgroundImage, r);
-								}
-								else
-								{
-									g.FillRectangle(bg, r);
-								}
-								g.DrawString(Text, Font, tb, r, sf);
-								g.DrawRectangle(p, r);
-
-							}
-						}
-					}
+                        using var p = new Pen(PressBorderColor, 2);
+                        using var tb = new SolidBrush(PressTextColor);
+                        if (BackgroundImage != null)
+                        {
+                            g.DrawImage(BackgroundImage, r);
+                        }
+                        else
+                        {
+                            using var bg = new SolidBrush(PressColor);
+                            g.FillRectangle(bg, r);
+                        }
+                        g.DrawString(Text, Font, tb, r, sf);
+                        g.DrawRectangle(p, r);
+                    }
 					break;
 
 				case MouseMode.Disabled:
-					using (var bg = new SolidBrush(DisabledBackColor))
 					{
-						using (var p = new Pen(DisabledBorderColor))
-						{
-							using (var tb = new SolidBrush(DisabledForeColor))
-							{
-								g.FillRectangle(bg, r);
-								g.DrawString(Text, Font, tb, r, sf);
-								g.DrawRectangle(p, r);
-							}
-						}
-					}
+                        using var p = new Pen(DisabledBorderColor);
+                        using var tb = new SolidBrush(DisabledForeColor);
+                        using var bg = new SolidBrush(DisabledBackColor);
+                        g.FillRectangle(bg, r);
+                        g.DrawString(Text, Font, tb, r, sf);
+                        g.DrawRectangle(p, r);
+                    }
 					break;
 				default:
-					throw new ArgumentOutOfRangeException();
+					throw new InvalidOperationException();
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
-
+        /// <summary>
+        /// Gets or sets the style provided by the user.
+        /// </summary>
+        /// <param name="style">The Style.</param>
+        protected override void ApplyThemeInternal(Style style)
+        {
 			switch (style)
 			{
 				case Style.Light:
@@ -291,66 +199,21 @@ namespace MetroSet.UI.Controls
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.TileDictionary)
-						{
-							if ((varkey.Key == null) || varkey.Key == null)
-							{
-								return;
-							}
-
-							if (varkey.Key == "NormalColor")
-							{
-								NormalColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "NormalBorderColor")
-							{
-								NormalBorderColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "NormalTextColor")
-							{
-								NormalTextColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "HoverColor")
-							{
-								HoverColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "HoverBorderColor")
-							{
-								HoverBorderColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "HoverTextColor")
-							{
-								HoverTextColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "PressColor")
-							{
-								PressColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "PressBorderColor")
-							{
-								PressBorderColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "PressTextColor")
-							{
-								PressTextColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "DisabledBackColor")
-							{
-								DisabledBackColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "DisabledBorderColor")
-							{
-								DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "DisabledForeColor")
-							{
-								DisabledForeColor = Utilites.HexColor((string)varkey.Value);
-							}
-						}
-					Refresh();
+					{
+                        NormalColor = Utils.HexColor(StyleDictionary["NormalColor"]);
+                        NormalBorderColor = Utils.HexColor(StyleDictionary["NormalBorderColor"]);
+                        NormalTextColor = Utils.HexColor(StyleDictionary["NormalTextColor"]);
+                        HoverColor = Utils.HexColor(StyleDictionary["HoverColor"]);
+                        HoverBorderColor = Utils.HexColor(StyleDictionary["HoverBorderColor"]);
+                        HoverTextColor = Utils.HexColor(StyleDictionary["HoverTextColor"]);
+                        PressColor = Utils.HexColor(StyleDictionary["PressColor"]);
+                        PressBorderColor = Utils.HexColor(StyleDictionary["PressBorderColor"]);
+                        PressTextColor = Utils.HexColor(StyleDictionary["PressTextColor"]);
+                        DisabledBackColor = Utils.HexColor(StyleDictionary["DisabledBackColor"]);
+                        DisabledBorderColor = Utils.HexColor(StyleDictionary["DisabledBorderColor"]);
+                        DisabledForeColor = Utils.HexColor(StyleDictionary["DisabledForeColor"]);
+                    }
 					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(style), style, null);
 			}
 		}
 
@@ -372,7 +235,7 @@ namespace MetroSet.UI.Controls
 				base.Enabled = value;
 				if (value == false)
 				{
-					_state = MouseMode.Disabled;
+					_MouseMode = MouseMode.Disabled;
 				}
 				Invalidate();
 			}
@@ -604,7 +467,7 @@ namespace MetroSet.UI.Controls
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
 			base.OnMouseUp(e);
-			_state = MouseMode.Hovered;
+			_MouseMode = MouseMode.Hovered;
 			Invalidate();
 		}
 
@@ -615,7 +478,7 @@ namespace MetroSet.UI.Controls
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			base.OnMouseUp(e);
-			_state = MouseMode.Pushed;
+			_MouseMode = MouseMode.Pushed;
 			Invalidate();
 		}
 
@@ -626,7 +489,7 @@ namespace MetroSet.UI.Controls
 		protected override void OnMouseEnter(EventArgs e)
 		{
 			base.OnMouseEnter(e);
-			_state = MouseMode.Hovered;
+			_MouseMode = MouseMode.Hovered;
 			Invalidate();
 		}
 
@@ -637,7 +500,7 @@ namespace MetroSet.UI.Controls
 		protected override void OnMouseLeave(EventArgs e)
 		{
 			base.OnMouseEnter(e);
-			_state = MouseMode.Normal;
+			_MouseMode = MouseMode.Normal;
 			Invalidate();
 		}
 

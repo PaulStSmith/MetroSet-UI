@@ -53,40 +53,29 @@ namespace MetroSet.UI.Controls
 			get => StyleManager?.Style ?? _style;
 			set
 			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-				Invalidate();
-			}
-		}
+                if (_style == value) return;
+                _style = value;
+                ApplyTheme(value);
+                Invalidate();
+            }
+        }
 
 		/// <summary>
 		/// Gets or sets the Style Manager associated with the control.
 		/// </summary>
 		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set { _styleManager = value; Invalidate(); }
-		}
+        public StyleManager StyleManager
+        {
+            get => _styleManager;
+            set
+            {
+                if (_styleManager == value) return;
+                _styleManager = value;
+                Invalidate();
+            }
+        }
 
-		private Style _style;
+        private Style _style;
 		private StyleManager _styleManager;
 
 		public MetroSetLink()
@@ -105,13 +94,14 @@ namespace MetroSet.UI.Controls
 			LinkBehavior = LinkBehavior.HoverUnderline;
 		}
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
+        /// <summary>
+        /// Gets or sets the style provided by the user.
+        /// </summary>
+        /// <param name="style">The Style.</param>
+        internal void ApplyTheme(Style style = Style.System)
+        {
+            style = style == Style.System ? StyleManager.UseLightTheme ? Style.Light : Style.Dark : style;
+            if (!InheritStyle)
 				return;
 
 			switch (style)
@@ -122,7 +112,7 @@ namespace MetroSet.UI.Controls
 					ActiveLinkColor = Color.FromArgb(85, 197, 245);
 					LinkColor = Color.FromArgb(65, 177, 225);
 					VisitedLinkColor = Color.FromArgb(45, 157, 205);
-					UpdateProperties();
+					Invalidate();
 					break;
 
 				case Style.Dark:
@@ -131,7 +121,7 @@ namespace MetroSet.UI.Controls
 					ActiveLinkColor = Color.FromArgb(85, 197, 245);
 					LinkColor = Color.FromArgb(65, 177, 225);
 					VisitedLinkColor = Color.FromArgb(45, 157, 205);
-					UpdateProperties();
+					Invalidate();
 					break;
 
 				case Style.Custom:
@@ -141,23 +131,23 @@ namespace MetroSet.UI.Controls
 							switch (varkey.Key)
 							{
 								case "ForeColor":
-									ForeColor = Utilites.HexColor((string)varkey.Value);
+									ForeColor = Utils.HexColor((string)varkey.Value);
 									break;
 
 								case "BackColor":
-									BackColor = Utilites.HexColor((string)varkey.Value);
+									BackColor = Utils.HexColor((string)varkey.Value);
 									break;
 
 								case "LinkColor":
-									LinkColor = Utilites.HexColor((string)varkey.Value);
+									LinkColor = Utils.HexColor((string)varkey.Value);
 									break;
 
 								case "ActiveLinkColor":
-									ActiveLinkColor = Utilites.HexColor((string)varkey.Value);
+									ActiveLinkColor = Utils.HexColor((string)varkey.Value);
 									break;
 
 								case "VisitedLinkColor":
-									VisitedLinkColor = Utilites.HexColor((string)varkey.Value);
+									VisitedLinkColor = Utils.HexColor((string)varkey.Value);
 									break;
 
 								case "LinkBehavior":
@@ -182,14 +172,14 @@ namespace MetroSet.UI.Controls
 									return;
 							}
 						}
-					UpdateProperties();
+					Invalidate();
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(style), style, null);
 			}
 		}
 
-		private void UpdateProperties()
+		private void Invalidate()
 		{
 			Invalidate();
 		}
@@ -200,7 +190,7 @@ namespace MetroSet.UI.Controls
 		/// <param name="m"></param>
 		protected override void WndProc(ref Message m)
 		{
-			Utilites.SmoothCursor(ref m);
+			Utils.SmoothCursor(ref m);
 
 			base.WndProc(ref m);
 		}
@@ -256,7 +246,7 @@ namespace MetroSet.UI.Controls
 		[Category("MetroSet Framework")]
 		[Description("Gets or sets the whether this control reflect to parent(s) style. \n " +
 					 "Set it to false if you want the style of this control be independent. ")]
-		public bool IsDerivedStyle
+		public bool InheritStyle
 		{
 			get { return _isDerivedStyle; }
 			set

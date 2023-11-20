@@ -36,11 +36,11 @@ namespace MetroSet.UI.Actions
 {
 	class MetroSetLinkActionList : DesignerActionList
 	{
-		private readonly MetroSetLink _metroSetLink;
+		private readonly MetroSetLinkLabel _metroSetLink;
 
 		public MetroSetLinkActionList(IComponent component) : base(component)
 		{
-			_metroSetLink = (MetroSetLink)component;
+			_metroSetLink = (MetroSetLinkLabel)component;
 		}
 
 		public Style Style

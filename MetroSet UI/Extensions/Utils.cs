@@ -33,11 +33,16 @@ using System.Reflection;
 using System.Resources;
 using System.Windows.Forms;
 using MetroSet.UI.Native;
+using Microsoft.Win32;
 
 namespace MetroSet.UI.Extensions
 {
-	internal static class Utilites
+	internal static class Utils
 	{
+        /// <summary>
+        /// Gets a value indicating whether or not the light theme should be used.
+        /// </summary>
+        public static bool UseLightTheme => ((int?)Registry.CurrentUser.OpenSubKey($@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize")?.GetValue("AppsUseLightTheme", 1) == 1);
 
         /// <summary>
         /// Returns an <see cref="Image"/> object for the specified <see cref="MessageBoxIcon"/>.
@@ -85,13 +90,6 @@ namespace MetroSet.UI.Extensions
         public static SolidBrush SolidBrushRGBColor(int R, int G, int B, int A = 0) => new(Color.FromArgb(A, R, G, B));
 
         /// <summary>
-        /// The Brush from HEX color.
-        /// </summary>
-        /// <param name="C_WithoutHash">HEX Color without hash.</param>
-        /// <returns>The Brush from given HEX color.</returns>
-        public static SolidBrush SolidBrushHTMlColor(string C_WithoutHash) => new (HexColor(C_WithoutHash));
-
-        /// <summary>
         /// The Pen from RGBA color.
         /// </summary>
         /// <param name="red">Red.</param>
@@ -116,6 +114,13 @@ namespace MetroSet.UI.Extensions
         /// <param name="hexColor">Hex Color</param>
         /// <returns>The Color based on given hex color string</returns>
         public static Color HexColor(string hexColor) => ColorTranslator.FromHtml(hexColor);
+
+        /// <summary>
+        /// Gets Color based on given hex color string.
+        /// </summary>
+        /// <param name="hexColor">Hex Color</param>
+        /// <returns>The Color based on given hex color string</returns>
+        public static Color HexColor(object hexString) => HexColor((string)hexString);
 
         /// <summary>
         /// The Color from HEX by alpha property.

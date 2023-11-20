@@ -36,6 +36,7 @@ using MetroSet.UI.Enums;
 using MetroSet.UI.Extensions;
 using MetroSet.UI.Interfaces;
 using MetroSet.UI.Native;
+using Microsoft.Win32;
 using static MetroSet.UI.Native.User32;
 
 namespace MetroSet.UI.Forms
@@ -52,6 +53,7 @@ namespace MetroSet.UI.Forms
 
 		protected MetroSetForm()
 		{
+			Utils.InitControlHandle(this);
 			SetStyle(
 				ControlStyles.UserPaint |
 				ControlStyles.AllPaintingInWmPaint |
@@ -70,18 +72,21 @@ namespace MetroSet.UI.Forms
 			_showLeftRect = true;
 			_showHeader = false;
 			AllowResize = true;
-			ApplyTheme();
-
 		}
 
-		protected override void OnPaint(PaintEventArgs e)
+		/// <summary>
+		/// Gets a value indicating whether or not the light theme should be used.
+		/// </summary>
+		public bool UseLightTheme => ((int?)Registry.CurrentUser.OpenSubKey($@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize")?.GetValue("AppsUseLightTheme", 1) == 1);
+
+        protected override void OnPaint(PaintEventArgs e)
 		{
 
 			e.Graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 			e.Graphics.InterpolationMode = InterpolationMode.High;
 			e.Graphics.CompositingQuality = CompositingQuality.HighQuality;
 
-			using (var b = new SolidBrush(BackgroundColor))
+			using (var b = new SolidBrush(BackColor))
 			{
 				e.Graphics.FillRectangle(b, new Rectangle(0, 0, Width, Height));
 				if (BackgroundImage != null)
@@ -142,26 +147,6 @@ namespace MetroSet.UI.Forms
 				textBrush.Dispose();
 			}
 		}
-
-		/// <summary>
-		/// Gets or sets the form backcolor.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the form backcolor.")]
-		public Color BackgroundColor
-		{
-			get { return _backgroundColor; }
-			set
-			{
-				_backgroundColor = value;
-				Refresh();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the form fore color.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the form forecolor.")]
-		public override Color ForeColor { get; set; }
 
 		/// <summary>
 		/// Gets or sets the form border color.
@@ -251,7 +236,9 @@ namespace MetroSet.UI.Forms
 		/// <summary>
 		/// Gets or sets whether the border be shown.
 		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets whether the border be shown."), DefaultValue(true)]
+		[Category("MetroSet Framework")]
+		[Description("Gets or sets whether the border be shown.")]
+		[DefaultValue(true)]
 		public bool ShowBorder
 		{
 			get { return _showBorder; }
@@ -304,11 +291,7 @@ namespace MetroSet.UI.Forms
 		[Browsable(false)]
 		[DefaultValue(false)]
 		[Description("FormMinimizeBox")]
-		public new bool MinimizeBox
-		{
-			get => false;
-			set => value = false;
-		}
+		public new bool MinimizeBox => false;
 
 		/// <summary>
 		/// Gets or sets whether the title be shown.
@@ -368,7 +351,7 @@ namespace MetroSet.UI.Forms
 					Padding = new Padding(12, 90, 12, 12);
 					ShowTitle = false;
 				}
-				Invalidate();
+				base.Invalidate();
 			}
 		}
 
@@ -387,7 +370,7 @@ namespace MetroSet.UI.Forms
 				{
 					ShowHeader = false;
 				}
-				Invalidate();
+				base.Invalidate();
 			}
 		}
 
@@ -439,7 +422,7 @@ namespace MetroSet.UI.Forms
 					throw new Exception("The Value must be between 0-1.");
 
 				_backgroundImageTransparency = value;
-				Invalidate();
+				base.Invalidate();
 			}
 		}
 
@@ -584,7 +567,7 @@ namespace MetroSet.UI.Forms
 					default:
 						throw new ArgumentOutOfRangeException(nameof(value), value, null);
 				}
-				Invalidate();
+				base.Invalidate();
 			}
 		}
 
@@ -598,7 +581,7 @@ namespace MetroSet.UI.Forms
 			set
 			{
 				_styleManager = value;
-				Invalidate();
+				base.Invalidate();
 			}
 		}
 
@@ -610,14 +593,13 @@ namespace MetroSet.UI.Forms
 		private bool _showHeader;
 		private float _backgroundImageTransparency;
 
-		private Color _backgroundColor;
 		private Color _borderColor;
 		private Color _textColor;
 		private Color _smallLineColor1;
 		private Color _smallLineColor2;
 		private Color _headerColor;
 		private int _smallRectThickness = 10;
-		private bool _showBorder;
+		private bool _showBorder = true;
 		private float _borderThickness = 1;
 		private bool _showTitle = true;
 		private TextAlign _textAlign = TextAlign.Left;
@@ -628,94 +610,68 @@ namespace MetroSet.UI.Forms
 		private bool _allowResize;
 
 		/// <summary>
-		/// Gets or sets the style provided by the user.
+		/// Applies the theme to the <see cref="MetroSetForm"/>.
 		/// </summary>
 		/// <param name="style">The Style.</param>
-		internal void ApplyTheme(Style style = Style.Light)
+		protected internal virtual void ApplyTheme(Style style = Style.Light)
 		{
+			_SuspendRefresh = true;
 			switch (style)
 			{
 				case Style.Light:
 					ForeColor = Color.Gray;
-					BackgroundColor = Color.White;
+					BackColor = Color.White;
 					BorderColor = Color.FromArgb(65, 177, 225);
 					TextColor = ShowHeader ? Color.White : Color.Gray;
 					SmallLineColor1 = Color.FromArgb(65, 177, 225);
 					SmallLineColor2 = Color.FromArgb(65, 177, 225);
 					HeaderColor = Color.FromArgb(65, 177, 225);
-					UpdateProperties();
 					break;
 
 				case Style.Dark:
 					ForeColor = Color.White;
-					BackgroundColor = Color.FromArgb(30, 30, 30);
+					BackColor = Color.FromArgb(30, 30, 30);
 					BorderColor = Color.FromArgb(65, 177, 225);
 					SmallLineColor1 = Color.FromArgb(65, 177, 225);
 					SmallLineColor2 = Color.FromArgb(65, 177, 225);
 					HeaderColor = Color.FromArgb(65, 177, 225);
 					TextColor = ShowHeader ? Color.Gray : Color.White;
-					UpdateProperties();
 					break;
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.FormDictionary)
-						{
-							if (!string.Equals(varkey.Key, null, StringComparison.Ordinal) && varkey.Key != null)
-							{
-								if (varkey.Key == "ForeColor")
-								{
-									ForeColor = Utilites.HexColor((string)varkey.Value);
-								}
-								else if (varkey.Key == "BackColor")
-								{
-									BackgroundColor = Utilites.HexColor((string)varkey.Value);
-								}
-								else if (varkey.Key == "BorderColor")
-								{
-									BorderColor = Utilites.HexColor((string)varkey.Value);
-								}
-								else if (varkey.Key == "TextColor")
-								{
-									TextColor = Utilites.HexColor((string)varkey.Value);
-								}
-								else if (varkey.Key == "SmallLineColor1")
-								{
-									SmallLineColor1 = Utilites.HexColor((string)varkey.Value);
-								}
-								else if (varkey.Key == "SmallLineColor2")
-								{
-									SmallLineColor2 = Utilites.HexColor((string)varkey.Value);
-								}
-								else if (varkey.Key == "SmallRectThickness")
-								{
-									SmallRectThickness = int.Parse(varkey.Value.ToString());
-								}
-								else if (varkey.Key == "HeaderColor")
-								{
-									HeaderColor = Utilites.HexColor((string)varkey.Value);
-								}
-							}
-							else
-							{
-								throw new Exception("FormDictionary is empty");
-							}
-						}
-					UpdateProperties();
+					{
+						var dic = StyleManager.StyleDictionary(ControlKind.Form);
+                        TextColor = Utils.HexColor(dic["TextColor"]);
+                        ForeColor = Utils.HexColor(dic["ForeColor"]);
+                        BorderColor = Utils.HexColor(dic["BorderColor"]);
+                        HeaderColor = Utils.HexColor(dic["HeaderColor"]);
+                        BackColor = Utils.HexColor(dic["BackColor"]);
+                        SmallLineColor1 = Utils.HexColor(dic["SmallLineColor1"]);
+                        SmallLineColor2 = Utils.HexColor(dic["SmallLineColor2"]);
+                        SmallRectThickness = int.Parse((string)dic["SmallRectThickness"]);
+                    }
 					break;
 			}
+			_SuspendRefresh = false;
+            Refresh();
 		}
 
-		private void UpdateProperties()
-		{
-			Invalidate();
-		}
+		private bool _SuspendRefresh;
 
-		/// <summary>
-		/// Handling windows messages.
-		/// </summary>
-		/// <param name="message">Windows Messages</param>
-		protected override void WndProc(ref Message message)
+		/// <inheritdoc/>
+        public override void Refresh()
+        {
+			if (_SuspendRefresh)
+                return;	
+            base.Refresh();
+        }
+
+        /// <summary>
+        /// Handling windows messages.
+        /// </summary>
+        /// <param name="message">Windows Messages</param>
+        protected override void WndProc(ref Message message)
 		{
 			base.WndProc(ref message);
 
@@ -759,6 +715,10 @@ namespace MetroSet.UI.Forms
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
+			ApplyTheme(Style);
+			if (this.StartPosition == FormStartPosition.CenterScreen)
+                this.CenterToScreen();
+
 			// https://www.codeproject.com/Articles/30255/C-Fade-Form-Effect-With-the-AnimateWindow-API-Func
 			AnimateWindow(Handle, 800, AnimateWindowFlags.AW_ACTIVATE | (UseSlideAnimation ?
 				  AnimateWindowFlags.AW_HOR_POSITIVE | AnimateWindowFlags.AW_SLIDE : AnimateWindowFlags.AW_BLEND));
@@ -779,18 +739,5 @@ namespace MetroSet.UI.Forms
 			}
 		}
 
-		/// <summary>
-		/// Returns a value indicating whether or not the form can close.
-		/// </summary>
-		/// <param name="closeReason">The reason for the closing.</param>
-		/// <returns>True if the fom can be closed; false otherwise.</returns>
-		protected internal bool CanClose(CloseReason closeReason)
-		{
-			var e = new FormClosingEventArgs(closeReason, false);
-			OnFormClosing(e);
-			return !e.Cancel;
-        }
-
 	}
-
 }

@@ -38,66 +38,17 @@ using MetroSet.UI.Interfaces;
 
 namespace MetroSet.UI.Controls
 {
+
     [ToolboxItem(true)]
     [ToolboxBitmap(typeof(MetroSetBadge), "Bitmaps.Button.bmp")]
     [Designer(typeof(MetroSetBadgeDesigner))]
     [DefaultEvent("Click")]
     [DefaultProperty("Text")]
     [ComVisible(true)]
-    public class MetroSetBadge : Control, IMetroSetControl
+    public class MetroSetBadge : MetroSetControl
     {
 
-        /// <summary>
-        /// Gets or sets the style associated with the control.
-        /// </summary>
-        [Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-        public Style Style
-        {
-            get => StyleManager?.Style ?? _style;
-            set
-            {
-                _style = value;
-                switch (value)
-                {
-                    case Style.Light:
-                        ApplyTheme();
-                        break;
-
-                    case Style.Dark:
-                        ApplyTheme(Style.Dark);
-                        break;
-
-                    case Style.Custom:
-                        ApplyTheme(Style.Custom);
-                        break;
-
-                    default:
-                        ApplyTheme();
-                        break;
-                }
-
-                Invalidate();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the Style Manager associated with the control.
-        /// </summary>
-        [Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-        public StyleManager StyleManager
-        {
-            get => _styleManager;
-            set
-            {
-                _styleManager = value;
-                Invalidate();
-            }
-        }
-
-        private MouseMode _state;
-        private Style _style;
-        private StyleManager _styleManager;
-
+        private MouseMode _MouseMode;
         private BadgeAlign _badgeAlignment;
         private string _badgeText;
         private Color _normalColor;
@@ -119,7 +70,7 @@ namespace MetroSet.UI.Controls
         private Color _pressBadgeColor;
         private Color _pressBadgeTextColor;
 
-        public MetroSetBadge()
+        public MetroSetBadge() : base(ControlKind.Badge)
         {
             SetStyle(
                 ControlStyles.AllPaintingInWmPaint |
@@ -175,7 +126,7 @@ namespace MetroSet.UI.Controls
                 base.Enabled = value;
                 if (value == false)
                 {
-                    _state = MouseMode.Disabled;
+                    _MouseMode = MouseMode.Disabled;
                 }
                 Invalidate();
             }
@@ -451,25 +402,6 @@ namespace MetroSet.UI.Controls
             }
         }
 
-        private bool _isDerivedStyle = true;
-
-        /// <summary>
-        /// Gets or sets the whether this control reflect to parent form style.
-        /// Set it to false if you want the style of this control be independent. 
-        /// </summary>
-        [Category("MetroSet Framework")]
-        [Description("Gets or sets the whether this control reflect to parent(s) style. \n " +
-                     "Set it to false if you want the style of this control be independent. ")]
-        public bool IsDerivedStyle
-        {
-            get { return _isDerivedStyle; }
-            set
-            {
-                _isDerivedStyle = value;
-                Refresh();
-            }
-        }
-
         protected override void OnPaint(PaintEventArgs e)
         {
             var g = e.Graphics;
@@ -502,7 +434,7 @@ namespace MetroSet.UI.Controls
                     throw new InvalidOperationException($@"The allowed values for {nameof(BadgeAlignment)} are: {BadgeAlign.Topleft}, {BadgeAlign.TopRight}, {BadgeAlign.BottomRight}, and  {BadgeAlign.BottmLeft}.");
             }
 
-            switch (_state)
+            switch (_MouseMode)
             {
                 case MouseMode.Normal:
 
@@ -579,15 +511,9 @@ namespace MetroSet.UI.Controls
             }
         }
 
-        /// <summary>
-        /// Gets or sets the style provided by the user.
-        /// </summary>
-        /// <param name="style">The Style.</param>
-        private void ApplyTheme(Style style = Style.Light)
+        /// <inheritdoc/>
+        protected override void ApplyThemeInternal(Style style)
         {
-            if (!IsDerivedStyle)
-                return;
-
             switch (style)
             {
                 case Style.Light:
@@ -634,75 +560,27 @@ namespace MetroSet.UI.Controls
 
                 case Style.Custom:
                     if (StyleManager != null)
-                        foreach (var varkey in StyleManager.BadgeDictionary)
-                        {
-                            if (varkey.Key == null)
-                            {
-                                return;
-                            }
-
-                            switch (varkey.Key)
-                            {
-                                case "NormalColor":
-                                    NormalColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "NormalBorderColor":
-                                    NormalBorderColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "NormalTextColor":
-                                    NormalTextColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "HoverColor":
-                                    HoverColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "HoverBorderColor":
-                                    HoverBorderColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "HoverTextColor":
-                                    HoverTextColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "PressColor":
-                                    PressColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "PressBorderColor":
-                                    PressBorderColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "PressTextColor":
-                                    PressTextColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "NormalBadgeColor":
-                                    NormalBadgeColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "NormalBadgeTextColor":
-                                    NormalBadgeTextColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "HoverBadgeColor":
-                                    HoverBadgeColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "HoverBadgeTextColor":
-                                    HoverBadgeTextColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "PressBadgeColor":
-                                    PressBadgeColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "PressBadgeTextColor":
-                                    PressBadgeTextColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "DisabledBackColor":
-                                    DisabledBackColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "DisabledBorderColor":
-                                    DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                                case "DisabledForeColor":
-                                    DisabledForeColor = Utilites.HexColor((string)varkey.Value);
-                                    break;
-                            }
-                        }
-                    Invalidate();
+                    {
+                        NormalColor = Utils.HexColor(StyleDictionary["NormalColor"]);
+                        NormalBorderColor = Utils.HexColor(StyleDictionary["NormalBorderColor"]);
+                        NormalTextColor = Utils.HexColor(StyleDictionary["NormalTextColor"]);
+                        HoverColor = Utils.HexColor(StyleDictionary["HoverColor"]);
+                        HoverBorderColor = Utils.HexColor(StyleDictionary["HoverBorderColor"]);
+                        HoverTextColor = Utils.HexColor(StyleDictionary["HoverTextColor"]);
+                        PressColor = Utils.HexColor(StyleDictionary["PressColor"]);
+                        PressBorderColor = Utils.HexColor(StyleDictionary["PressBorderColor"]);
+                        PressTextColor = Utils.HexColor(StyleDictionary["PressTextColor"]);
+                        NormalBadgeColor = Utils.HexColor(StyleDictionary["NormalBadgeColor"]);
+                        NormalBadgeTextColor = Utils.HexColor(StyleDictionary["NormalBadgeTextColor"]);
+                        HoverBadgeColor = Utils.HexColor(StyleDictionary["HoverBadgeColor"]);
+                        HoverBadgeTextColor = Utils.HexColor(StyleDictionary["HoverBadgeTextColor"]);
+                        PressBadgeColor = Utils.HexColor(StyleDictionary["PressBadgeColor"]);
+                        PressBadgeTextColor = Utils.HexColor(StyleDictionary["PressBadgeTextColor"]);
+                        DisabledBackColor = Utils.HexColor(StyleDictionary["DisabledBackColor"]);
+                        DisabledBorderColor = Utils.HexColor(StyleDictionary["DisabledBorderColor"]);
+                        DisabledForeColor = Utils.HexColor(StyleDictionary["DisabledForeColor"]);
+                    }
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(style), style, null);
             }
         }
 
@@ -713,7 +591,7 @@ namespace MetroSet.UI.Controls
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            _state = MouseMode.Hovered;
+            _MouseMode = MouseMode.Hovered;
             Invalidate();
         }
 
@@ -724,7 +602,7 @@ namespace MetroSet.UI.Controls
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            _state = MouseMode.Pushed;
+            _MouseMode = MouseMode.Pushed;
             Invalidate();
         }
 
@@ -735,7 +613,7 @@ namespace MetroSet.UI.Controls
         protected override void OnMouseEnter(EventArgs e)
         {
             base.OnMouseEnter(e);
-            _state = MouseMode.Hovered;
+            _MouseMode = MouseMode.Hovered;
             Invalidate();
         }
 
@@ -746,7 +624,7 @@ namespace MetroSet.UI.Controls
         protected override void OnMouseLeave(EventArgs e)
         {
             base.OnMouseEnter(e);
-            _state = MouseMode.Normal;
+            _MouseMode = MouseMode.Normal;
             Invalidate();
         }
 

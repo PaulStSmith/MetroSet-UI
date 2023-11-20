@@ -44,54 +44,8 @@ namespace MetroSet.UI.Controls
 	[Designer(typeof(MetroSetControBoxDesigner))]
 	[DefaultProperty("Click")]
 	[ComVisible(true)]
-	public class MetroSetControlBox : Control, IMetroSetControl
+	public class MetroSetControlBox : MetroSetControl
 	{
-
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set { _styleManager = value; Invalidate(); }
-		}
-
-		private Style _style;
-		private StyleManager _styleManager;
-
 		private bool _maximizeBox = true;
 		private Color _closeNormalForeColor;
 		private Color _closeHoverForeColor;
@@ -104,7 +58,7 @@ namespace MetroSet.UI.Controls
 		private Color _minimizeNormalForeColor;
 		private Color _disabledForeColor;
 
-		public MetroSetControlBox()
+		public MetroSetControlBox() : base(ControlKind.ControlBox)
 		{
 			SetStyle(
 				ControlStyles.ResizeRedraw |
@@ -116,15 +70,9 @@ namespace MetroSet.UI.Controls
 			ApplyTheme();
 		}
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
-
+        /// <inheritdoc/>
+        protected override void ApplyThemeInternal(Style style)
+        {
 			switch (style)
 			{
 				case Style.Light:
@@ -155,79 +103,22 @@ namespace MetroSet.UI.Controls
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.ControlBoxDictionary)
-						{
-							switch (varkey.Key)
-							{
-								case "CloseHoverBackColor":
-									CloseHoverBackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "CloseHoverForeColor":
-									CloseHoverForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "CloseNormalForeColor":
-									CloseNormalForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "MaximizeHoverBackColor":
-									MaximizeHoverBackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "MaximizeHoverForeColor":
-									MaximizeHoverForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "MaximizeNormalForeColor":
-									MaximizeNormalForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "MinimizeHoverBackColor":
-									MinimizeHoverBackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "MinimizeHoverForeColor":
-									MinimizeHoverForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "MinimizeNormalForeColor":
-									MinimizeNormalForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledForeColor":
-									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								default:
-									return;
-							}
-						}
-
+					{
+                        CloseHoverBackColor = Utils.HexColor(StyleDictionary["CloseHoverBackColor"]);
+                        CloseHoverForeColor = Utils.HexColor(StyleDictionary["CloseHoverForeColor"]);
+                        CloseNormalForeColor = Utils.HexColor(StyleDictionary["CloseNormalForeColor"]);
+                        MaximizeHoverBackColor = Utils.HexColor(StyleDictionary["MaximizeHoverBackColor"]);
+                        MaximizeHoverForeColor = Utils.HexColor(StyleDictionary["MaximizeHoverForeColor"]);
+                        MaximizeNormalForeColor = Utils.HexColor(StyleDictionary["MaximizeNormalForeColor"]);
+                        MinimizeHoverBackColor = Utils.HexColor(StyleDictionary["MinimizeHoverBackColor"]);
+                        MinimizeHoverForeColor = Utils.HexColor(StyleDictionary["MinimizeHoverForeColor"]);
+                        MinimizeNormalForeColor = Utils.HexColor(StyleDictionary["MinimizeNormalForeColor"]);
+                        DisabledForeColor = Utils.HexColor(StyleDictionary["DisabledForeColor"]);
+                    }
 					break;
 
 				default:
 					throw new ArgumentOutOfRangeException(nameof(style), style, null);
-			}
-			Invalidate();
-		}
-
-		private bool _isDerivedStyle = true;
-
-		/// <summary>
-		/// Gets or sets the whether this control reflect to parent form style.
-		/// Set it to false if you want the style of this control be independent. 
-		/// </summary>
-		[Category("MetroSet Framework")]
-		[Description("Gets or sets the whether this control reflect to parent(s) style. \n " +
-					 "Set it to false if you want the style of this control be independent. ")]
-		public bool IsDerivedStyle
-		{
-			get { return _isDerivedStyle; }
-			set
-			{
-				_isDerivedStyle = value;
-				Refresh();
 			}
 		}
 
@@ -505,7 +396,7 @@ namespace MetroSet.UI.Controls
 			base.OnMouseDown(e);
 			if (CloseHovered)
             {
-                if (Parent.FindForm() is MetroSetForm mf && mf.CanClose(CloseReason.UserClosing))
+                if (Parent.FindForm() is MetroSetForm mf)
                     mf.Close();
             }
 			else if (MinimizeHovered)

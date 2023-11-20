@@ -25,26 +25,35 @@
 
 using MetroSet.UI.Components;
 using MetroSet.UI.Enums;
+using System.ComponentModel;
 
 namespace MetroSet.UI.Interfaces
 {
 	public interface IMetroSetControl
 	{
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		Style Style { get; set; }
+        /// <summary>
+        /// Gets or sets the style associated with the control.
+        /// </summary>
+        [Category("MetroSet Framework")]
+		[Description("Gets or sets the style associated with the control.")]
+        Style Style { get; set; }
 
-		/// <summary>
-		/// Gets or sets the StyleManager associated with the control.
-		/// </summary>
-		StyleManager StyleManager { get; set; }
+        /// <summary>
+        /// Gets or sets the StyleManager associated with the control.
+        /// </summary>
+        [Category("MetroSet Framework")]
+        [Description("Gets or sets the Style Manager associated with the control.")]
+        StyleManager StyleManager { get; set; }
 
-		/// <summary>
-		/// Gets or sets the whether this control reflect to parent form style.
-		/// Set it to false if you want the style of this control be independent. 
-		/// </summary>
-		bool IsDerivedStyle { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this control reflect to parent's style.
+        /// Set it to false if you want the style of this control be independent. 
+        /// </summary>
+        [Category("MetroSet Framework")]
+        [Description("Gets or sets the whether this control reflect to parent(s) style. \n " +
+                     "Set it to false if you want the style of this control be independent. ")]
+        [DefaultValue(true)]
+        bool IsCustomStyle { get; set; }
 	}
 
 }

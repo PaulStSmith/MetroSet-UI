@@ -45,58 +45,8 @@ namespace MetroSet.UI.Controls
 	[DefaultProperty("Items")]
 	[DefaultEvent("SelectedIndexChanged")]
 	[ComVisible(true)]
-	public class MetroSetListBox : Control, IMetroSetControl
+	public class MetroSetListBox : MetroSetControl
 	{
-
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-				_svs.Style = value;
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set
-			{
-				_styleManager = value;
-				Invalidate();
-			}
-		}
-
-		private Style _style;
-		private StyleManager _styleManager;
 		private MetroSetItemCollection _items;
 		private List<object> _selectedItems;
 		private List<object> _indicates;
@@ -120,7 +70,7 @@ namespace MetroSet.UI.Controls
 		private Color _disabledBackColor;
 		private Color _borderColor;
 
-		public MetroSetListBox()
+		public MetroSetListBox() : base(ControlKind.ListBox)
 		{
 			SetStyle(
 				ControlStyles.UserPaint |
@@ -165,15 +115,12 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
-
+        /// <summary>
+        /// Gets or sets the style provided by the user.
+        /// </summary>
+        /// <param name="style">The Style.</param>
+        protected override void ApplyThemeInternal(Style style)
+        {
 			switch (style)
 			{
 				case Style.Light:
@@ -186,7 +133,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(204, 204, 204);
 					DisabledForeColor = Color.FromArgb(136, 136, 136);
 					BorderColor = Color.LightGray;
-					UpdateProperties();
 					break;
 
 				case Style.Dark:
@@ -199,66 +145,23 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(80, 80, 80);
 					DisabledForeColor = Color.FromArgb(109, 109, 109);
 					BorderColor = Color.FromArgb(64, 64, 64);
-					UpdateProperties();
 					break;
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.ListBoxDictionary)
-						{
-							switch (varkey.Key)
-							{
-
-								case "ForeColor":
-									ForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BackColor":
-									BackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledBackColor":
-									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledForeColor":
-									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "HoveredItemBackColor":
-									HoveredItemBackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "HoveredItemColor":
-									HoveredItemColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "SelectedItemBackColor":
-									SelectedItemBackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "SelectedItemColor":
-									SelectedItemColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BorderColor":
-									BorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								default:
-									return;
-							}
-						}
-					UpdateProperties();
+					{
+                        ForeColor = Utils.HexColor(StyleDictionary["ForeColor"]);
+                        BackColor = Utils.HexColor(StyleDictionary["BackColor"]);
+                        DisabledBackColor = Utils.HexColor(StyleDictionary["DisabledBackColor"]);
+                        DisabledForeColor = Utils.HexColor(StyleDictionary["DisabledForeColor"]);
+                        HoveredItemBackColor = Utils.HexColor(StyleDictionary["HoveredItemBackColor"]);
+                        HoveredItemColor = Utils.HexColor(StyleDictionary["HoveredItemColor"]);
+                        SelectedItemBackColor = Utils.HexColor(StyleDictionary["SelectedItemBackColor"]);
+                        SelectedItemColor = Utils.HexColor(StyleDictionary["SelectedItemColor"]);
+                        BorderColor = Utils.HexColor(StyleDictionary["BorderColor"]);
+                    }
 					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(style), style, null);
 			}
-		}
-
-		private void UpdateProperties()
-		{
-			Invalidate();
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -267,69 +170,55 @@ namespace MetroSet.UI.Controls
 			g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 			var mainRect = new Rectangle(0, 0, Width - (ShowBorder ? 1 : 0), Height - (ShowBorder ? 1 : 0));
 
-			using (var bg = new SolidBrush(Enabled ? BackColor : DisabledBackColor))
-			{
-				using (var usic = new SolidBrush(Enabled ? ForeColor : DisabledForeColor))
-				{
-					using (var sic = new SolidBrush(SelectedItemColor))
-					{
-						using (var sibc = new SolidBrush(SelectedItemBackColor))
-						{
-							using (var hic = new SolidBrush(HoveredItemColor))
-							{
-								using (var hibc = new SolidBrush(HoveredItemBackColor))
-								{
-									using (var sf = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center })
-									{
-										var firstItem = _svs.Value / ItemHeight < 0 ? 0 : _svs.Value / ItemHeight;
-										var lastItem = _svs.Value / ItemHeight + Height / ItemHeight + 1 > Items.Count ? Items.Count : _svs.Value / ItemHeight + Height / ItemHeight + 1;
+            using var bg = new SolidBrush(Enabled ? BackColor : DisabledBackColor);
+            using var usic = new SolidBrush(Enabled ? ForeColor : DisabledForeColor);
+            using var sic = new SolidBrush(SelectedItemColor);
+            using var sibc = new SolidBrush(SelectedItemBackColor);
+            using var hic = new SolidBrush(HoveredItemColor);
+            using var hibc = new SolidBrush(HoveredItemBackColor);
+            using var sf = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center };
+            var firstItem = _svs.Value / ItemHeight < 0 ? 0 : _svs.Value / ItemHeight;
+            var lastItem = _svs.Value / ItemHeight + Height / ItemHeight + 1 > Items.Count ? Items.Count : _svs.Value / ItemHeight + Height / ItemHeight + 1;
 
-										g.FillRectangle(bg, mainRect);
+            g.FillRectangle(bg, mainRect);
 
-										for (var i = firstItem; i < lastItem; i++)
-										{
-											var itemText = (string)Items[i];
+            for (var i = firstItem; i < lastItem; i++)
+            {
+                var itemText = (string)Items[i];
 
-											var rect = new Rectangle(5, (i - firstItem) * ItemHeight, Width - 1, ItemHeight);
-											g.DrawString(itemText, Font, usic, rect, sf);
-											if (MultiSelect && _indicates.Count != 0)
-											{
-												if (i == _hoveredItem && !_indicates.Contains(i))
-												{
-													g.FillRectangle(hibc, rect);
-													g.DrawString(itemText, Font, hic, rect, sf);
-												}
-												else if (_indicates.Contains(i))
-												{
-													g.FillRectangle(sibc, rect);
-													g.DrawString(itemText, Font, sic, rect, sf);
-												}
-											}
-											else
-											{
-												if (i == _hoveredItem && i != SelectedIndex)
-												{
-													g.FillRectangle(hibc, rect);
-													g.DrawString(itemText, Font, hic, rect, sf);
-												}
-												else if (i == SelectedIndex)
-												{
-													g.FillRectangle(sibc, rect);
-													g.DrawString(itemText, Font, sic, rect, sf);
-												}
-											}
+                var rect = new Rectangle(5, (i - firstItem) * ItemHeight, Width - 1, ItemHeight);
+                g.DrawString(itemText, Font, usic, rect, sf);
+                if (MultiSelect && _indicates.Count != 0)
+                {
+                    if (i == _hoveredItem && !_indicates.Contains(i))
+                    {
+                        g.FillRectangle(hibc, rect);
+                        g.DrawString(itemText, Font, hic, rect, sf);
+                    }
+                    else if (_indicates.Contains(i))
+                    {
+                        g.FillRectangle(sibc, rect);
+                        g.DrawString(itemText, Font, sic, rect, sf);
+                    }
+                }
+                else
+                {
+                    if (i == _hoveredItem && i != SelectedIndex)
+                    {
+                        g.FillRectangle(hibc, rect);
+                        g.DrawString(itemText, Font, hic, rect, sf);
+                    }
+                    else if (i == SelectedIndex)
+                    {
+                        g.FillRectangle(sibc, rect);
+                        g.DrawString(itemText, Font, sic, rect, sf);
+                    }
+                }
 
-										}
-										if (ShowBorder)
-											g.DrawRectangle(Pens.LightGray, mainRect);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+            }
+            if (ShowBorder)
+                g.DrawRectangle(Pens.LightGray, mainRect);
+        }
 
 		/// <summary>
 		/// Gets the items of the ListBox.

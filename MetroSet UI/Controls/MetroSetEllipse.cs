@@ -43,63 +43,13 @@ namespace MetroSet.UI.Controls
 	[DefaultEvent("Click")]
 	[DefaultProperty("Text")]
 	[ComVisible(true)]
-	public class MetroSetEllipse : Control, IMetroSetControl
+	public class MetroSetEllipse : MetroSetControl
 	{
 
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set
-			{
-				_styleManager = value;
-				Invalidate();
-			}
-		}
-
-		private MouseMode _state;
-		private Style _style;
-		private StyleManager _styleManager;
-
+		private MouseMode _MouseMode;
 		private int _borderThickness = 7;
 		private Image _image;
-		private Size _imageSize = new Size(64, 64);
+		private Size _imageSize = new(64, 64);
 		private Color _normalColor;
 		private Color _normalBorderColor;
 		private Color _normalTextColor;
@@ -113,7 +63,7 @@ namespace MetroSet.UI.Controls
 		private Color _disabledForeColor;
 		private Color _disabledBorderColor;
 
-		public MetroSetEllipse()
+		public MetroSetEllipse() : base(ControlKind.Ellipse)
 		{
 			SetStyle(
 				ControlStyles.AllPaintingInWmPaint |
@@ -134,7 +84,7 @@ namespace MetroSet.UI.Controls
 			g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 			g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-			switch (_state)
+			switch (_MouseMode)
 			{
 				case MouseMode.Normal:
 
@@ -188,7 +138,7 @@ namespace MetroSet.UI.Controls
 
 					break;
 				default:
-					throw new ArgumentOutOfRangeException();
+					throw new InvalidOperationException();
 			}
 
 			if (Image == null)
@@ -197,15 +147,12 @@ namespace MetroSet.UI.Controls
 			g.DrawImage(Image, imgRect);
 		}
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
-
+        /// <summary>
+        /// Gets or sets the style provided by the user.
+        /// </summary>
+        /// <param name="style">The Style.</param>
+        protected override void ApplyThemeInternal(Style style)
+        {
 			switch (style)
 			{
 				case Style.Light:
@@ -240,66 +187,21 @@ namespace MetroSet.UI.Controls
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.EllipseDictionary)
-						{
-							if ((varkey.Key == null) || varkey.Key == null)
-							{
-								return;
-							}
-
-							if (varkey.Key == "NormalColor")
-							{
-								NormalColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "NormalBorderColor")
-							{
-								NormalBorderColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "NormalTextColor")
-							{
-								NormalTextColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "HoverColor")
-							{
-								HoverColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "HoverBorderColor")
-							{
-								HoverBorderColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "HoverTextColor")
-							{
-								HoverTextColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "PressColor")
-							{
-								PressColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "PressBorderColor")
-							{
-								PressBorderColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "PressTextColor")
-							{
-								PressTextColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "DisabledBackColor")
-							{
-								DisabledBackColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "DisabledBorderColor")
-							{
-								DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
-							}
-							else if (varkey.Key == "DisabledForeColor")
-							{
-								DisabledForeColor = Utilites.HexColor((string)varkey.Value);
-							}
-						}
-					Refresh();
+					{
+                        NormalColor = Utils.HexColor(StyleDictionary["NormalColor"]);
+                        NormalBorderColor = Utils.HexColor(StyleDictionary["NormalBorderColor"]);
+                        NormalTextColor = Utils.HexColor(StyleDictionary["NormalTextColor"]);
+                        HoverColor = Utils.HexColor(StyleDictionary["HoverColor"]);
+                        HoverBorderColor = Utils.HexColor(StyleDictionary["HoverBorderColor"]);
+                        HoverTextColor = Utils.HexColor(StyleDictionary["HoverTextColor"]);
+                        PressColor = Utils.HexColor(StyleDictionary["PressColor"]);
+                        PressBorderColor = Utils.HexColor(StyleDictionary["PressBorderColor"]);
+                        PressTextColor = Utils.HexColor(StyleDictionary["PressTextColor"]);
+                        DisabledBackColor = Utils.HexColor(StyleDictionary["DisabledBackColor"]);
+                        DisabledBorderColor = Utils.HexColor(StyleDictionary["DisabledBorderColor"]);
+                        DisabledForeColor = Utils.HexColor(StyleDictionary["DisabledForeColor"]);
+					}
 					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(style), style, null);
 			}
 		}
 
@@ -335,7 +237,7 @@ namespace MetroSet.UI.Controls
 				base.Enabled = value;
 				if (value == false)
 				{
-					_state = MouseMode.Disabled;
+					_MouseMode = MouseMode.Disabled;
 				}
 				Invalidate();
 			}
@@ -575,7 +477,7 @@ namespace MetroSet.UI.Controls
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
 			base.OnMouseUp(e);
-			_state = MouseMode.Hovered;
+			_MouseMode = MouseMode.Hovered;
 			Invalidate();
 		}
 
@@ -586,7 +488,7 @@ namespace MetroSet.UI.Controls
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			base.OnMouseUp(e);
-			_state = MouseMode.Pushed;
+			_MouseMode = MouseMode.Pushed;
 			Invalidate();
 		}
 
@@ -597,7 +499,7 @@ namespace MetroSet.UI.Controls
 		protected override void OnMouseEnter(EventArgs e)
 		{
 			base.OnMouseEnter(e);
-			_state = MouseMode.Hovered;
+			_MouseMode = MouseMode.Hovered;
 			Invalidate();
 		}
 
@@ -608,7 +510,7 @@ namespace MetroSet.UI.Controls
 		protected override void OnMouseLeave(EventArgs e)
 		{
 			base.OnMouseEnter(e);
-			_state = MouseMode.Normal;
+			_MouseMode = MouseMode.Normal;
 			Invalidate();
 		}
 

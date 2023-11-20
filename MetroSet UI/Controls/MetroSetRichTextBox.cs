@@ -42,53 +42,8 @@ namespace MetroSet.UI.Controls
 	[DefaultProperty("Text")]
 	[DefaultEvent("TextChanged")]
 	[ComVisible(true)]
-	public class MetroSetRichTextBox : Control, IMetroSetControl
+	public class MetroSetRichTextBox : MetroSetControl
 	{
-
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set { _styleManager = value; Invalidate(); }
-		}
-
-		private Style _style;
-		private StyleManager _styleManager;
 		private int _maxLength;
 		private bool _readOnly;
 		private MouseMode _state;
@@ -106,7 +61,7 @@ namespace MetroSet.UI.Controls
 
 		private readonly RichTextBox _richTextBox = new();
 
-		public MetroSetRichTextBox()
+		public MetroSetRichTextBox() : base(ControlKind.RichTextBox)
 		{
 			SetStyle(
 				ControlStyles.AllPaintingInWmPaint |
@@ -115,14 +70,8 @@ namespace MetroSet.UI.Controls
 				ControlStyles.SupportsTransparentBackColor, true);
 			UpdateStyles();
 			base.Font = MetroSetFonts.Regular(10);
-			EvaluateVars();
-			ApplyTheme();
 			Defaults();
-		}
-
-		private void EvaluateVars()
-		{
-			
+			ApplyTheme();
 		}
 
 		private void Defaults()
@@ -146,12 +95,12 @@ namespace MetroSet.UI.Controls
 			_richTextBox.Font = Font;
 			_richTextBox.Size = new Size(Width, Height);
 
-			_richTextBox.MouseHover += T_MouseHover;
-			_richTextBox.MouseUp += T_MouseUp;
-			_richTextBox.Leave += T_Leave;
-			_richTextBox.Enter += T_Enter;
-			_richTextBox.KeyDown += T_KeyDown;
-			_richTextBox.TextChanged += T_TextChanged;
+			_richTextBox.MouseHover += HandleMouseHover;
+			_richTextBox.MouseUp += HandleMouseUp;
+			_richTextBox.Leave += HandleLeave;
+			_richTextBox.Enter += HandleEnter;
+			_richTextBox.KeyDown += HandleKeyDown;
+			_richTextBox.TextChanged += HandleTextChanged;
 
 		}
 
@@ -163,57 +112,44 @@ namespace MetroSet.UI.Controls
 
 			if (Enabled)
 			{
-				using (var bg = new SolidBrush(BackColor))
-				{
-					using (var p = new Pen(BorderColor))
-					{
-						using (var ph = new Pen(HoverColor))
-						{
-							g.FillRectangle(bg, rect);
-							switch (_state)
-							{
-								case MouseMode.Normal:
-									g.DrawRectangle(p, rect);
-									break;
-								case MouseMode.Hovered:
-									g.DrawRectangle(ph, rect);
-									break;
-							}
+                using var bg = new SolidBrush(BackColor);
+                using var p = new Pen(BorderColor);
+                using var ph = new Pen(HoverColor);
+                g.FillRectangle(bg, rect);
+                switch (_state)
+                {
+                    case MouseMode.Normal:
+                        g.DrawRectangle(p, rect);
+                        break;
+                    case MouseMode.Hovered:
+                        g.DrawRectangle(ph, rect);
+                        break;
+                }
 
-							_richTextBox.BackColor = BackColor;
-							_richTextBox.ForeColor = ForeColor;
-						}
-					}
-				}
-			}
+                _richTextBox.BackColor = BackColor;
+                _richTextBox.ForeColor = ForeColor;
+            }
 			else
 			{
-				using (var bg = new SolidBrush(DisabledBackColor))
-				{
-					using (var p = new Pen(DisabledBorderColor))
-					{
-						g.FillRectangle(bg, rect);
-						g.DrawRectangle(p, rect);
-						_richTextBox.BackColor = DisabledBackColor;
-						_richTextBox.ForeColor = DisabledForeColor;
-					}
-				}
-			}
+                using var bg = new SolidBrush(DisabledBackColor);
+                using var p = new Pen(DisabledBorderColor);
+                g.FillRectangle(bg, rect);
+                g.DrawRectangle(p, rect);
+                _richTextBox.BackColor = DisabledBackColor;
+                _richTextBox.ForeColor = DisabledForeColor;
+            }
 
 			_richTextBox.Location = new Point(7, 4);
 			_richTextBox.Width = Width - 10;
 
 		}
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
-
+        /// <summary>
+        /// Gets or sets the style provided by the user.
+        /// </summary>
+        /// <param name="style">The Style.</param>
+        protected override void ApplyThemeInternal(Style style)
+        {
 			switch (style)
 			{
 				case Style.Light:
@@ -240,46 +176,16 @@ namespace MetroSet.UI.Controls
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.RichTextBoxDictionary)
-						{
-							switch (varkey.Key)
-							{
-								case "ForeColor":
-									ForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BackColor":
-									BackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "HoverColor":
-									HoverColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BorderColor":
-									BorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledBackColor":
-									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledBorderColor":
-									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledForeColor":
-									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								default:
-									return;
-							}
-						}
-					UpdateProperties();
+					{
+                        ForeColor = Utils.HexColor(StyleDictionary["ForeColor"]);
+                        BackColor = Utils.HexColor(StyleDictionary["BackColor"]);
+                        HoverColor = Utils.HexColor(StyleDictionary["HoverColor"]);
+                        BorderColor = Utils.HexColor(StyleDictionary["BorderColor"]);
+                        DisabledBackColor = Utils.HexColor(StyleDictionary["DisabledBackColor"]);
+                        DisabledBorderColor = Utils.HexColor(StyleDictionary["DisabledBorderColor"]);
+                        DisabledForeColor = Utils.HexColor(StyleDictionary["DisabledForeColor"]);
+                    }
 					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(style), style, null);
 			}
 		}
 
@@ -313,7 +219,7 @@ namespace MetroSet.UI.Controls
 		/// </summary>
 		/// <param name="sender">object</param>
 		/// <param name="e">EventArgs</param>
-		private void T_SelectionChanged(object sender, EventArgs e)
+		private void HandleSelectionChanged(object sender, EventArgs e)
 		{
 			SelectionChanged?.Invoke(sender, e);
 		}
@@ -323,7 +229,7 @@ namespace MetroSet.UI.Controls
 		/// </summary>
 		/// <param name="sender">object</param>
 		/// <param name="e">EventArgs</param>
-		private void T_LinkClicked(object sender, EventArgs e)
+		private void HandleLinkClicked(object sender, EventArgs e)
 		{
 			LinkClicked?.Invoke(sender, e);
 		}
@@ -333,7 +239,7 @@ namespace MetroSet.UI.Controls
 		/// </summary>
 		/// <param name="sender">object</param>
 		/// <param name="e">EventArgs</param>
-		private void T_Protected(object sender, EventArgs e)
+		private void HandleProtected(object sender, EventArgs e)
 		{
 			Protected?.Invoke(sender, e);
 		}
@@ -343,7 +249,7 @@ namespace MetroSet.UI.Controls
 		/// </summary>
 		/// <param name="sender">object</param>
 		/// <param name="e">EventArgs</param>
-		public void T_Leave(object sender, EventArgs e)
+		public void HandleLeave(object sender, EventArgs e)
 		{
 			base.OnMouseLeave(e);
 			Invalidate();
@@ -376,7 +282,7 @@ namespace MetroSet.UI.Controls
 		/// </summary>
 		/// <param name="sender">object</param>
 		/// <param name="e">EventArgs</param>
-		public void T_MouseUp(object sender, MouseEventArgs e)
+		public void HandleMouseUp(object sender, MouseEventArgs e)
 		{
 			base.OnMouseUp(e);
 			if (e.Button == MouseButtons.Right)
@@ -412,7 +318,7 @@ namespace MetroSet.UI.Controls
 		/// </summary>
 		/// <param name="sender">object</param>
 		/// <param name="e">EventArgs</param>
-		public void T_MouseHover(object sender, EventArgs e)
+		public void HandleMouseHover(object sender, EventArgs e)
 		{
 			base.OnMouseHover(e);
 			Invalidate();
@@ -433,7 +339,7 @@ namespace MetroSet.UI.Controls
 		/// </summary>
 		/// <param name="sender">object</param>
 		/// <param name="e">EventArgs</param>
-		public void T_Enter(object sender, EventArgs e)
+		public void HandleEnter(object sender, EventArgs e)
 		{
 			base.OnMouseEnter(e);
 			Invalidate();
@@ -444,7 +350,7 @@ namespace MetroSet.UI.Controls
 		/// </summary>
 		/// <param name="sender">object</param>
 		/// <param name="e">KeyEventArgs</param>
-		private void T_KeyDown(object sender, KeyEventArgs e)
+		private void HandleKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Control && e.KeyCode == Keys.A)
 				e.SuppressKeyPress = true;
@@ -460,7 +366,7 @@ namespace MetroSet.UI.Controls
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void T_TextChanged(object sender, EventArgs e)
+		private void HandleTextChanged(object sender, EventArgs e)
 		{
 			Text = _richTextBox.Text;
 			TextChanged?.Invoke(this);

@@ -42,67 +42,22 @@ namespace MetroSet.UI.Controls
 	[DefaultEvent("ValueChanged")]
 	[DefaultProperty("Value")]
 	[ComVisible(true)]
-	public class MetroSetProgressBar : Control, IMetroSetControl
+	public class MetroSetProgressBar : MetroSetControl
 	{
+        private int _value;
+        private int _currentValue;
 
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set { _styleManager = value; Invalidate(); }
-		}
-
-		private Style _style;
-		private StyleManager _styleManager;
-		private int _value;
-		private int _currentValue;
-
-		private int _maximum = 100;
-		private int _minimum;
-		private ProgressOrientation _orientation = ProgressOrientation.Horizontal;
-		private Color _backgroundColor;
-		private Color _borderColor;
-		private Color _progressColor;
-		private Color _disabledProgressColor;
-		private Color _disabledBackColor;
-		private Color _disabledBorderColor;
-
-		public MetroSetProgressBar()
+        private int _maximum = 100;
+        private int _minimum;
+        private ProgressOrientation _orientation = ProgressOrientation.Horizontal;
+        private Color _backgroundColor;
+        private Color _borderColor;
+        private Color _progressColor;
+        private Color _disabledProgressColor;
+        private Color _disabledBackColor;
+        private Color _disabledBorderColor;
+        
+		public MetroSetProgressBar() : base(ControlKind.ProgressBar)
 		{
 			SetStyle(
 				ControlStyles.ResizeRedraw |
@@ -113,15 +68,12 @@ namespace MetroSet.UI.Controls
 			ApplyTheme();
 		}
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
-
+        /// <summary>
+        /// Gets or sets the style provided by the user.
+        /// </summary>
+        /// <param name="style">The Style.</param>
+        protected override void ApplyThemeInternal(Style style)
+        {
 			switch (style)
 			{
 				case Style.Light:
@@ -131,7 +83,6 @@ namespace MetroSet.UI.Controls
 					DisabledProgressColor = Color.FromArgb(120, 65, 177, 225);
 					DisabledBorderColor = Color.FromArgb(238, 238, 238);
 					DisabledBackColor = Color.FromArgb(238, 238, 238);
-					UpdateProperties();
 					break;
 
 				case Style.Dark:
@@ -141,53 +92,20 @@ namespace MetroSet.UI.Controls
 					DisabledProgressColor = Color.FromArgb(120, 65, 177, 225);
 					DisabledBackColor = Color.FromArgb(38, 38, 38);
 					DisabledBorderColor = Color.FromArgb(38, 38, 38);
-					UpdateProperties();
 					break;
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.ProgressDictionary)
-						{
-							switch (varkey.Key)
-							{
-								case "ProgressColor":
-									ProgressColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BorderColor":
-									BorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BackColor":
-									BackgroundColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledBackColor":
-									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledBorderColor":
-									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledProgressColor":
-									DisabledProgressColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								default:
-									return;
-							}
-						}
-					UpdateProperties();
+					{
+                        ProgressColor = Utils.HexColor(StyleDictionary["ProgressColor"]);
+                        BorderColor = Utils.HexColor(StyleDictionary["BorderColor"]);
+                        BackColor = Utils.HexColor(StyleDictionary["BackColor"]);
+                        DisabledBackColor = Utils.HexColor(StyleDictionary["DisabledBackColor"]);
+                        DisabledBorderColor = Utils.HexColor(StyleDictionary["DisabledBorderColor"]);
+                        DisabledProgressColor = Utils.HexColor(StyleDictionary["DisabledProgressColor"]);
+                    }
 					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(style), style, null);
 			}
-		}
-
-		private void UpdateProperties()
-		{
-			Invalidate();
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -210,7 +128,7 @@ namespace MetroSet.UI.Controls
                         g.FillRectangle(ps, new Rectangle(0, Height - _currentValue, Width - 1, _currentValue - 1));
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException();
+						throw new InvalidOperationException();
                 }
             }
             g.DrawRectangle(p, rect);

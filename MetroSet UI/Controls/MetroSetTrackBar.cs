@@ -42,53 +42,8 @@ namespace MetroSet.UI.Controls
 	[DefaultProperty("Value")]
 	[DefaultEvent("Scroll")]
 	[ComVisible(true)]
-	public class MetroSetTrackBar : Control, IMetroSetControl
+	public class MetroSetTrackBar : MetroSetControl
 	{
-
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set { _styleManager = value; Invalidate(); }
-		}
-
-		private Style _style;
-		private StyleManager _styleManager;
 		private bool _variable;
 		private Rectangle _track;
 		private int _maximum;
@@ -104,7 +59,7 @@ namespace MetroSet.UI.Controls
 		private Color _disabledBorderColor;
 		private Color _disabledHandlerColor;
 
-		public MetroSetTrackBar()
+		public MetroSetTrackBar() : base(ControlKind.TrackBar)
 		{
 			SetStyle(
 				ControlStyles.ResizeRedraw |
@@ -119,15 +74,12 @@ namespace MetroSet.UI.Controls
 			ApplyTheme();
 		}
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
-
+        /// <summary>
+        /// Gets or sets the style provided by the user.
+        /// </summary>
+        /// <param name="style">The Style.</param>
+        protected override void ApplyThemeInternal(Style style)
+        {
 			switch (style)
 			{
 				case Style.Light:
@@ -152,43 +104,15 @@ namespace MetroSet.UI.Controls
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.TrackBarDictionary)
-						{
-							switch (varkey.Key)
-							{
-
-								case "HandlerColor":
-									HandlerColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BackColor":
-									BackgroundColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "ValueColor":
-									ValueColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledBackColor":
-									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledValueColor":
-									DisabledValueColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledHandlerColor":
-									DisabledHandlerColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								default:
-									return;
-							}
-						}
-					UpdateProperties();
+					{
+                        HandlerColor = Utils.HexColor(StyleDictionary["HandlerColor"]);
+                        BackColor = Utils.HexColor(StyleDictionary["BackColor"]);
+                        ValueColor = Utils.HexColor(StyleDictionary["ValueColor"]);
+                        DisabledBackColor = Utils.HexColor(StyleDictionary["DisabledBackColor"]);
+                        DisabledValueColor = Utils.HexColor(StyleDictionary["DisabledValueColor"]);
+                        DisabledHandlerColor = Utils.HexColor(StyleDictionary["DisabledHandlerColor"]);
+                    }
 					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(style), style, null);
 			}
 		}
 
@@ -203,20 +127,14 @@ namespace MetroSet.UI.Controls
 
 			Cursor = Cursors.Hand;
 
-			using (var bg = new SolidBrush(Enabled ? BackgroundColor : DisabledBackColor))
-			{
-				using (var v = new SolidBrush(Enabled ? ValueColor : DisabledValueColor))
-				{
-					using (var vc = new SolidBrush(Enabled ? HandlerColor : DisabledHandlerColor))
-					{
-						g.FillRectangle(bg, new Rectangle(0, 6, Width, 4));
-						if (_currentValue != 0)
-							g.FillRectangle(v, new Rectangle(0, 6, _currentValue, 4));
-						g.FillRectangle(vc, _track);
-					}
-				}
-			}
-		}
+            using var bg = new SolidBrush(Enabled ? BackgroundColor : DisabledBackColor);
+            using var v = new SolidBrush(Enabled ? ValueColor : DisabledValueColor);
+            using var vc = new SolidBrush(Enabled ? HandlerColor : DisabledHandlerColor);
+            g.FillRectangle(bg, new Rectangle(0, 6, Width, 4));
+            if (_currentValue != 0)
+                g.FillRectangle(v, new Rectangle(0, 6, _currentValue, 4));
+            g.FillRectangle(vc, _track);
+        }
 
 		/// <summary>
 		/// Gets or sets the upper limit of the range this TrackBar is working with.

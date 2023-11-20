@@ -24,6 +24,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Text;
@@ -43,54 +44,7 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetComboBox : ComboBox, IMetroSetControl
 	{
-
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-				Refresh();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set { _styleManager = value; Invalidate(); }
-		}
-
-		private Style _style;
-		private StyleManager _styleManager;
-		private int _startIndex;
-
-		private Color _backgroundColor;
+        private Color _backgroundColor;
 		private Color _borderColor;
 		private Color _arrowColor;
 		private Color _selectedItemForeColor;
@@ -115,40 +69,131 @@ namespace MetroSet.UI.Controls
 			base.AllowDrop = true;
 			DrawMode = DrawMode.OwnerDrawFixed;
 			ItemHeight = 20;
-			_startIndex = 0;
 			CausesValidation = false;
 			DropDownStyle = ComboBoxStyle.DropDownList;
 
 			ApplyTheme();
 		}
 
-		/// <summary>
-		/// Gets or sets the index specifying the currently selected item.
-		/// </summary>
-		[Category("MetroSet Framework")]
-		[Description("Gets or sets the index specifying the currently selected item.")]
-		private int StartIndex
-		{
-			get => _startIndex;
-			set
-			{
-				_startIndex = value;
-				try
-				{
-					SelectedIndex = value;
-				}
-				catch
-				{
-					//
-				}
-				Invalidate();
-			}
-		}
+        /// <summary>
+        /// Gets a value indicating whether or not the light theme should be used.
+        /// </summary>
+        public static bool UseLightTheme => Utils.UseLightTheme;
 
+        /// <inheritdoc />
+        public Style Style
+        {
+            get => (Style)(_style ?? StyleManager?.Style);
+            set
+            {
+                if (_style != value)
+                    ApplyTheme((Style)(_style = value));
+            }
+        }
+        private Style? _style = UseLightTheme ? Style.Light : Style.Dark;
+
+        /// <inheritdoc />
+        public StyleManager StyleManager
+        {
+            get => _StyleManager;
+            set
+            {
+                if (value != _StyleManager)
+                {
+                    _StyleManager = value;
+                    Refresh();
+                }
+            }
+        }
+        private StyleManager _StyleManager;
+
+        /// <inheritdoc />
+        public bool IsCustomStyle
+        {
+            get => _IsCustomStyle;
+            set
+            {
+                if (value == _IsCustomStyle)
+                    return;
+                _IsCustomStyle = value;
+                Refresh();
+            }
+        }
+        private bool _IsCustomStyle = false;
+
+        /// <summary>
+        /// Gets the style dictionary for the control.
+        /// </summary>
+        public IDictionary<string, object> StyleDictionary => _StyleManager?.StyleDictionary(ControlKind.ComboBox);
+
+        /// <summary>
+        /// Applies the current style to the control.
+        /// </summary>
+        public void ApplyTheme()
+        {
+            if (IsCustomStyle)
+                return;
+            ApplyTheme(Style);
+        }
+
+        /// <summary>
+        /// Applies the specified style to the control.
+        /// </summary>
+        /// <param name="style">The style to apply.</param>
+        public void ApplyTheme(Style style)
+        {
+            if (IsCustomStyle)
+                return;
+            SuspendLayout();
+            switch (style)
+            {
+                case Style.Light:
+                    ForeColor = Color.FromArgb(20, 20, 20);
+                    BackgroundColor = Color.FromArgb(238, 238, 238);
+                    BorderColor = Color.FromArgb(150, 150, 150);
+                    ArrowColor = Color.FromArgb(150, 150, 150);
+                    SelectedItemBackColor = Color.FromArgb(65, 177, 225);
+                    SelectedItemForeColor = Color.White;
+                    DisabledBackColor = Color.FromArgb(204, 204, 204);
+                    DisabledBorderColor = Color.FromArgb(155, 155, 155);
+                    DisabledForeColor = Color.FromArgb(136, 136, 136);
+                    break;
+
+                case Style.Dark:
+                    ForeColor = Color.FromArgb(204, 204, 204);
+                    BackgroundColor = Color.FromArgb(34, 34, 34);
+                    BorderColor = Color.FromArgb(110, 110, 110);
+                    ArrowColor = Color.FromArgb(110, 110, 110);
+                    SelectedItemBackColor = Color.FromArgb(65, 177, 225);
+                    SelectedItemForeColor = Color.White;
+                    DisabledBackColor = Color.FromArgb(80, 80, 80);
+                    DisabledBorderColor = Color.FromArgb(109, 109, 109);
+                    DisabledForeColor = Color.FromArgb(109, 109, 109);
+                    break;
+
+                case Style.Custom:
+                    if (StyleManager != null)
+                    {
+                        ForeColor = Utils.HexColor(StyleDictionary["ForeColor"]);
+                        BackColor = Utils.HexColor(StyleDictionary["BackColor"]);
+                        BorderColor = Utils.HexColor(StyleDictionary["BorderColor"]);
+                        ArrowColor = Utils.HexColor(StyleDictionary["ArrowColor"]);
+                        SelectedItemBackColor = Utils.HexColor(StyleDictionary["SelectedItemBackColor"]);
+                        SelectedItemForeColor = Utils.HexColor(StyleDictionary["SelectedItemForeColor"]);
+                        DisabledBackColor = Utils.HexColor(StyleDictionary["DisabledBackColor"]);
+                        DisabledBorderColor = Utils.HexColor(StyleDictionary["DisabledBorderColor"]);
+                        DisabledForeColor = Utils.HexColor(StyleDictionary["DisabledForeColor"]);
+                    }
+                    break;
+            }
+            ResumeLayout();
+            Refresh();
+        }
+        
 		/// <summary>
-		/// Gets or sets ForeColor used by the control
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the form forecolor.")]
+        /// Gets or sets ForeColor used by the control
+        /// </summary>
+        [Category("MetroSet Framework"), Description("Gets or sets the form forecolor.")]
 		public override Color ForeColor { get; set; }
 
 		/// <summary>
@@ -270,30 +315,11 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-		private bool _isDerivedStyle = true;
-
-		/// <summary>
-		/// Gets or sets the whether this control reflect to parent form style.
-		/// Set it to false if you want the style of this control be independent. 
-		/// </summary>
-		[Category("MetroSet Framework")]
-		[Description("Gets or sets the whether this control reflect to parent(s) style. \n " +
-					 "Set it to false if you want the style of this control be independent. ")]
-		public bool IsDerivedStyle
-		{
-			get { return _isDerivedStyle; }
-			set
-			{
-				_isDerivedStyle = value;
-				Refresh();
-			}
-		}
-
-		/// <summary>
-		/// Here we draw the items.
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnDrawItem(DrawItemEventArgs e)
+        /// <summary>
+        /// Here we draw the items.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnDrawItem(DrawItemEventArgs e)
 		{
 			var g = e.Graphics;
 			g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
@@ -304,16 +330,12 @@ namespace MetroSet.UI.Controls
 			}
 
 			var itemState = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
-			using (var bg = new SolidBrush(itemState ? SelectedItemBackColor : BackgroundColor))
-			using (var tc = new SolidBrush(itemState ? SelectedItemForeColor : ForeColor))
-			{
-				using (var f = new Font(Font.Name, 9))
-				{
-					g.FillRectangle(bg, e.Bounds);
-					g.DrawString(GetItemText(Items[e.Index]), f, tc, e.Bounds, Methods.SetPosition(StringAlignment.Near));
-				}
-			}
-		}
+            using var bg = new SolidBrush(itemState ? SelectedItemBackColor : BackgroundColor);
+            using var tc = new SolidBrush(itemState ? SelectedItemForeColor : ForeColor);
+            using var f = new Font(Font.Name, 9);
+            g.FillRectangle(bg, e.Bounds);
+            g.DrawString(GetItemText(Items[e.Index]), f, tc, e.Bounds, Methods.SetPosition(StringAlignment.Near));
+        }
 
 		/// <summary>
 		/// Here we draw the container.
@@ -326,124 +348,17 @@ namespace MetroSet.UI.Controls
 			var downArrow = '▼';
 			g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
-			using (var bg = new SolidBrush(Enabled ? BackgroundColor : DisabledBackColor))
-			{
-				using (var p = new Pen(Enabled ? BorderColor : DisabledBorderColor))
-				{
-					using (var s = new SolidBrush(Enabled ? ArrowColor : DisabledForeColor))
-					{
-						using (var tb = new SolidBrush(Enabled ? ForeColor : DisabledForeColor))
-						{
-							using (var f = MetroSetFonts.SemiBold(8))
-							{
-								g.FillRectangle(bg, rect);
-								g.TextRenderingHint = TextRenderingHint.AntiAlias;
-								g.DrawString(downArrow.ToString(), f, s, new Point(Width - 22, 8));
-								g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-								g.DrawString(Text, f, tb, new Rectangle(7, 0, Width - 1, Height - 1), Methods.SetPosition(StringAlignment.Near));
-								g.DrawRectangle(p, rect);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
-
-			switch (style)
-			{
-				case Style.Light:
-					ForeColor = Color.FromArgb(20, 20, 20);
-					BackgroundColor = Color.FromArgb(238, 238, 238);
-					BorderColor = Color.FromArgb(150, 150, 150);
-					ArrowColor = Color.FromArgb(150, 150, 150);
-					SelectedItemBackColor = Color.FromArgb(65, 177, 225);
-					SelectedItemForeColor = Color.White;
-					DisabledBackColor = Color.FromArgb(204, 204, 204);
-					DisabledBorderColor = Color.FromArgb(155, 155, 155);
-					DisabledForeColor = Color.FromArgb(136, 136, 136);
-					UpdateProperties();
-					break;
-
-				case Style.Dark:
-					ForeColor = Color.FromArgb(204, 204, 204);
-					BackgroundColor = Color.FromArgb(34, 34, 34);
-					BorderColor = Color.FromArgb(110, 110, 110);
-					ArrowColor = Color.FromArgb(110, 110, 110);
-					SelectedItemBackColor = Color.FromArgb(65, 177, 225);
-					SelectedItemForeColor = Color.White;
-					DisabledBackColor = Color.FromArgb(80, 80, 80);
-					DisabledBorderColor = Color.FromArgb(109, 109, 109);
-					DisabledForeColor = Color.FromArgb(109, 109, 109);
-					UpdateProperties();
-					break;
-
-				case Style.Custom:
-					if (StyleManager != null)
-						foreach (var varkey in StyleManager.ComboBoxDictionary)
-						{
-							switch (varkey.Key)
-							{
-
-								case "ForeColor":
-									ForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BackColor":
-									BackgroundColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BorderColor":
-									BorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "ArrowColor":
-									ArrowColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "SelectedItemBackColor":
-									SelectedItemBackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "SelectedItemForeColor":
-									SelectedItemForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledBackColor":
-									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledBorderColor":
-									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledForeColor":
-									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								default:
-									return;
-							}
-						}
-					UpdateProperties();
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(style), style, null);
-			}
-		}
-
-		private void UpdateProperties()
-		{
-			Invalidate();
-		}
-
+            using var bg = new SolidBrush(Enabled ? BackgroundColor : DisabledBackColor);
+            using var p = new Pen(Enabled ? BorderColor : DisabledBorderColor);
+            using var s = new SolidBrush(Enabled ? ArrowColor : DisabledForeColor);
+            using var tb = new SolidBrush(Enabled ? ForeColor : DisabledForeColor);
+            using var f = MetroSetFonts.SemiBold(8);
+            g.FillRectangle(bg, rect);
+            g.TextRenderingHint = TextRenderingHint.AntiAlias;
+            g.DrawString(downArrow.ToString(), f, s, new Point(Width - 22, 8));
+            g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+            g.DrawString(Text, f, tb, new Rectangle(7, 0, Width - 1, Height - 1), Methods.SetPosition(StringAlignment.Near));
+            g.DrawRectangle(p, rect);
+        }
 	}
 }

@@ -41,58 +41,12 @@ namespace MetroSet.UI.Controls
 	[Designer(typeof(MetroSetDividerDesigner))]
 	[DefaultProperty("Orientation")]
 	[ComVisible(true)]
-	public class MetroSetDivider : Control, IMetroSetControl
+	public class MetroSetDivider : MetroSetControl
 	{
-
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set { _styleManager = value; Invalidate(); }
-		}
-
-		private Style _style;
-		private StyleManager _styleManager;
-
 		private DividerStyle _orientation;
 		private int _thickness;
 
-		public MetroSetDivider()
+		public MetroSetDivider() : base(ControlKind.Divider)
 		{
 			SetStyle(
 				ControlStyles.OptimizedDoubleBuffer |
@@ -103,81 +57,40 @@ namespace MetroSet.UI.Controls
 			Orientation = DividerStyle.Horizontal;
 		}
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
-
+        protected override void ApplyThemeInternal(Style style)
+        {
 			switch (style)
 			{
 				case Style.Light:
 					Thickness = 1;
 					ForeColor = Color.Black;
-					UpdateProperties();
 					break;
 
 				case Style.Dark:
 					Thickness = 1;
 					ForeColor = Color.FromArgb(170, 170, 170);
-					UpdateProperties();
 					break;
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.DividerDictionary)
-						{
-							switch (varkey.Key)
-							{
-								case "Orientation":
-									if ((string)varkey.Value == "Horizontal")
-									{
-										Orientation = DividerStyle.Horizontal;
-									}
-									else if ((string)varkey.Value == "Vertical")
-									{
-										Orientation = DividerStyle.Vertical;
-									}
-									break;
-
-								case "Thickness":
-									Thickness = ((int)varkey.Value);
-									break;
-
-								case "ForeColor":
-									ForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								default:
-									return;
-							}
-						}
-					UpdateProperties();
+					{
+                        Orientation = Enum.Parse<DividerStyle>((string)StyleDictionary["Orientation"]);
+                        Thickness = (int)StyleDictionary["Thickness"];
+                        ForeColor = Utils.HexColor(StyleDictionary["ForeColor"]);
+                    }
 					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(style), style, null);
 			}
-		}
-
-		private void UpdateProperties()
-		{
-			Invalidate();
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			var g = e.Graphics;
-			using (var p = new Pen(ForeColor, Thickness))
-			{
-				if (Orientation == DividerStyle.Horizontal)
-					g.DrawLine(p, 0, Thickness, Width, Thickness);
-				else
-					g.DrawLine(p, Thickness, 0, Thickness, Height);
-			}
-		}
+            using var p = new Pen(ForeColor, Thickness);
+            if (Orientation == DividerStyle.Horizontal)
+                g.DrawLine(p, 0, Thickness, Width, Thickness);
+            else
+                g.DrawLine(p, Thickness, 0, Thickness, Height);
+        }
 
 		/// <summary>
 		/// Gets or sets the style associated with the control.

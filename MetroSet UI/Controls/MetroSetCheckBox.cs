@@ -45,56 +45,11 @@ namespace MetroSet.UI.Controls
 	[Designer(typeof(MetroSetCheckBoxDesigner))]
 	[DefaultEvent("CheckedChanged")]
 	[DefaultProperty("Checked")]
-	public class MetroSetCheckBox : Control, IMetroSetControl, IDisposable
+	public class MetroSetCheckBox : MetroSetControl, IDisposable
 	{
 
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set { _styleManager = value; Invalidate(); }
-		}
-
-		private Style _style;
-		private StyleManager _styleManager;
 		private bool _checked;
-		private IntAnimate _animator;
-
+		private readonly IntAnimate _animator;
 		private SignStyle _signStyle = SignStyle.Sign;
 		private Enums.CheckState _checkState;
 		private Color _backgroundColor;
@@ -102,7 +57,7 @@ namespace MetroSet.UI.Controls
 		private Color _disabledBorderColor;
 		private Color _checkSignColor;
 
-		public MetroSetCheckBox()
+		public MetroSetCheckBox() : base(ControlKind.CheckBox)
 		{
 			SetStyle(
 				ControlStyles.ResizeRedraw |
@@ -114,19 +69,16 @@ namespace MetroSet.UI.Controls
 			base.BackColor = Color.Transparent;
 			_animator = new IntAnimate();
 			_animator.Setting(100, 0, 255);
-			_animator.Update = (alpha) => Invalidate();
+            _animator.Update = (alpha) => base.Invalidate();
 			ApplyTheme();
 		}
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
-
+        /// <summary>
+        /// Gets or sets the style provided by the user.
+        /// </summary>
+        /// <param name="style">The Style.</param>
+        protected override void ApplyThemeInternal(Style style)
+        {
 			switch (style)
 			{
 				case Style.Light:
@@ -135,7 +87,6 @@ namespace MetroSet.UI.Controls
 					BorderColor = Color.FromArgb(155, 155, 155);
 					DisabledBorderColor = Color.FromArgb(205, 205, 205);
 					CheckSignColor = Color.FromArgb(65, 177, 225);
-					UpdateProperties();
 					break;
 
 				case Style.Dark:
@@ -144,60 +95,20 @@ namespace MetroSet.UI.Controls
 					BorderColor = Color.FromArgb(155, 155, 155);
 					DisabledBorderColor = Color.FromArgb(85, 85, 85);
 					CheckSignColor = Color.FromArgb(65, 177, 225);
-					UpdateProperties();
 					break;
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.CheckBoxDictionary)
-						{
-							switch (varkey.Key)
-							{
-
-								case "ForeColor":
-									ForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BackColor":
-									BackgroundColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BorderColor":
-									BorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledBorderColor":
-									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "CheckColor":
-									CheckSignColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "CheckedStyle":
-									if ((string)varkey.Value == "Sign")
-										SignStyle = SignStyle.Sign;
-									else if ((string)varkey.Value == "Shape")
-									{
-										SignStyle = SignStyle.Shape;
-									}
-
-									break;
-
-								default:
-									return;
-							}
-						}
-					UpdateProperties();
+					{
+                        ForeColor = Utils.HexColor(StyleDictionary["ForeColor"]);
+                        BackColor = Utils.HexColor(StyleDictionary["BackColor"]);
+                        BorderColor = Utils.HexColor(StyleDictionary["BorderColor"]);
+                        DisabledBorderColor = Utils.HexColor(StyleDictionary["DisabledBorderColor"]);
+                        CheckSignColor = Utils.HexColor(StyleDictionary["CheckColor"]);
+                        SignStyle = Enum.Parse<SignStyle>((string)StyleDictionary["CheckedStyle"]);
+                    }
 					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(style), style, null);
 			}
-		}
-
-		private void UpdateProperties()
-		{
-			Invalidate();
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -208,29 +119,17 @@ namespace MetroSet.UI.Controls
 			var rect = new Rectangle(0, 0, 16, 15);
 			var alpha = _animator.Value;
 
-			using (var backBrush = new SolidBrush(Enabled ? BackgroundColor : Color.FromArgb(238, 238, 238)))
-			{
-				using (var checkMarkPen = new Pen(Enabled ? Checked || _animator.Active ? Color.FromArgb(alpha, CheckSignColor) : BackgroundColor : Color.FromArgb(alpha, DisabledBorderColor), 2))
-				{
-					using (var checkMarkBrush = new SolidBrush(Enabled ? Checked || _animator.Active ? Color.FromArgb(alpha, CheckSignColor) : BackgroundColor : DisabledBorderColor))
-					{
-						using (var p = new Pen(Enabled ? BorderColor : DisabledBorderColor))
-						{
-							using (var sf = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center })
-							{
-								using (var tb = new SolidBrush(ForeColor))
-								{
-									g.FillRectangle(backBrush, rect);
-									g.DrawRectangle(Enabled ? p : checkMarkPen, rect);
-									DrawSymbol(g, checkMarkPen, checkMarkBrush);
-									g.DrawString(Text, Font, tb, new Rectangle(19, 2, Width, Height - 4), sf);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+            using var backBrush = new SolidBrush(Enabled ? BackgroundColor : Color.FromArgb(238, 238, 238));
+            using var checkMarkPen = new Pen(Enabled ? Checked || _animator.Active ? Color.FromArgb(alpha, CheckSignColor) : BackgroundColor : Color.FromArgb(alpha, DisabledBorderColor), 2);
+            using var checkMarkBrush = new SolidBrush(Enabled ? Checked || _animator.Active ? Color.FromArgb(alpha, CheckSignColor) : BackgroundColor : DisabledBorderColor);
+            using var p = new Pen(Enabled ? BorderColor : DisabledBorderColor);
+            using var sf = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center };
+            using var tb = new SolidBrush(ForeColor);
+            g.FillRectangle(backBrush, rect);
+            g.DrawRectangle(Enabled ? p : checkMarkPen, rect);
+            DrawSymbol(g, checkMarkPen, checkMarkBrush);
+            g.DrawString(Text, Font, tb, new Rectangle(19, 2, Width, Height - 4), sf);
+        }
 
 		private void DrawSymbol(Graphics g, Pen pen, SolidBrush solidBrush)
 		{
@@ -265,7 +164,7 @@ namespace MetroSet.UI.Controls
 		{
 			base.OnClick(e);
 			Checked = !Checked;
-			Invalidate();
+			base.Invalidate();
 		}
 
 		/// <summary>
@@ -276,7 +175,7 @@ namespace MetroSet.UI.Controls
 		{
 			base.OnResize(e);
 			Height = 16;
-			Invalidate();
+			base.Invalidate();
 		}
 
 		/// <summary>
@@ -304,11 +203,14 @@ namespace MetroSet.UI.Controls
 			get => _checked;
 			set
 			{
+				if (_checked == value)
+					return;
+
 				_checked = value;
 				CheckedChanged?.Invoke(this);
 				_animator.Reverse(!value);
 				CheckState = value ? Enums.CheckState.Checked : Enums.CheckState.Unchecked;
-				Invalidate();
+				base.Invalidate();
 			}
 		}
 

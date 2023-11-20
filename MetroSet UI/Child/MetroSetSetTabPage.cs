@@ -104,7 +104,7 @@ namespace MetroSet.UI.Child
 		/// <param name="style">The Style.</param>
 		private void ApplyTheme(Style style = Style.Light)
 		{
-			if (!IsDerivedStyle)
+			if (!IsCustomStyle)
 				return;
 
 			switch (style)
@@ -163,7 +163,7 @@ namespace MetroSet.UI.Child
 		[Category("MetroSet Framework")]
 		[Description("Gets or sets the whether this control reflect to parent form style. \n " +
 					 "Set it to false if you want the style of this control be independent. ")]
-		public bool IsDerivedStyle
+		public bool IsCustomStyle
 		{
 			get { return _isDerivedStyle; }
 			set

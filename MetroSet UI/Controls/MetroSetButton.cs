@@ -41,60 +41,9 @@ namespace MetroSet.UI.Controls
 	[Designer(typeof(MetroSetButtonDesigner))]
 	[DefaultEvent("Click")]
 	[DefaultProperty("Text")]
-	public class MetroSetButton : Control, IMetroSetControl
+	public class MetroSetButton : MetroSetControl
 	{
-
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set
-			{
-				_styleManager = value;
-				Invalidate();
-			}
-		}
-
-		private MouseMode _state;
-		private Style _style;
-		private StyleManager _styleManager;
-
+		private MouseMode _MouseMode;
 		private Color _normalColor;
 		private Color _normalBorderColor;
 		private Color _normalTextColor;
@@ -108,7 +57,7 @@ namespace MetroSet.UI.Controls
 		private Color _disabledForeColor;
 		private Color _disabledBorderColor;
 
-		public MetroSetButton()
+		public MetroSetButton() : base(ControlKind.Button)
 		{
 			SetStyle(
 				ControlStyles.AllPaintingInWmPaint |
@@ -127,7 +76,7 @@ namespace MetroSet.UI.Controls
 			var r = new Rectangle(0, 0, Width - 1, Height - 1);
 			g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
-			switch (_state)
+			switch (_MouseMode)
 			{
 				case MouseMode.Normal:
 
@@ -181,19 +130,16 @@ namespace MetroSet.UI.Controls
 					}
 					break;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(_state), "");
+					throw new ArgumentOutOfRangeException(nameof(_MouseMode), "");
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
-
+        /// <summary>
+        /// Gets or sets the style provided by the user.
+        /// </summary>
+        /// <param name="style">The Style.</param>
+        protected override void ApplyThemeInternal(Style style)
+        {
 			switch (style)
 			{
 				case Style.Light:
@@ -228,57 +174,21 @@ namespace MetroSet.UI.Controls
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.ButtonDictionary)
-						{
-							if ((varkey.Key == null) || varkey.Key == null)
-							{
-								return;
-							}
-
-							switch (varkey.Key)
-							{
-								case "NormalColor":
-									NormalColor = Utilites.HexColor((string)varkey.Value);
-									break;
-								case "NormalBorderColor":
-									NormalBorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-								case "NormalTextColor":
-									NormalTextColor = Utilites.HexColor((string)varkey.Value);
-									break;
-								case "HoverColor":
-									HoverColor = Utilites.HexColor((string)varkey.Value);
-									break;
-								case "HoverBorderColor":
-									HoverBorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-								case "HoverTextColor":
-									HoverTextColor = Utilites.HexColor((string)varkey.Value);
-									break;
-								case "PressColor":
-									PressColor = Utilites.HexColor((string)varkey.Value);
-									break;
-								case "PressBorderColor":
-									PressBorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-								case "PressTextColor":
-									PressTextColor = Utilites.HexColor((string)varkey.Value);
-									break;
-								case "DisabledBackColor":
-									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-								case "DisabledBorderColor":
-									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-								case "DisabledForeColor":
-									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-							}
-						}
-					Invalidate();
+					{
+                        NormalColor = Utils.HexColor(StyleDictionary["NormalColor"]);
+                        NormalBorderColor = Utils.HexColor(StyleDictionary["NormalBorderColor"]);
+                        NormalTextColor = Utils.HexColor(StyleDictionary["NormalTextColor"]);
+                        HoverColor = Utils.HexColor(StyleDictionary["HoverColor"]);
+                        HoverBorderColor = Utils.HexColor(StyleDictionary["HoverBorderColor"]);
+                        HoverTextColor = Utils.HexColor(StyleDictionary["HoverTextColor"]);
+                        PressColor = Utils.HexColor(StyleDictionary["PressColor"]);
+                        PressBorderColor = Utils.HexColor(StyleDictionary["PressBorderColor"]);
+                        PressTextColor = Utils.HexColor(StyleDictionary["PressTextColor"]);
+                        DisabledBackColor = Utils.HexColor(StyleDictionary["DisabledBackColor"]);
+                        DisabledBorderColor = Utils.HexColor(StyleDictionary["DisabledBorderColor"]);
+                        DisabledForeColor = Utils.HexColor(StyleDictionary["DisabledForeColor"]);
+                    }
 					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(style), style, null);
 			}
 		}
 
@@ -298,7 +208,7 @@ namespace MetroSet.UI.Controls
 			set
 			{
 				base.Enabled = value;
-				_state = value ? MouseMode.Normal : MouseMode.Disabled;
+				_MouseMode = value ? MouseMode.Normal : MouseMode.Disabled;
 				Invalidate();
 			}
 		}
@@ -509,7 +419,7 @@ namespace MetroSet.UI.Controls
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
 			base.OnMouseUp(e);
-			_state = MouseMode.Hovered;
+			_MouseMode = MouseMode.Hovered;
 			Invalidate();
 		}
 
@@ -520,7 +430,7 @@ namespace MetroSet.UI.Controls
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			base.OnMouseUp(e);
-			_state = MouseMode.Pushed;
+			_MouseMode = MouseMode.Pushed;
 			Invalidate();
 		}
 
@@ -531,7 +441,7 @@ namespace MetroSet.UI.Controls
 		protected override void OnMouseEnter(EventArgs e)
 		{
 			base.OnMouseEnter(e);
-			_state = MouseMode.Hovered;
+			_MouseMode = MouseMode.Hovered;
 			Invalidate();
 		}
 
@@ -542,7 +452,7 @@ namespace MetroSet.UI.Controls
 		protected override void OnMouseLeave(EventArgs e)
 		{
 			base.OnMouseEnter(e);
-			_state = MouseMode.Normal;
+			_MouseMode = MouseMode.Normal;
 			Invalidate();
 		}
 

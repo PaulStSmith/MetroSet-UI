@@ -38,13 +38,42 @@ using MetroSet.UI.Interfaces;
 
 namespace MetroSet.UI.Components
 {
-	[DefaultProperty("Style")]
+    public enum ControlKind
+    {
+        Button,
+        DefaultButton,
+        Label,
+        LinkLabel,
+        TextBox,
+        RichTextBox,
+        ComboBox,
+        Form,
+        Badge,
+        Divider,
+        CheckBox,
+        RadioButton,
+        SwitchBox,
+        ToolTip,
+        Numeric,
+        Ellipse,
+        Tile,
+        ProgressBar,
+        ControlBox,
+        TabControl,
+        ScrollBar,
+        Panel,
+        TrackBar,
+        ContextMenuStrip,
+        ListBox,
+        DataGrid
+    }
+
+    [DefaultProperty("Style")]
 	[Designer(typeof(StyleManagerDesigner))]
 	[ToolboxItem(true)]
 	[ToolboxBitmap(typeof(StyleManager), "Style.bmp")]
 	public class StyleManager : Component
 	{
-
 		public StyleManager()
 		{
 			_style = Style.Light;
@@ -53,7 +82,6 @@ namespace MetroSet.UI.Components
 				var themeFile = Properties.Settings.Default.ThemeFile;
 				_customTheme = File.Exists(themeFile) ? themeFile : ThemeFilePath(themeFile);
 			}
-			InitializeDictionaries();
 		}
 
 		/// <summary>
@@ -120,7 +148,7 @@ namespace MetroSet.UI.Components
 		{
 			if (e.Control is IMetroSetControl control)
 			{
-				if (!control.IsDerivedStyle)
+				if (!control.IsCustomStyle)
 					return;
 				control.Style = Style;
 				control.StyleManager = this;
@@ -132,20 +160,19 @@ namespace MetroSet.UI.Components
 		}
 
 		private Style _style;
-		private Form _metroForm;
 		private string _customTheme;
 
 		/// <summary>
 		/// Gets or sets the form (MetroForm) to Apply themes for.
 		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the form (MetroForm) to Apply themes for.")]
-
+		[Category("MetroSet Framework")]
+		[Description("Gets or sets the form (MetroForm) to Apply themes for.")]
 		public Form MetroForm
 		{
 			get => _metroForm;
 			set
 			{
-				if (_metroForm != null)
+				if (_metroForm != null || value == null)
 					return;
 
 				_metroForm = value;
@@ -153,6 +180,7 @@ namespace MetroSet.UI.Components
 				UpdateForm();
 			}
 		}
+		private Form _metroForm;
 
 		/// <summary>
 		/// Gets or sets the style for the button.
@@ -193,11 +221,11 @@ namespace MetroSet.UI.Components
 		public void OpenTheme()
 		{
 			Style = Style.Custom;
-            using var ofd = new OpenFileDialog { Filter = @"Xml File (*.xml)|*.xml" };
-            if (ofd.ShowDialog() != DialogResult.OK)
-                return;
-            CustomTheme = ofd.FileName;
-        }
+			using var ofd = new OpenFileDialog { Filter = @"Xml File (*.xml)|*.xml" };
+			if (ofd.ShowDialog() != DialogResult.OK)
+				return;
+			CustomTheme = ofd.FileName;
+		}
 
 		/// <summary>
 		/// The Method for setting the custom theme up.
@@ -221,135 +249,172 @@ namespace MetroSet.UI.Components
 			return path;
 		}
 
+        /// <summary>
+        /// Gets the style dictionary for the specified control.
+        /// </summary>
+        /// <param name="kind">The kind of dictionary to get.</param>
+        /// <returns>The dictionary for the specified control.</returns>
+        /// <exception cref="NotSupportedException">Thrown if the specified control is not supported.</exception>
+        public IDictionary<string, object> StyleDictionary(ControlKind kind) => kind switch
+		{
+			ControlKind.Button => ButtonDictionary,
+			ControlKind.DefaultButton => DefaultButtonDictionary,
+			ControlKind.Label => LabelDictionary,
+			ControlKind.LinkLabel => LinkLabelDictionary,
+			ControlKind.TextBox => TextBoxDictionary,
+			ControlKind.RichTextBox => RichTextBoxDictionary,
+			ControlKind.ComboBox => ComboBoxDictionary,
+			ControlKind.Form => FormDictionary,
+			ControlKind.Badge => BadgeDictionary,
+			ControlKind.Divider => DividerDictionary,
+			ControlKind.CheckBox => CheckBoxDictionary,
+			ControlKind.RadioButton => RadioButtonDictionary,
+			ControlKind.SwitchBox => SwitchBoxDictionary,
+			ControlKind.ToolTip => ToolTipDictionary,
+			ControlKind.Numeric => NumericDictionary,
+			ControlKind.Ellipse => EllipseDictionary,
+			ControlKind.Tile => TileDictionary,
+			ControlKind.ProgressBar => ProgressDictionary,
+			ControlKind.ControlBox => ControlBoxDictionary,
+			ControlKind.TabControl => TabControlDictionary,
+			ControlKind.ScrollBar => ScrollBarDictionary,
+			ControlKind.Panel => PanelDictionary,
+			ControlKind.TrackBar => TrackBarDictionary,
+			ControlKind.ContextMenuStrip => ContextMenuDictionary,
+			ControlKind.ListBox => ListBoxDictionary,
+			ControlKind.DataGrid => DataGridDictionary,
+			_ => throw new NotSupportedException()
+		};
+
 		/// <summary>
 		/// The Button properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> ButtonDictionary;
+		private Dictionary<string, object> ButtonDictionary = new();
 
 		/// <summary>
 		/// The DefaultButton properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> DefaultButtonDictionary;
+		private Dictionary<string, object> DefaultButtonDictionary = new();
 
 		/// <summary>
 		/// The Label properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> LabelDictionary;
+		private Dictionary<string, object> LabelDictionary = new();
 
 		/// <summary>
 		/// The LinkLabel properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> LinkLabelDictionary;
+		private Dictionary<string, object> LinkLabelDictionary = new();
 
 		/// <summary>
 		/// The TextBox properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> TextBoxDictionary;
+		private Dictionary<string, object> TextBoxDictionary = new();
 
 		/// <summary>
 		/// The RichTextBox properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> RichTextBoxDictionary;
+		private Dictionary<string, object> RichTextBoxDictionary = new();
 
 		/// <summary>
 		/// The ComboBox properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> ComboBoxDictionary;
+		private Dictionary<string, object> ComboBoxDictionary = new();
 
 		/// <summary>
 		/// The Form properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> FormDictionary;
+		private Dictionary<string, object> FormDictionary = new();
 
 		/// <summary>
 		/// The Badge properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> BadgeDictionary;
+		private Dictionary<string, object> BadgeDictionary = new();
 
 		/// <summary>
 		/// The Divider properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> DividerDictionary;
+		private Dictionary<string, object> DividerDictionary = new();
 
 		/// <summary>
 		/// The CheckBox properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> CheckBoxDictionary;
+		private Dictionary<string, object> CheckBoxDictionary = new();
 
 		/// <summary>
 		/// The RadioButton properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> RadioButtonDictionary;
+		private Dictionary<string, object> RadioButtonDictionary = new();
 
 		/// <summary>
 		/// The Switch properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> SwitchBoxDictionary;
+		private Dictionary<string, object> SwitchBoxDictionary = new();
 
 		/// <summary>
 		/// The ToolTip properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> ToolTipDictionary;
+		private Dictionary<string, object> ToolTipDictionary = new();
 
 		/// <summary>
 		/// The ToolTip properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> NumericDictionary;
+		private Dictionary<string, object> NumericDictionary = new();
 
 		/// <summary>
 		/// The ToolTip properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> EllipseDictionary;
+		private Dictionary<string, object> EllipseDictionary = new();
 
 		/// <summary>
 		/// The Tile properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> TileDictionary;
+		private Dictionary<string, object> TileDictionary = new();
 
 		/// <summary>
 		/// The Tile properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> ProgressDictionary;
+		private Dictionary<string, object> ProgressDictionary = new();
 
 		/// <summary>
 		/// The ControlBox properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> ControlBoxDictionary;
+		private Dictionary<string, object> ControlBoxDictionary = new();
 
 		/// <summary>
 		/// The TabControl properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> TabControlDictionary;
+		private Dictionary<string, object> TabControlDictionary = new();
 
 		/// <summary>
 		/// The ScrollBar properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> ScrollBarDictionary;
+		private Dictionary<string, object> ScrollBarDictionary = new();
 
 		/// <summary>
 		/// The Panel properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> PanelDictionary;
+		private Dictionary<string, object> PanelDictionary = new();
 
 		/// <summary>
 		/// The TrackBar properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> TrackBarDictionary;
+		private Dictionary<string, object> TrackBarDictionary = new();
 
 		/// <summary>
 		/// The ContextMenuStrip properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> ContextMenuDictionary;
+		private Dictionary<string, object> ContextMenuDictionary = new();
 
 		/// <summary>
 		/// The ListBox properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> ListBoxDictionary;
+		private Dictionary<string, object> ListBoxDictionary = new();
 
 		/// <summary>
 		/// The ListBox properties from custom theme will be stored into this dictionary.
 		/// </summary>
-		public Dictionary<string, object> DataGridDictionary;
+		private Dictionary<string, object> DataGridDictionary = new();
 
 		private void Clear()
 		{
@@ -380,36 +445,6 @@ namespace MetroSet.UI.Components
 			ContextMenuDictionary.Clear();
 			ListBoxDictionary.Clear();
 			DataGridDictionary.Clear();
-		}
-
-		private void InitializeDictionaries()
-		{
-			ButtonDictionary = new Dictionary<string, object>();
-			DefaultButtonDictionary = new Dictionary<string, object>();
-			LabelDictionary = new Dictionary<string, object>();
-			LinkLabelDictionary = new Dictionary<string, object>();
-			TextBoxDictionary = new Dictionary<string, object>();
-			RichTextBoxDictionary = new Dictionary<string, object>();
-			FormDictionary = new Dictionary<string, object>();
-			BadgeDictionary = new Dictionary<string, object>();
-			DividerDictionary = new Dictionary<string, object>();
-			CheckBoxDictionary = new Dictionary<string, object>();
-			RadioButtonDictionary = new Dictionary<string, object>();
-			SwitchBoxDictionary = new Dictionary<string, object>();
-			ToolTipDictionary = new Dictionary<string, object>();
-			ComboBoxDictionary = new Dictionary<string, object>();
-			NumericDictionary = new Dictionary<string, object>();
-			EllipseDictionary = new Dictionary<string, object>();
-			TileDictionary = new Dictionary<string, object>();
-			ProgressDictionary = new Dictionary<string, object>();
-			ControlBoxDictionary = new Dictionary<string, object>();
-			TabControlDictionary = new Dictionary<string, object>();
-			ScrollBarDictionary = new Dictionary<string, object>();
-			PanelDictionary = new Dictionary<string, object>();
-			TrackBarDictionary = new Dictionary<string, object>();
-			ContextMenuDictionary = new Dictionary<string, object>();
-			ListBoxDictionary = new Dictionary<string, object>();
-			DataGridDictionary = new Dictionary<string, object>();
 		}
 
 		/// <summary>

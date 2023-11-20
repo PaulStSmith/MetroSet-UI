@@ -25,10 +25,12 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
 using MetroSet.UI.Controls;
+using MetroSet.UI.Enums;
 using MetroSet.UI.Extensions;
 
 namespace MetroSet.UI.Forms
@@ -45,11 +47,6 @@ namespace MetroSet.UI.Forms
 		private MetroSetDefaultButton _abortButton;
 		private MetroSetDefaultButton _ignoreButton;
 		private MetroSetDefaultButton _continueButton;
-
-        /// <summary>
-        /// Get or sets the parent owner.
-        /// </summary>
-        private Form OwnerForm { get; set; }
 
 		/// <summary>
 		/// Gets or sets the content of the message.
@@ -82,7 +79,6 @@ namespace MetroSet.UI.Forms
 			StartPosition = FormStartPosition.CenterParent;
 			DefaulButtonSize = new Size(95, 32);
 			KeyPreview = true;
-			ApplyTheme();
 			ConfigureControls();
 			AddControls();
 		}
@@ -185,36 +181,40 @@ namespace MetroSet.UI.Forms
 		/// <returns>The MessageBox with the content and title and provided button(s) and type.</returns>
 		public static DialogResult Show(MetroSetForm owner, string content, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
-			const string message = @"MetroSetMessageBox requires a form, use 'this' as the first parameter in the place you use MetroSetMessageBox.";
-			var msgBox = new MetroSetMessageBox
-			{
-				OwnerForm = owner ?? throw new ArgumentNullException(nameof(owner), message),
-				Content = content,
-				Caption = caption,
-				Buttons = buttons,
-				Size = new Size(owner.Width - 2, (owner.Height / 3) - 1),
-				Location = new Point(owner.Location.X, (owner.Height / 2) - 1)
-			};
+            /*
+			 * "MetroSetMessageBox requires a form, use 'this' as the first parameter in the place you use MetroSetMessageBox.";
+			 */
+            var msgBox = new MetroSetMessageBox
+            {
+                Content = content,
+                Caption = caption,
+                Buttons = buttons,
+                Size = new Size(owner.Width - 2, (owner.Height / 3) - 1),
+                Location = new Point(owner.Location.X, (owner.Height / 2) - 1),
+                MessageIcon = icon
+            };
 
-			if (icon == MessageBoxIcon.Hand)
-                msgBox.BackColor = Color.FromArgb(210, 50, 45);
-			else if (icon == MessageBoxIcon.Asterisk)
-                msgBox.BackColor = Color.FromArgb(60, 180, 218);
-			else if (icon == MessageBoxIcon.Question)
-                msgBox.BackColor = Color.FromArgb(50, 65, 120);
-			else if (icon == MessageBoxIcon.Exclamation)
-                msgBox.BackColor = Color.FromArgb(237, 156, 40);
-			else // (icon == MessageBoxIcon.None || icon == MessageBoxIcon.Asterisk || icon == MessageBoxIcon.Hand)
-                msgBox.BackgroundColor = Color.White;
-
-			msgBox.MessageIcon = icon;
             msgBox.ForeColor = msgBox.BackColor.GetContrastingColor();
             msgBox.BorderColor = msgBox.BackColor.AdjustLuminance(-50);
 
             return msgBox.ShowDialog();
 		}
 
-		private void SetupButton(MetroSetDefaultButton button, int position)
+        protected internal override void ApplyTheme(Style style)
+        {
+            base.ApplyTheme(style);
+
+            this.BackColor = MessageIcon switch
+            {
+                MessageBoxIcon.Hand => Color.FromArgb(210, 50, 45),
+                MessageBoxIcon.Question => Color.FromArgb(50, 65, 120),
+                MessageBoxIcon.Exclamation => Color.FromArgb(237, 156, 40),
+                MessageBoxIcon.Asterisk => Color.FromArgb(60, 180, 218),
+                _ => Color.White
+            };
+        }
+
+        private void SetupButton(MetroSetDefaultButton button, int position)
 		{
 			button.Location = new Point(Width - DefaulButtonSize.Width * position - 10 * position, Height - 45); ;
 			button.Visible = true;
@@ -237,11 +237,13 @@ namespace MetroSet.UI.Forms
 
         private void SetupButtons(MetroSetDefaultButton btn3, MetroSetDefaultButton btn2, MetroSetDefaultButton btn1)
 		{
-			SetupButtons(btn1, btn2);
+			SetupButtons(btn2, btn1);
             SetupButton(btn3, 3);
             Button3 = btn3;
         }
+#pragma warning disable IDE0052 // Future use
         private MetroSetDefaultButton Button3;
+#pragma warning restore IDE0052 
 
         /// <summary>
         /// Here we handle the user provided buttons appearance.
@@ -286,9 +288,9 @@ namespace MetroSet.UI.Forms
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
 			if (e.KeyChar == '\r')
-				Button1.OnClickInternal(EventArgs.Empty);
+				Button1.PerformClick(EventArgs.Empty);
 			if (e.KeyChar == '\x1B')
-                (Button2 ?? Button1).OnClickInternal(EventArgs.Empty);
+                (Button2 ?? Button1).PerformClick(EventArgs.Empty);
             base.OnKeyPress(e);
         }
 
@@ -301,10 +303,10 @@ namespace MetroSet.UI.Forms
             var lft = ClientRectangle.X + 104;
 			var rgt = ClientRectangle.Width - lft - 10;
             using var bgBrush = new SolidBrush(BackColor);
-			using var fgBrush = new SolidBrush(ForeColor == Color.Transparent ? Utilites.GetContrastingColor(BackColor) : ForeColor);
+			using var fgBrush = new SolidBrush(Utils.GetContrastingColor(BackColor));
             using var borderPen = new Pen(BorderColor, 3);
             G.FillRectangle(bgBrush, ClientRectangle);
-            var bmp = Utilites.GetMessageBoxIcon(this.MessageIcon);
+            var bmp = Utils.GetMessageBoxIcon(this.MessageIcon);
 			if (bmp != null)
 				G.DrawImage(bmp, new Point(10, ClientRectangle.Y + 10));
 			else

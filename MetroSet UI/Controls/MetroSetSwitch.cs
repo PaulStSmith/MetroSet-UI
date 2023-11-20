@@ -44,64 +44,15 @@ namespace MetroSet.UI.Controls
 	[DefaultEvent("SwitchedChanged")]
 	[DefaultProperty("Switched")]
 	[ComVisible(true)]
-	public class MetroSetSwitch : Control, IMetroSetControl, IDisposable
+    public class MetroSetSwitch : MetroSetControlBase, IDisposable
 	{
-
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set { _styleManager = value; Invalidate(); }
-		}
-
-		private StyleManager _styleManager;
 		private bool _switched;
-		private Style _style;
 		private int _switchLocation;
 		private readonly IntAnimate _animator;
 
-		private Enums.CheckState _checkState;
-		private Color _borderColor;
 		private Color _checkColor;
-		private Color _disabledBorderColor;
 		private Color _disabledCheckColor;
 		private Color _disabledUnCheckColor;
-		private Color _backgroundColor;
 		private Color _symbolColor;
 		private Color _unCheckColor;
 
@@ -124,18 +75,14 @@ namespace MetroSet.UI.Controls
 			ApplyTheme();
 		}
 
-		private void UpdateProperties()
-		{
-			Invalidate();
-		}
-
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
+        /// <summary>
+        /// Gets or sets the style provided by the user.
+        /// </summary>
+        /// <param name="style">The Style.</param>
+        protected override void ApplyTheme(Style style = Style.System)
+        {
+            style = style == Style.System ? StyleManager.UseLightTheme ? Style.Light : Style.Dark : style;
+            if (!InheritStyle)
 				return;
 
 			switch (style)
@@ -150,7 +97,7 @@ namespace MetroSet.UI.Controls
 					CheckColor = Color.FromArgb(65, 177, 225);
 					DisabledUnCheckColor = Color.FromArgb(200, 205, 205, 205);
 					DisabledCheckColor = Color.FromArgb(100, 65, 177, 225);
-					UpdateProperties();
+					Invalidate();
 					break;
 
 				case Style.Dark:
@@ -163,7 +110,7 @@ namespace MetroSet.UI.Controls
 					CheckColor = Color.FromArgb(65, 177, 225);
 					DisabledUnCheckColor = Color.FromArgb(200, 205, 205, 205);
 					DisabledCheckColor = Color.FromArgb(100, 65, 177, 225);
-					UpdateProperties();
+					Invalidate();
 					break;
 
 				case Style.Custom:
@@ -174,75 +121,45 @@ namespace MetroSet.UI.Controls
 							switch (varkey.Key)
 							{
 								case "BackColor":
-									BackColor = Utilites.HexColor((string)varkey.Value);
+									BackColor = Utils.HexColor((string)varkey.Value);
 									break;
 
 								case "BorderColor":
-									BorderColor = Utilites.HexColor((string)varkey.Value);
+									BorderColor = Utils.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledBorderColor":
-									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
+									DisabledBorderColor = Utils.HexColor((string)varkey.Value);
 									break;
 
 								case "SymbolColor":
-									SymbolColor = Utilites.HexColor((string)varkey.Value);
+									SymbolColor = Utils.HexColor((string)varkey.Value);
 									break;
 
 								case "UnCheckColor":
-									UnCheckColor = Utilites.HexColor((string)varkey.Value);
+									UnCheckColor = Utils.HexColor((string)varkey.Value);
 									break;
 
 								case "CheckColor":
-									CheckColor = Utilites.HexColor((string)varkey.Value);
+									CheckColor = Utils.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledUnCheckColor":
-									DisabledUnCheckColor = Utilites.HexColor((string)varkey.Value);
+									DisabledUnCheckColor = Utils.HexColor((string)varkey.Value);
 									break;
 
 								case "DisabledCheckColor":
-									DisabledCheckColor = Utilites.HexColor((string)varkey.Value);
+									DisabledCheckColor = Utils.HexColor((string)varkey.Value);
 									break;
 
 								default:
 									return;
 							}
 						}
-					UpdateProperties();
+					Invalidate();
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(style), style, null);
-			}
-		}
-
-		protected override void OnPaint(PaintEventArgs e)
-		{
-			var g = e.Graphics;
-			g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-
-			var rect = new Rectangle(1, 1, 56, 20);
-
-			var rect2 = new Rectangle(3, 3, 52, 16);
-
-			using (var backBrush = new SolidBrush(BackgroundColor))
-			{
-				using (var checkback = new SolidBrush(Enabled ? Switched ? CheckColor : UnCheckColor : Switched ? DisabledCheckColor : DisabledUnCheckColor))
-				{
-					using (var checkMarkBrush = new SolidBrush(SymbolColor))
-					{
-						using (var p = new Pen(Enabled ? BorderColor : DisabledBorderColor, 2))
-						{
-							g.FillRectangle(backBrush, rect);
-
-							g.FillRectangle(checkback, rect2);
-
-							g.DrawRectangle(p, rect);
-
-							g.FillRectangle(checkMarkBrush, new Rectangle((Convert.ToInt32(rect.Width * (_switchLocation / 180.0))), 0, 16, 22));
-						}
-					}
-				}
 			}
 		}
 
@@ -278,23 +195,9 @@ namespace MetroSet.UI.Controls
 		/// <param name="m"></param>
 		protected override void WndProc(ref Message m)
 		{
-			Utilites.SmoothCursor(ref m);
+			Utils.SmoothCursor(ref m);
 
 			base.WndProc(ref m);
-		}
-
-		/// <summary>
-		/// Specifies the state of a control, such as a check box, that can be checked, unchecked.
-		/// </summary>
-		[Browsable(false)]
-		public Enums.CheckState CheckState
-		{
-			get { return _checkState; }
-			set
-			{
-				_checkState = value;
-				Refresh();
-			}
 		}
 
 		/// <summary>
@@ -304,30 +207,15 @@ namespace MetroSet.UI.Controls
 		public bool Switched
 		{
 			get => _switched;
-			set
+			set => Utils.SetValue(ref _switched, value, () =>
 			{
-				_switched = value;
 				SwitchedChanged?.Invoke(this);
 				_animator.Reverse(!value);
-				CheckState = value != true ? Enums.CheckState.Unchecked : Enums.CheckState.Checked;
 				Invalidate();
-			}
+			});
 		}
 
-		/// <summary>
-		/// Gets or sets the border color.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the border color.")]
-		public Color BorderColor
-		{
-			get { return _borderColor; }
-			set
-			{
-				_borderColor = value;
-				Refresh();
-			}
-		}
-
+		
 		/// <summary>
 		/// Gets or sets the Checked backColor.
 		/// </summary>
@@ -335,25 +223,7 @@ namespace MetroSet.UI.Controls
 		public Color CheckColor
 		{
 			get { return _checkColor; }
-			set
-			{
-				_checkColor = value;
-				Refresh();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the border color while the control disabled.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the border color while the control disabled.")]
-		public Color DisabledBorderColor
-		{
-			get { return _disabledBorderColor; }
-			set
-			{
-				_disabledBorderColor = value;
-				Refresh();
-			}
+			set => Utils.SetValue(ref _checkColor, value, Refresh);
 		}
 
 		/// <summary>
@@ -363,53 +233,19 @@ namespace MetroSet.UI.Controls
 		public Color DisabledCheckColor
 		{
 			get { return _disabledCheckColor; }
-			set
-			{
-				_disabledCheckColor = value;
-				Refresh();
-			}
-		}
+            set => Utils.SetValue(ref _disabledCheckColor, value, Refresh);
 
-		/// <summary>
-		/// Gets or sets the Unchecked BackColor while disabled.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Un-Checkd BackColor while disabled.")]
+        }
+
+        /// <summary>
+        /// Gets or sets the Unchecked BackColor while disabled.
+        /// </summary>
+        [Category("MetroSet Framework"), Description("Gets or sets the Un-Checkd BackColor while disabled.")]
 		public Color DisabledUnCheckColor
 		{
 			get { return _disabledUnCheckColor; }
-			set
-			{
-				_disabledUnCheckColor = value;
-				Refresh();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets fore color used by the control
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets forecolor used by the control.")]
-		public override Color ForeColor { get; set; }
-
-		/// <summary>
-		/// I make back color inaccessible cause I want it to be just transparent and I used another property for the same job in following properties. 
-		/// </summary>
-		[Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-		public override Color BackColor => Color.Transparent;
-
-		/// <summary>
-		/// Gets or sets the control back color.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the control backcolor.")]
-		[DisplayName("BackColor")]
-		public Color BackgroundColor
-		{
-			get { return _backgroundColor; }
-			set
-			{
-				_backgroundColor = value;
-				Refresh();
-			}
-		}
+            set => Utils.SetValue(ref _disabledUnCheckColor, value, Refresh);
+        }
 
 		/// <summary>
 		/// Gets or sets the color of the check symbol.
@@ -418,54 +254,52 @@ namespace MetroSet.UI.Controls
 		public Color SymbolColor
 		{
 			get { return _symbolColor; }
-			set
-			{
-				_symbolColor = value;
-				Refresh();
-			}
-		}
+            set => Utils.SetValue(ref _symbolColor, value, Refresh);
+        }
 
-		/// <summary>
-		/// Gets or sets the Unchecked backColor.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Un-Checkd backColor.")]
+        /// <summary>
+        /// Gets or sets the Unchecked backColor.
+        /// </summary>
+        [Category("MetroSet Framework"), Description("Gets or sets the Un-Checkd backColor.")]
 		public Color UnCheckColor
 		{
 			get { return _unCheckColor; }
-			set
-			{
-				_unCheckColor = value;
-				Refresh();
-			}
-		}
+            set => Utils.SetValue(ref _unCheckColor, value, Refresh);
+        }
 
-		private bool _isDerivedStyle = true;
-
-		/// <summary>
-		/// Gets or sets the whether this control reflect to parent form style.
-		/// Set it to false if you want the style of this control be independent. 
-		/// </summary>
-		[Category("MetroSet Framework")]
-		[Description("Gets or sets the whether this control reflect to parent(s) style. \n " +
-					 "Set it to false if you want the style of this control be independent. ")]
-		public bool IsDerivedStyle
-		{
-			get { return _isDerivedStyle; }
-			set
-			{
-				_isDerivedStyle = value;
-				Refresh();
-			}
-		}
-
-		/// <summary>
-		/// Disposing Methods.
-		/// </summary>
-		public new void Dispose()
+        /// <summary>
+        /// Disposing Methods.
+        /// </summary>
+        public new void Dispose()
 		{
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
 
-	}
+		/// <inheritdoc/>
+        protected override void PaintDisabled(Graphics g, Rectangle r) => PaintNormal(g, r);
+
+        /// <inheritdoc/>
+        protected override void PaintPressed(Graphics g, Rectangle r) => PaintNormal(g, r);
+
+        /// <inheritdoc/>
+        protected override void PaintHovered(Graphics g, Rectangle r) => PaintNormal(g, r);
+
+        /// <inheritdoc/>
+        protected override void PaintNormal(Graphics g, Rectangle r)
+        {
+            var rect = new Rectangle(1, 1, 56, 20);
+
+            var rect2 = new Rectangle(3, 3, 52, 16);
+
+            using var backBrush = new SolidBrush(BackColor);
+            using var checkback = new SolidBrush(Enabled ? Switched ? CheckColor : UnCheckColor : Switched ? DisabledCheckColor : DisabledUnCheckColor);
+            using var checkMarkBrush = new SolidBrush(SymbolColor);
+            using var p = new Pen(Enabled ? BorderColor : DisabledBorderColor, 2);
+            g.FillRectangle(backBrush, rect);
+            g.FillRectangle(checkback, rect2);
+            g.DrawRectangle(p, rect);
+            g.FillRectangle(checkMarkBrush, new Rectangle((Convert.ToInt32(rect.Width * (_switchLocation / 180.0))), 0, 16, 22));
+        }
+    }
 }

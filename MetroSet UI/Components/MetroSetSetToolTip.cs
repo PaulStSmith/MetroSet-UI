@@ -42,58 +42,57 @@ namespace MetroSet.UI.Components
 	[DefaultEvent("Popup")]
 	public class MetroSetSetToolTip : ToolTip, IMetroSetControl
 	{
+        public MetroSetSetToolTip()
+        {
+            OwnerDraw = true;
+            Draw += OnDraw;
+            Popup += ToolTip_Popup;
+            ApplyTheme();
+        }
 
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
+        /// <summary>
+        /// Gets a value indicating whether or not the light theme should be used.
+        /// </summary>
+        public static bool UseLightTheme => Utils.UseLightTheme;
 
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
+        /// <inheritdoc />
+        public Style Style
+        {
+            get => (Style)(_style ?? StyleManager?.Style);
+            set
+            {
+                if (_style != value)
+                    ApplyTheme((Style)(_style = value));
+            }
+        }
+        private Style? _style = UseLightTheme ? Style.Light : Style.Dark;
 
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
+        /// <inheritdoc />
+        public StyleManager StyleManager
+        {
+            get => _StyleManager;
+            set
+            {
+                if (value != _StyleManager)
+                {
+                    _StyleManager = value;
+                }
+            }
+        }
+        private StyleManager _StyleManager;
 
-					default:
-						ApplyTheme();
-						break;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set => _styleManager = value;
-		}
-
-		private StyleManager _styleManager;
-		private Style _style;
-
-		public MetroSetSetToolTip()
-		{
-			OwnerDraw = true;
-			Draw += OnDraw;
-			Popup += ToolTip_Popup;
-			ApplyTheme();
-		}
+        /// <inheritdoc />
+        public bool IsCustomStyle
+        {
+            get => _IsCustomStyle;
+            set
+            {
+                if (value == _IsCustomStyle)
+                    return;
+                _IsCustomStyle = value;
+            }
+        }
+        private bool _IsCustomStyle = false;
 
 		private void OnDraw(object sender, DrawToolTipEventArgs e)
 		{
@@ -109,16 +108,26 @@ namespace MetroSet.UI.Components
 
         }
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
+        /// <summary>
+        /// Applies the current style to the control.
+        /// </summary>
+        public void ApplyTheme()
+        {
+            if (IsCustomStyle)
+                return;
+            ApplyTheme(Style);
+        }
 
-			switch (style)
+        /// <summary>
+        /// Applies the specified style to the control.
+        /// </summary>
+        /// <param name="style">The style to apply.</param>
+        public void ApplyTheme(Style style)
+        {
+            if (IsCustomStyle)
+                return;
+
+            switch (style)
 			{
 				case Style.Light:
 					ForeColor = Color.FromArgb(170, 170, 170);
@@ -133,32 +142,14 @@ namespace MetroSet.UI.Components
 					break;
 
 				case Style.Custom:
-
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.ToolTipDictionary)
-						{
-							switch (varkey.Key)
-							{
-
-								case "BackColor":
-									BackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BorderColor":
-									BorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "ForeColor":
-									ForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								default:
-									return;
-							}
-						}
+					{
+						var dic = StyleManager.StyleDictionary(ControlKind.ToolTip);
+                        BackColor = Utils.HexColor(dic["BackColor"]);
+                        BorderColor = Utils.HexColor(dic["BorderColor"]);
+                        ForeColor = Utils.HexColor(dic["ForeColor"]);
+                    }
 					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(style), style, null);
 			}
 		}
 
@@ -216,24 +207,6 @@ namespace MetroSet.UI.Components
 		/// </summary>
 		[Category("MetroSet Framework"), Description("Gets or sets the border color for the ToolTip.")]
 		public Color BorderColor { get; set; }
-
-		private bool _isDerivedStyle = true;
-
-		/// <summary>
-		/// Gets or sets the whether this control reflect to parent metroForm style.
-		/// Set it to false if you want the style of this control be independent. 
-		/// </summary>
-		[Category("MetroSet Framework")]
-		[Description("Gets or sets the whether this control reflect to parent(s) style. \n " +
-					 "Set it to false if you want the style of this control be independent. ")]
-		public bool IsDerivedStyle
-		{
-			get { return _isDerivedStyle; }
-			set
-			{
-				_isDerivedStyle = value;
-			}
-		}
 
 		/// <summary>
 		/// The ToolTip text to display when the pointer is on the control.

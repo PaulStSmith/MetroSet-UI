@@ -47,53 +47,9 @@ namespace MetroSet.UI.Controls
 	[DefaultEvent("CheckedChanged")]
 	[DefaultProperty("Checked")]
 	[ComVisible(true)]
-	public class MetroSetRadioButton : Control, IMetroSetControl, IDisposable
+	public class MetroSetRadioButton : MetroSetControl, IDisposable
 	{
 
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set { _styleManager = value; Invalidate(); }
-		}
-
-		private Style _style;
-		private StyleManager _styleManager;
 		private bool _checked;
 		private readonly IntAnimate _animator;
 
@@ -103,7 +59,7 @@ namespace MetroSet.UI.Controls
 		private Color _disabledBorderColor;
 		private Color _checkSignColor;
 
-		public MetroSetRadioButton()
+		public MetroSetRadioButton() : base(ControlKind.RadioButton)
 		{
 			SetStyle(
 				ControlStyles.ResizeRedraw |
@@ -118,15 +74,12 @@ namespace MetroSet.UI.Controls
 			ApplyTheme();
 		}
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
-
+        /// <summary>
+        /// Gets or sets the style provided by the user.
+        /// </summary>
+        /// <param name="style">The Style.</param>
+        protected override void ApplyThemeInternal(Style style)
+        {
 			switch (style)
 			{
 				case Style.Light:
@@ -135,7 +88,6 @@ namespace MetroSet.UI.Controls
 					BorderColor = Color.FromArgb(155, 155, 155);
 					DisabledBorderColor = Color.FromArgb(205, 205, 205);
 					CheckSignColor = Color.FromArgb(65, 177, 225);
-					UpdateProperties();
 					break;
 
 				case Style.Dark:
@@ -144,56 +96,18 @@ namespace MetroSet.UI.Controls
 					BorderColor = Color.FromArgb(155, 155, 155);
 					DisabledBorderColor = Color.FromArgb(85, 85, 85);
 					CheckSignColor = Color.FromArgb(65, 177, 225);
-					UpdateProperties();
 					break;
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.RadioButtonDictionary)
-						{
-							switch (varkey.Key)
-							{
-								case "ForeColor":
-									ForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BackColor":
-									BackgroundColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BorderColor":
-									BorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledBorderColor":
-									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "CheckColor":
-									CheckSignColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								default:
-									return;
-							}
-						}
-					UpdateProperties();
+					{
+                        ForeColor = Utils.HexColor(StyleDictionary["ForeColor"]);
+                        BackColor = Utils.HexColor(StyleDictionary["BackColor"]);
+                        BorderColor = Utils.HexColor(StyleDictionary["BorderColor"]);
+                        DisabledBorderColor = Utils.HexColor(StyleDictionary["DisabledBorderColor"]);
+                        CheckSignColor = Utils.HexColor(StyleDictionary["CheckColor"]);
+                    }
 					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(style), style, null);
-			}
-		}
-
-		private void UpdateProperties()
-		{
-			try
-			{
-				ForeColor = ForeColor;
-				Invalidate();
-			}
-			catch (Exception ex)
-			{
-				throw new Exception(ex.StackTrace);
 			}
 		}
 

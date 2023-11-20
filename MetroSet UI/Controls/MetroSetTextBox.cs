@@ -43,77 +43,29 @@ namespace MetroSet.UI.Controls
 	[Designer(typeof(MetroSetTextBoxDesigner))]
 	[DefaultProperty("Text")]
 	[ComVisible(true)]
-	public class MetroSetTextBox : Control, IMetroSetControl
+	public class MetroSetTextBox : MetroSetControl
 	{
-
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set { _styleManager = value; Invalidate(); }
-		}
-
-		private Style _style;
-		private StyleManager _styleManager;
 		private HorizontalAlignment _textAlign;
 		private int _maxLength;
 		private bool _readOnly;
 		private bool _useSystemPasswordChar;
 		private string _watermarkText;
 		private Image _image;
-		private MouseMode _state;
+		private MouseMode _MouseMode;
 		private AutoCompleteSource _autoCompleteSource;
 		private AutoCompleteMode _autoCompleteMode;
 		private AutoCompleteStringCollection _autoCompleteCustomSource;
 		private bool _multiline;
 		private string[] _lines;
-		private Color _backColor;
-		private Color _foreColor;
 		private Color _borderColor;
 		private Color _hoverColor;
-
 		private Color _disabledForeColor;
 		private Color _disabledBackColor;
 		private Color _disabledBorderColor;
 
-		private readonly TextBox _textBox = new TextBox();
+		private readonly TextBox _textBox = new();
 
-		public MetroSetTextBox()
+		public MetroSetTextBox() : base(ControlKind.TextBox)
 		{
 			SetStyle(
 				ControlStyles.AllPaintingInWmPaint |
@@ -123,26 +75,20 @@ namespace MetroSet.UI.Controls
 				ControlStyles.UserPaint, true);
 			UpdateStyles();
 			Font = MetroSetFonts.Regular(10);
-			EvaluateVars();
+			Defaults();
 			ApplyTheme();
-			T_Defaults();
 			if (!Multiline)
 				Size = new Size(135, 30);
 		}
 
-		private void EvaluateVars()
-		{
-			
-		}
-
-		private void T_Defaults()
+		private void Defaults()
 		{
 			_watermarkText = string.Empty;
 			_useSystemPasswordChar = false;
 			_readOnly = false;
 			_maxLength = 32767;
 			_textAlign = HorizontalAlignment.Left;
-			_state = MouseMode.Normal;
+			_MouseMode = MouseMode.Normal;
 			_autoCompleteMode = AutoCompleteMode.None;
 			_autoCompleteSource = AutoCompleteSource.None;
 			_lines = null;
@@ -156,24 +102,35 @@ namespace MetroSet.UI.Controls
 			_textBox.Font = Font;
 			_textBox.UseSystemPasswordChar = UseSystemPasswordChar;
 			if (Multiline)
-			{
 				_textBox.Height = Height - 11;
-			}
 			else
-			{
 				Height = _textBox.Height + 11;
-			}
 
-			_textBox.MouseHover += T_MouseHover;
-			_textBox.Leave += T_Leave;
-			_textBox.Enter += T_Enter;
-			_textBox.KeyDown += T_KeyDown;
-			_textBox.TextChanged += T_TextChanged;
-			_textBox.KeyPress += T_KeyPress;
+			_textBox.MouseHover += HandleMouseHover;
+			_textBox.Leave += HandleLeave;
+			_textBox.Enter += HandleEnter;
+			_textBox.KeyDown += HandleKeyDown;
+			_textBox.TextChanged += HandleTextChanged;
+			_textBox.KeyPress += HandleKeyPress;
 
 		}
 
-		protected override void OnPaint(PaintEventArgs e)
+        protected override void OnEnabledChanged(EventArgs e)
+        {
+            base.OnEnabledChanged(e);
+			if (_textBox.Enabled = Enabled)
+			{
+				_textBox.BackColor = DisabledBackColor;
+				_textBox.ForeColor = DisabledForeColor;
+			}
+			else
+			{
+                _textBox.BackColor = BackColor;
+                _textBox.ForeColor = ForeColor;
+            }
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
 		{
 			var g = e.Graphics;
 			var rect = new Rectangle(0, 0, Width - 1, Height - 1);
@@ -181,36 +138,24 @@ namespace MetroSet.UI.Controls
 
 			if (Enabled)
 			{
-				using (var bg = new SolidBrush(BackColor))
+                using var bg = new SolidBrush(BackColor);
+                g.FillRectangle(bg, rect);
+				using var p = _MouseMode switch
 				{
-					using (var p = new Pen(BorderColor))
-					{
-						using (var ph = new Pen(HoverColor))
-						{
-							g.FillRectangle(bg, rect);
-							if (_state == MouseMode.Normal)
-								g.DrawRectangle(p, rect);
-							else if (_state == MouseMode.Hovered)
-							{
-								g.DrawRectangle(ph, rect);
-							}
-						}
-					}
-				}
-			}
+                    MouseMode.Normal => new Pen(BorderColor),
+                    MouseMode.Pushed => new Pen(HoverColor),
+                    MouseMode.Hovered => new Pen(HoverColor),
+                    _ => new Pen(BorderColor)
+                };
+				g.DrawRectangle(p, rect);
+            }
 			else
 			{
-				using (var bg = new SolidBrush(DisabledBackColor))
-				{
-					using (var p = new Pen(DisabledBorderColor))
-					{
-						g.FillRectangle(bg, rect);
-						g.DrawRectangle(p, rect);
-						_textBox.BackColor = DisabledBackColor;
-						_textBox.ForeColor = DisabledForeColor;
-					}
-				}
-			}
+                using var bg = new SolidBrush(DisabledBackColor);
+                using var p = new Pen(DisabledBorderColor);
+                g.FillRectangle(bg, rect);
+                g.DrawRectangle(p, rect);
+            }
 			if (Image != null)
 			{
 				_textBox.Location = new Point(31, 4);
@@ -223,18 +168,14 @@ namespace MetroSet.UI.Controls
 				_textBox.Location = new Point(7, 4);
 				_textBox.Width = Width - 10;
 			}
-
 		}
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
-
+        /// <summary>
+        /// Gets or sets the style provided by the user.
+        /// </summary>
+        /// <param name="style">The Style.</param>
+        protected override void ApplyThemeInternal(Style style)
+        {
 			switch (style)
 			{
 				case Style.Light:
@@ -245,7 +186,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(204, 204, 204);
 					DisabledBorderColor = Color.FromArgb(155, 155, 155);
 					DisabledForeColor = Color.FromArgb(136, 136, 136);
-					UpdateProperties();
 					break;
 
 				case Style.Dark:
@@ -256,60 +196,22 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(80, 80, 80);
 					DisabledBorderColor = Color.FromArgb(109, 109, 109);
 					DisabledForeColor = Color.FromArgb(109, 109, 109);
-					UpdateProperties();
 					break;
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.TextBoxDictionary)
-						{
-							switch (varkey.Key)
-							{
-
-								case "ForeColor":
-									ForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BackColor":
-									BackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "HoverColor":
-									HoverColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BorderColor":
-									BorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "WatermarkText":
-									WatermarkText = (string)varkey.Value;
-									break;
-
-								case "DisabledBackColor":
-									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledBorderColor":
-									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledForeColor":
-									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								default:
-									return;
-							}
-						}
-					UpdateProperties();
+					{
+                        ForeColor = Utils.HexColor(StyleDictionary["ForeColor"]);
+                        BackColor = Utils.HexColor(StyleDictionary["BackColor"]);
+                        HoverColor = Utils.HexColor(StyleDictionary["HoverColor"]);
+                        BorderColor = Utils.HexColor(StyleDictionary["BorderColor"]);
+                        WatermarkText = (string)StyleDictionary["WatermarkText"];
+                        DisabledBackColor = Utils.HexColor(StyleDictionary["DisabledBackColor"]);
+                        DisabledBorderColor = Utils.HexColor(StyleDictionary["DisabledBorderColor"]);
+                        DisabledForeColor = Utils.HexColor(StyleDictionary["DisabledForeColor"]);
+                    }
 					break;
 			}
-		}
-
-		public void UpdateProperties()
-		{
-			Invalidate();
 		}
 
 		public new event EventHandler TextChanged;
@@ -321,13 +223,13 @@ namespace MetroSet.UI.Controls
 		/// </summary>
 		/// <param name="sender">object</param>
 		/// <param name="e">EventArgs</param>
-		public void T_Leave(object sender, EventArgs e)
+		public void HandleLeave(object sender, EventArgs e)
 		{
 			base.OnMouseLeave(e);
 			Leave?.Invoke(sender, e);
 		}
 
-		public void T_KeyPress(object sender, KeyPressEventArgs e)
+		public void HandleKeyPress(object sender, KeyPressEventArgs e)
 		{
 			KeyPressed?.Invoke(this, e);
 			Invalidate();
@@ -339,7 +241,7 @@ namespace MetroSet.UI.Controls
 		/// <param name="e">EventArgs</param>
 		protected override void OnMouseLeave(EventArgs e)
 		{
-			_state = MouseMode.Normal;
+			_MouseMode = MouseMode.Normal;
 			base.OnMouseLeave(e);
 		}
 
@@ -350,7 +252,7 @@ namespace MetroSet.UI.Controls
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
 			base.OnMouseUp(e);
-			_state = MouseMode.Hovered;
+			_MouseMode = MouseMode.Hovered;
 			Invalidate();
 		}
 
@@ -361,7 +263,7 @@ namespace MetroSet.UI.Controls
 		protected override void OnMouseEnter(EventArgs e)
 		{
 			base.OnMouseEnter(e);
-			_state = MouseMode.Pushed;
+			_MouseMode = MouseMode.Pushed;
 			Invalidate();
 		}
 
@@ -372,7 +274,7 @@ namespace MetroSet.UI.Controls
 		protected override void OnMouseHover(EventArgs e)
 		{
 			base.OnMouseHover(e);
-			_state = MouseMode.Hovered;
+			_MouseMode = MouseMode.Hovered;
 			Invalidate();
 		}
 
@@ -381,7 +283,7 @@ namespace MetroSet.UI.Controls
 		/// </summary>
 		/// <param name="sender">object</param>
 		/// <param name="e">EventArgs</param>
-		public void T_MouseHover(object sender, EventArgs e)
+		public void HandleMouseHover(object sender, EventArgs e)
 		{
 			base.OnMouseHover(e);
 			Invalidate();
@@ -411,7 +313,7 @@ namespace MetroSet.UI.Controls
 		/// </summary>
 		/// <param name="sender">object</param>
 		/// <param name="e">EventArgs</param>
-		public void T_Enter(object sender, EventArgs e)
+		public void HandleEnter(object sender, EventArgs e)
 		{
 			base.OnMouseEnter(e);
 			Invalidate();
@@ -422,7 +324,7 @@ namespace MetroSet.UI.Controls
 		/// </summary>
 		/// <param name="sender">object</param>
 		/// <param name="e">KeyEventArgs</param>
-		private void T_KeyDown(object sender, KeyEventArgs e)
+		private void HandleKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Control && e.KeyCode == Keys.A)
 				e.SuppressKeyPress = true;
@@ -437,7 +339,7 @@ namespace MetroSet.UI.Controls
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void T_TextChanged(object sender, EventArgs e)
+		private void HandleTextChanged(object sender, EventArgs e)
 		{
 			Text = _textBox.Text;
 			TextChanged?.Invoke(this, e);
@@ -615,10 +517,10 @@ namespace MetroSet.UI.Controls
 		[Description("Gets or sets the background color of the control.")]
 		public override Color BackColor
 		{
-			get => _backColor;
+			get => base.BackColor;
 			set
 			{
-				_backColor = value;
+                base.BackColor = value;
 				_textBox.BackColor = value;
 				Invalidate();
 			}
@@ -662,10 +564,10 @@ namespace MetroSet.UI.Controls
 		[Browsable(false)]
 		public override Color ForeColor
 		{
-			get => _foreColor;
+			get => base.ForeColor;
 			set
 			{
-				_foreColor = value;
+				base.ForeColor = value;
 				_textBox.ForeColor = value;
 				Invalidate();
 			}

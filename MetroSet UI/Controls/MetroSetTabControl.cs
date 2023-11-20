@@ -24,6 +24,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
@@ -45,52 +46,7 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetTabControl : TabControl, IMetroSetControl
 	{
-
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set { _styleManager = value; Invalidate(); }
-		}
-
-		private Style _style;
-		private StyleManager _styleManager;
-		private PointFAnimate _slideAnimator;
+		private readonly PointFAnimate _slideAnimator;
 		private Graphics _slideGraphics;
 		private Bitmap _slideBitmap;
 
@@ -117,23 +73,83 @@ namespace MetroSet.UI.Controls
 			ApplyTheme();
 		}
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
+        /// <summary>
+        /// Gets a value indicating whether or not the light theme should be used.
+        /// </summary>
+        public static bool UseLightTheme => Utils.UseLightTheme;
 
-			switch (style)
+        /// <inheritdoc />
+        public Style Style
+        {
+            get => (Style)(_style ?? StyleManager?.Style);
+            set
+            {
+                if (_style != value)
+                    ApplyTheme((Style)(_style = value));
+            }
+        }
+        private Style? _style = UseLightTheme ? Style.Light : Style.Dark;
+
+        /// <inheritdoc />
+        public StyleManager StyleManager
+        {
+            get => _StyleManager;
+            set
+            {
+                if (value != _StyleManager)
+                {
+                    _StyleManager = value;
+                    Refresh();
+                }
+            }
+        }
+        private StyleManager _StyleManager;
+
+        /// <inheritdoc />
+        public bool IsCustomStyle
+        {
+            get => _IsCustomStyle;
+            set
+            {
+                if (value == _IsCustomStyle)
+                    return;
+                _IsCustomStyle = value;
+                Refresh();
+            }
+        }
+        private bool _IsCustomStyle = false;
+
+        /// <summary>
+        /// Gets the style dictionary for the control.
+        /// </summary>
+        public IDictionary<string, object> StyleDictionary => _StyleManager?.StyleDictionary(ControlKind.TabControl);
+
+        /// <summary>
+        /// Applies the current style to the control.
+        /// </summary>
+        public void ApplyTheme()
+        {
+            if (IsCustomStyle)
+                return;
+            ApplyTheme(Style);
+        }
+
+        /// <summary>
+        /// Applies the specified style to the control.
+        /// </summary>
+        /// <param name="style">The style to apply.</param>
+        public void ApplyTheme(Style style)
+        {
+            if (IsCustomStyle)
+                return;
+            SuspendLayout();
+            switch (style)
 			{
 				case Style.Light:
 					ForegroundColor = Color.FromArgb(65, 177, 225);
 					BackgroundColor = Color.White;
 					UnselectedTextColor = Color.Gray;
 					SelectedTextColor = Color.White;
-					UpdateProperties();
 					break;
 
 				case Style.Dark:
@@ -141,53 +157,27 @@ namespace MetroSet.UI.Controls
 					BackgroundColor = Color.FromArgb(30, 30, 30);
 					UnselectedTextColor = Color.Gray;
 					SelectedTextColor = Color.White;
-					UpdateProperties();
 					break;
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.TabControlDictionary)
-						{
-							switch (varkey.Key)
-							{
-								case "ForeColor":
-									ForegroundColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BackColor":
-									BackgroundColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "UnselectedTextColor":
-									UnselectedTextColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "SelectedTextColor":
-									SelectedTextColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								default:
-									return;
-							}
-						}
-					UpdateProperties();
+					{
+                        ForeColor = Utils.HexColor(StyleDictionary["ForeColor"]);
+                        BackColor = Utils.HexColor(StyleDictionary["BackColor"]);
+                        UnselectedTextColor = Utils.HexColor(StyleDictionary["UnselectedTextColor"]);
+                        SelectedTextColor = Utils.HexColor(StyleDictionary["SelectedTextColor"]);
+                    }
 					break;
-
 			}
+			ResumeLayout();
+			Refresh();
 		}
 
-		private void UpdateProperties()
-		{
-			try
-			{
-				InvalidateTabPage(BackgroundColor);
-				Invalidate();
-			}
-			catch
-			{
-				//throw new Exception(ex.StackTrace);
-			}
-		}
+        public override void Refresh()
+        {
+			InvalidateTabPage(BackgroundColor);
+            base.Refresh();
+        }
 
 		/// <summary>
 		/// Get or set slide animate time(ms).
@@ -349,25 +339,6 @@ namespace MetroSet.UI.Controls
 			}
 		}
 
-		private bool _isDerivedStyle = true;
-
-		/// <summary>
-		/// Gets or sets the whether this control reflect to parent form style.
-		/// Set it to false if you want the style of this control be independent. 
-		/// </summary>
-		[Category("MetroSet Framework")]
-		[Description("Gets or sets the whether this control reflect to parent(s) style. \n " +
-					 "Set it to false if you want the style of this control be independent. ")]
-		public bool IsDerivedStyle
-		{
-			get { return _isDerivedStyle; }
-			set
-			{
-				_isDerivedStyle = value;
-				Refresh();
-			}
-		}
-
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			var g = e.Graphics;
@@ -393,16 +364,12 @@ namespace MetroSet.UI.Controls
 
 						if (i == SelectedIndex)
 						{
-							using (var sb = new SolidBrush(ForegroundColor))
-							{
-								g.FillRectangle(sb, r);
-							}
-						}
-						using (var tb = new SolidBrush(i == SelectedIndex ? SelectedTextColor : UnselectedTextColor))
-						{
-							g.DrawString(TabPages[i].Text, Font, tb, r, Methods.SetPosition());
-						}
-					}
+                            using var sb = new SolidBrush(ForegroundColor);
+                            g.FillRectangle(sb, r);
+                        }
+                        using var tb = new SolidBrush(i == SelectedIndex ? SelectedTextColor : UnselectedTextColor);
+                        g.DrawString(TabPages[i].Text, Font, tb, r, Methods.SetPosition());
+                    }
 					break;
 				case TabStyle.Style2:
 					for (var i = 0; i <= TabCount - 1; i++)
@@ -411,16 +378,12 @@ namespace MetroSet.UI.Controls
 
 						if (i == SelectedIndex)
 						{
-							using (var sb = new Pen(ForegroundColor, 2))
-							{
-								g.DrawLine(sb, r.X, r.Height, r.X + r.Width, r.Height);
-							}
-						}
-						using (var tb = new SolidBrush(UnselectedTextColor))
-						{
-							g.DrawString(TabPages[i].Text, Font, tb, r, Methods.SetPosition());
-						}
-					}
+                            using var sb = new Pen(ForegroundColor, 2);
+                            g.DrawLine(sb, r.X, r.Height, r.X + r.Width, r.Height);
+                        }
+                        using var tb = new SolidBrush(UnselectedTextColor);
+                        g.DrawString(TabPages[i].Text, Font, tb, r, Methods.SetPosition());
+                    }
 					break;
 			}
 
@@ -460,7 +423,7 @@ namespace MetroSet.UI.Controls
 		/// <param name="m"></param>
 		protected override void WndProc(ref Message m)
 		{
-			Utilites.SmoothCursor(ref m);
+			Utils.SmoothCursor(ref m);
 
 			base.WndProc(ref m);
 		}
@@ -472,8 +435,8 @@ namespace MetroSet.UI.Controls
 		private void DoSlideAnimate(TabPage control1, TabPage control2, bool moveback)
 		{
 			// initialize control and child controls when control first painted
-			Utilites.InitControlHandle(control1);
-			Utilites.InitControlHandle(control2);
+			Utils.InitControlHandle(control1);
+			Utils.InitControlHandle(control2);
 			_slideGraphics = Graphics.FromHwnd(control2.Handle);
 			_slideBitmap = new Bitmap(control1.Width + control2.Width, control1.Height + control2.Height);
 
@@ -528,44 +491,6 @@ namespace MetroSet.UI.Controls
 		protected override void OnDeselecting(TabControlCancelEventArgs e)
 		{
 			_oldIndex = e.TabPageIndex;
-		}
-
-		private void DoAnimationScrollRight(Control control1, Control control2)
-		{
-			var g = control1.CreateGraphics();
-			var p1 = new Bitmap(control1.Width, control1.Height);
-			var p2 = new Bitmap(control2.Width, control2.Height);
-			control1.DrawToBitmap(p1, new Rectangle(0, 0, control1.Width, control1.Height));
-			control2.DrawToBitmap(p2, new Rectangle(0, 0, control2.Width, control2.Height));
-
-			foreach (Control c in control1.Controls)
-			{
-				c.Hide();
-			}
-
-			var slide = control1.Width - (control1.Width % Speed);
-
-			int a;
-			for (a = 0; a >= -slide; a += -Speed)
-			{
-				g.DrawImage(p1, new Rectangle(a, 0, control1.Width, control1.Height));
-				g.DrawImage(p2, new Rectangle(a + control2.Width, 0, control2.Width, control2.Height));
-			}
-			a = control1.Width;
-			g.DrawImage(p1, new Rectangle(a, 0, control1.Width, control1.Height));
-			g.DrawImage(p2, new Rectangle(a + control2.Width, 0, control2.Width, control2.Height));
-
-			SelectedTab = (TabPage)control2;
-
-			foreach (Control c in control2.Controls)
-			{
-				c.Show();
-			}
-
-			foreach (Control c in control1.Controls)
-			{
-				c.Show();
-			}
 		}
 
 		/// <summary>

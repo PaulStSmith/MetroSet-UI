@@ -142,7 +142,7 @@ namespace MetroSet.UI_Example
             _metroSetTabControl1.Controls.Add(_metroSetSetTabPage8);
             _metroSetTabControl1.Cursor = System.Windows.Forms.Cursors.Hand;
             _metroSetTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            _metroSetTabControl1.IsDerivedStyle = true;
+            _metroSetTabControl1.InheritStyle = true;
             _metroSetTabControl1.ItemSize = new System.Drawing.Size(100, 38);
             _metroSetTabControl1.Location = new System.Drawing.Point(12, 70);
             _metroSetTabControl1.Name = "_metroSetTabControl1";
@@ -176,7 +176,7 @@ namespace MetroSet.UI_Example
             _metroSetSetTabPage2.Font = null;
             _metroSetSetTabPage2.ImageIndex = 0;
             _metroSetSetTabPage2.ImageKey = null;
-            _metroSetSetTabPage2.IsDerivedStyle = true;
+            _metroSetSetTabPage2.InheritStyle = true;
             _metroSetSetTabPage2.Location = new System.Drawing.Point(4, 42);
             _metroSetSetTabPage2.Name = "_metroSetSetTabPage2";
             _metroSetSetTabPage2.Size = new System.Drawing.Size(1106, 570);
@@ -189,22 +189,22 @@ namespace MetroSet.UI_Example
             // _metroSetButton2
             // 
             _metroSetButton2.DisabledBackColor = System.Drawing.Color.FromArgb(120, 65, 177, 225);
-            _metroSetButton2.DisabledBorderColor = System.Drawing.Color.FromArgb(120, 65, 177, 225);
+            _metroSetButton2.SetDisabledBorderColor(System.Drawing.Color.FromArgb(120, 65, 177, 225));
             _metroSetButton2.DisabledForeColor = System.Drawing.Color.Gray;
             _metroSetButton2.Enabled = false;
             _metroSetButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             _metroSetButton2.HoverBorderColor = System.Drawing.Color.FromArgb(95, 207, 255);
             _metroSetButton2.HoverColor = System.Drawing.Color.FromArgb(95, 207, 255);
             _metroSetButton2.HoverTextColor = System.Drawing.Color.White;
-            _metroSetButton2.IsDerivedStyle = true;
+            _metroSetButton2.InheritStyle = true;
             _metroSetButton2.Location = new System.Drawing.Point(376, 171);
             _metroSetButton2.Name = "_metroSetButton2";
-            _metroSetButton2.NormalBorderColor = System.Drawing.Color.FromArgb(65, 177, 225);
-            _metroSetButton2.NormalColor = System.Drawing.Color.FromArgb(65, 177, 225);
-            _metroSetButton2.NormalTextColor = System.Drawing.Color.White;
+            _metroSetButton2.BorderColor = System.Drawing.Color.FromArgb(65, 177, 225);
+            _metroSetButton2.ForeColor = System.Drawing.Color.FromArgb(65, 177, 225);
+            _metroSetButton2.ForeColor = System.Drawing.Color.White;
             _metroSetButton2.PressBorderColor = System.Drawing.Color.FromArgb(35, 147, 195);
-            _metroSetButton2.PressColor = System.Drawing.Color.FromArgb(35, 147, 195);
-            _metroSetButton2.PressTextColor = System.Drawing.Color.White;
+            _metroSetButton2.PressBackColor = System.Drawing.Color.FromArgb(35, 147, 195);
+            _metroSetButton2.PressForeColor = System.Drawing.Color.White;
             _metroSetButton2.Size = new System.Drawing.Size(180, 40);
             _metroSetButton2.Style = UI.Enums.Style.Light;
             _metroSetButton2.StyleManager = styleManager1;
@@ -220,21 +220,21 @@ namespace MetroSet.UI_Example
             // _metroSetButton1
             // 
             _metroSetButton1.DisabledBackColor = System.Drawing.Color.FromArgb(120, 65, 177, 225);
-            _metroSetButton1.DisabledBorderColor = System.Drawing.Color.FromArgb(120, 65, 177, 225);
+            _metroSetButton1.SetDisabledBorderColor(System.Drawing.Color.FromArgb(120, 65, 177, 225));
             _metroSetButton1.DisabledForeColor = System.Drawing.Color.Gray;
             _metroSetButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             _metroSetButton1.HoverBorderColor = System.Drawing.Color.FromArgb(95, 207, 255);
             _metroSetButton1.HoverColor = System.Drawing.Color.FromArgb(95, 207, 255);
             _metroSetButton1.HoverTextColor = System.Drawing.Color.White;
-            _metroSetButton1.IsDerivedStyle = true;
+            _metroSetButton1.InheritStyle = true;
             _metroSetButton1.Location = new System.Drawing.Point(376, 104);
             _metroSetButton1.Name = "_metroSetButton1";
-            _metroSetButton1.NormalBorderColor = System.Drawing.Color.FromArgb(65, 177, 225);
-            _metroSetButton1.NormalColor = System.Drawing.Color.FromArgb(65, 177, 225);
-            _metroSetButton1.NormalTextColor = System.Drawing.Color.White;
+            _metroSetButton1.BorderColor = System.Drawing.Color.FromArgb(65, 177, 225);
+            _metroSetButton1.ForeColor = System.Drawing.Color.FromArgb(65, 177, 225);
+            _metroSetButton1.ForeColor = System.Drawing.Color.White;
             _metroSetButton1.PressBorderColor = System.Drawing.Color.FromArgb(35, 147, 195);
-            _metroSetButton1.PressColor = System.Drawing.Color.FromArgb(35, 147, 195);
-            _metroSetButton1.PressTextColor = System.Drawing.Color.White;
+            _metroSetButton1.PressBackColor = System.Drawing.Color.FromArgb(35, 147, 195);
+            _metroSetButton1.PressForeColor = System.Drawing.Color.White;
             _metroSetButton1.Size = new System.Drawing.Size(180, 40);
             _metroSetButton1.Style = UI.Enums.Style.Light;
             _metroSetButton1.StyleManager = styleManager1;
@@ -254,7 +254,7 @@ namespace MetroSet.UI_Example
             _metroSetEllipse3.HoverTextColor = System.Drawing.Color.White;
             _metroSetEllipse3.Image = null;
             _metroSetEllipse3.ImageSize = new System.Drawing.Size(64, 64);
-            _metroSetEllipse3.IsDerivedStyle = true;
+            _metroSetEllipse3.InheritStyle = true;
             _metroSetEllipse3.Location = new System.Drawing.Point(793, 234);
             _metroSetEllipse3.Name = "_metroSetEllipse3";
             _metroSetEllipse3.NormalBorderColor = System.Drawing.Color.FromArgb(204, 204, 204);
@@ -282,7 +282,7 @@ namespace MetroSet.UI_Example
             _metroSetEllipse2.HoverTextColor = System.Drawing.Color.White;
             _metroSetEllipse2.Image = null;
             _metroSetEllipse2.ImageSize = new System.Drawing.Size(64, 64);
-            _metroSetEllipse2.IsDerivedStyle = true;
+            _metroSetEllipse2.InheritStyle = true;
             _metroSetEllipse2.Location = new System.Drawing.Point(870, 104);
             _metroSetEllipse2.Name = "_metroSetEllipse2";
             _metroSetEllipse2.NormalBorderColor = System.Drawing.Color.FromArgb(204, 204, 204);
@@ -310,7 +310,7 @@ namespace MetroSet.UI_Example
             _metroSetEllipse1.HoverTextColor = System.Drawing.Color.White;
             _metroSetEllipse1.Image = null;
             _metroSetEllipse1.ImageSize = new System.Drawing.Size(64, 64);
-            _metroSetEllipse1.IsDerivedStyle = true;
+            _metroSetEllipse1.InheritStyle = true;
             _metroSetEllipse1.Location = new System.Drawing.Point(714, 104);
             _metroSetEllipse1.Name = "_metroSetEllipse1";
             _metroSetEllipse1.NormalBorderColor = System.Drawing.Color.FromArgb(204, 204, 204);
@@ -340,19 +340,19 @@ namespace MetroSet.UI_Example
             _metroSetBadge2.HoverBorderColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetBadge2.HoverColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetBadge2.HoverTextColor = System.Drawing.Color.White;
-            _metroSetBadge2.IsDerivedStyle = true;
+            _metroSetBadge2.InheritStyle = true;
             _metroSetBadge2.Location = new System.Drawing.Point(376, 289);
             _metroSetBadge2.Name = "_metroSetBadge2";
             _metroSetBadge2.NormalBadgeColor = System.Drawing.Color.FromArgb(65, 177, 225);
             _metroSetBadge2.NormalBadgeTextColor = System.Drawing.Color.White;
-            _metroSetBadge2.NormalBorderColor = System.Drawing.Color.FromArgb(204, 204, 204);
-            _metroSetBadge2.NormalColor = System.Drawing.Color.FromArgb(238, 238, 238);
-            _metroSetBadge2.NormalTextColor = System.Drawing.Color.Black;
+            _metroSetBadge2.BorderColor = System.Drawing.Color.FromArgb(204, 204, 204);
+            _metroSetBadge2.ForeColor = System.Drawing.Color.FromArgb(238, 238, 238);
+            _metroSetBadge2.ForeColor = System.Drawing.Color.Black;
             _metroSetBadge2.PressBadgeColor = System.Drawing.Color.FromArgb(45, 147, 205);
             _metroSetBadge2.PressBadgeTextColor = System.Drawing.Color.White;
             _metroSetBadge2.PressBorderColor = System.Drawing.Color.FromArgb(51, 51, 51);
-            _metroSetBadge2.PressColor = System.Drawing.Color.FromArgb(51, 51, 51);
-            _metroSetBadge2.PressTextColor = System.Drawing.Color.White;
+            _metroSetBadge2.PressBackColor = System.Drawing.Color.FromArgb(51, 51, 51);
+            _metroSetBadge2.PressForeColor = System.Drawing.Color.White;
             _metroSetBadge2.Size = new System.Drawing.Size(198, 67);
             _metroSetBadge2.Style = UI.Enums.Style.Light;
             _metroSetBadge2.StyleManager = styleManager1;
@@ -373,19 +373,19 @@ namespace MetroSet.UI_Example
             _metroSetBadge1.HoverBorderColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetBadge1.HoverColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetBadge1.HoverTextColor = System.Drawing.Color.White;
-            _metroSetBadge1.IsDerivedStyle = true;
+            _metroSetBadge1.InheritStyle = true;
             _metroSetBadge1.Location = new System.Drawing.Point(15, 289);
             _metroSetBadge1.Name = "_metroSetBadge1";
             _metroSetBadge1.NormalBadgeColor = System.Drawing.Color.FromArgb(65, 177, 225);
             _metroSetBadge1.NormalBadgeTextColor = System.Drawing.Color.White;
-            _metroSetBadge1.NormalBorderColor = System.Drawing.Color.FromArgb(204, 204, 204);
-            _metroSetBadge1.NormalColor = System.Drawing.Color.FromArgb(238, 238, 238);
-            _metroSetBadge1.NormalTextColor = System.Drawing.Color.Black;
+            _metroSetBadge1.BorderColor = System.Drawing.Color.FromArgb(204, 204, 204);
+            _metroSetBadge1.ForeColor = System.Drawing.Color.FromArgb(238, 238, 238);
+            _metroSetBadge1.ForeColor = System.Drawing.Color.Black;
             _metroSetBadge1.PressBadgeColor = System.Drawing.Color.FromArgb(45, 147, 205);
             _metroSetBadge1.PressBadgeTextColor = System.Drawing.Color.White;
             _metroSetBadge1.PressBorderColor = System.Drawing.Color.FromArgb(51, 51, 51);
-            _metroSetBadge1.PressColor = System.Drawing.Color.FromArgb(51, 51, 51);
-            _metroSetBadge1.PressTextColor = System.Drawing.Color.White;
+            _metroSetBadge1.PressBackColor = System.Drawing.Color.FromArgb(51, 51, 51);
+            _metroSetBadge1.PressForeColor = System.Drawing.Color.White;
             _metroSetBadge1.Size = new System.Drawing.Size(195, 67);
             _metroSetBadge1.Style = UI.Enums.Style.Light;
             _metroSetBadge1.StyleManager = styleManager1;
@@ -395,7 +395,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel2
             // 
             _metroSetLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel2.IsDerivedStyle = true;
+            _metroSetLabel2.InheritStyle = true;
             _metroSetLabel2.Location = new System.Drawing.Point(15, 259);
             _metroSetLabel2.Name = "_metroSetLabel2";
             _metroSetLabel2.Size = new System.Drawing.Size(100, 23);
@@ -407,7 +407,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel3
             // 
             _metroSetLabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel3.IsDerivedStyle = true;
+            _metroSetLabel3.InheritStyle = true;
             _metroSetLabel3.Location = new System.Drawing.Point(810, 59);
             _metroSetLabel3.Name = "_metroSetLabel3";
             _metroSetLabel3.Size = new System.Drawing.Size(100, 23);
@@ -419,7 +419,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel19
             // 
             _metroSetLabel19.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel19.IsDerivedStyle = true;
+            _metroSetLabel19.InheritStyle = true;
             _metroSetLabel19.Location = new System.Drawing.Point(376, 59);
             _metroSetLabel19.Name = "_metroSetLabel19";
             _metroSetLabel19.Size = new System.Drawing.Size(100, 23);
@@ -432,7 +432,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel1
             // 
             _metroSetLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel1.IsDerivedStyle = true;
+            _metroSetLabel1.InheritStyle = true;
             _metroSetLabel1.Location = new System.Drawing.Point(15, 59);
             _metroSetLabel1.Name = "_metroSetLabel1";
             _metroSetLabel1.Size = new System.Drawing.Size(100, 23);
@@ -452,7 +452,7 @@ namespace MetroSet.UI_Example
             _metroSetDefaultButton2.HoverBorderColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetDefaultButton2.HoverColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetDefaultButton2.HoverTextColor = System.Drawing.Color.White;
-            _metroSetDefaultButton2.IsDerivedStyle = true;
+            _metroSetDefaultButton2.InheritStyle = true;
             _metroSetDefaultButton2.Location = new System.Drawing.Point(15, 171);
             _metroSetDefaultButton2.Name = "_metroSetDefaultButton2";
             _metroSetDefaultButton2.NormalBorderColor = System.Drawing.Color.FromArgb(204, 204, 204);
@@ -477,7 +477,7 @@ namespace MetroSet.UI_Example
             _metroSetDefaultButton1.HoverBorderColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetDefaultButton1.HoverColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetDefaultButton1.HoverTextColor = System.Drawing.Color.White;
-            _metroSetDefaultButton1.IsDerivedStyle = true;
+            _metroSetDefaultButton1.InheritStyle = true;
             _metroSetDefaultButton1.Location = new System.Drawing.Point(15, 104);
             _metroSetDefaultButton1.Name = "_metroSetDefaultButton1";
             _metroSetDefaultButton1.NormalBorderColor = System.Drawing.Color.FromArgb(204, 204, 204);
@@ -509,7 +509,7 @@ namespace MetroSet.UI_Example
             _metroSetSetTabPage1.Font = null;
             _metroSetSetTabPage1.ImageIndex = 0;
             _metroSetSetTabPage1.ImageKey = null;
-            _metroSetSetTabPage1.IsDerivedStyle = true;
+            _metroSetSetTabPage1.InheritStyle = true;
             _metroSetSetTabPage1.Location = new System.Drawing.Point(4, 42);
             _metroSetSetTabPage1.Name = "_metroSetSetTabPage1";
             _metroSetSetTabPage1.Size = new System.Drawing.Size(1106, 570);
@@ -530,7 +530,7 @@ namespace MetroSet.UI_Example
             _metroSetTile8.HoverBorderColor = System.Drawing.Color.FromArgb(230, 230, 230);
             _metroSetTile8.HoverColor = System.Drawing.Color.FromArgb(65, 177, 225);
             _metroSetTile8.HoverTextColor = System.Drawing.Color.White;
-            _metroSetTile8.IsDerivedStyle = true;
+            _metroSetTile8.InheritStyle = true;
             _metroSetTile8.Location = new System.Drawing.Point(732, 259);
             _metroSetTile8.Name = "_metroSetTile8";
             _metroSetTile8.NormalBorderColor = System.Drawing.Color.FromArgb(65, 177, 225);
@@ -545,7 +545,7 @@ namespace MetroSet.UI_Example
             _metroSetTile8.TabIndex = 13;
             _metroSetTile8.Text = "Disabled Tile";
 
-            _metroSetTile8.TileAlign = UI.Enums.TileAlign.BottomCenter;
+            _metroSetTile8.TileAlign = UI.Enums.TileAlignment.BottomCenter;
             // 
             // _metroSetTile4
             // 
@@ -556,7 +556,7 @@ namespace MetroSet.UI_Example
             _metroSetTile4.HoverBorderColor = System.Drawing.Color.FromArgb(230, 230, 230);
             _metroSetTile4.HoverColor = System.Drawing.Color.FromArgb(65, 177, 225);
             _metroSetTile4.HoverTextColor = System.Drawing.Color.White;
-            _metroSetTile4.IsDerivedStyle = true;
+            _metroSetTile4.InheritStyle = true;
             _metroSetTile4.Location = new System.Drawing.Point(732, 104);
             _metroSetTile4.Name = "_metroSetTile4";
             _metroSetTile4.NormalBorderColor = System.Drawing.Color.FromArgb(65, 177, 225);
@@ -571,7 +571,7 @@ namespace MetroSet.UI_Example
             _metroSetTile4.TabIndex = 13;
             _metroSetTile4.Text = "Normal Tile";
 
-            _metroSetTile4.TileAlign = UI.Enums.TileAlign.TopCenter;
+            _metroSetTile4.TileAlign = UI.Enums.TileAlignment.TopCenter;
             // 
             // _metroSetTile7
             // 
@@ -582,7 +582,7 @@ namespace MetroSet.UI_Example
             _metroSetTile7.HoverBorderColor = System.Drawing.Color.FromArgb(230, 230, 230);
             _metroSetTile7.HoverColor = System.Drawing.Color.FromArgb(65, 177, 225);
             _metroSetTile7.HoverTextColor = System.Drawing.Color.White;
-            _metroSetTile7.IsDerivedStyle = true;
+            _metroSetTile7.InheritStyle = true;
             _metroSetTile7.Location = new System.Drawing.Point(254, 259);
             _metroSetTile7.Name = "_metroSetTile7";
             _metroSetTile7.NormalBorderColor = System.Drawing.Color.FromArgb(65, 177, 225);
@@ -597,7 +597,7 @@ namespace MetroSet.UI_Example
             _metroSetTile7.TabIndex = 10;
             _metroSetTile7.Text = "TopCenter";
 
-            _metroSetTile7.TileAlign = UI.Enums.TileAlign.BottomCenter;
+            _metroSetTile7.TileAlign = UI.Enums.TileAlignment.BottomCenter;
             // 
             // _metroSetTile6
             // 
@@ -608,7 +608,7 @@ namespace MetroSet.UI_Example
             _metroSetTile6.HoverBorderColor = System.Drawing.Color.FromArgb(230, 230, 230);
             _metroSetTile6.HoverColor = System.Drawing.Color.FromArgb(65, 177, 225);
             _metroSetTile6.HoverTextColor = System.Drawing.Color.White;
-            _metroSetTile6.IsDerivedStyle = true;
+            _metroSetTile6.InheritStyle = true;
             _metroSetTile6.Location = new System.Drawing.Point(493, 259);
             _metroSetTile6.Name = "_metroSetTile6";
             _metroSetTile6.NormalBorderColor = System.Drawing.Color.FromArgb(65, 177, 225);
@@ -623,7 +623,7 @@ namespace MetroSet.UI_Example
             _metroSetTile6.TabIndex = 11;
             _metroSetTile6.Text = "BottomRight";
 
-            _metroSetTile6.TileAlign = UI.Enums.TileAlign.BottomRight;
+            _metroSetTile6.TileAlign = UI.Enums.TileAlignment.BottomRight;
             // 
             // _metroSetTile2
             // 
@@ -634,7 +634,7 @@ namespace MetroSet.UI_Example
             _metroSetTile2.HoverBorderColor = System.Drawing.Color.FromArgb(230, 230, 230);
             _metroSetTile2.HoverColor = System.Drawing.Color.FromArgb(65, 177, 225);
             _metroSetTile2.HoverTextColor = System.Drawing.Color.White;
-            _metroSetTile2.IsDerivedStyle = true;
+            _metroSetTile2.InheritStyle = true;
             _metroSetTile2.Location = new System.Drawing.Point(254, 104);
             _metroSetTile2.Name = "_metroSetTile2";
             _metroSetTile2.NormalBorderColor = System.Drawing.Color.FromArgb(65, 177, 225);
@@ -649,7 +649,7 @@ namespace MetroSet.UI_Example
             _metroSetTile2.TabIndex = 10;
             _metroSetTile2.Text = "TopCenter";
 
-            _metroSetTile2.TileAlign = UI.Enums.TileAlign.TopCenter;
+            _metroSetTile2.TileAlign = UI.Enums.TileAlignment.TopCenter;
             // 
             // _metroSetTile5
             // 
@@ -660,7 +660,7 @@ namespace MetroSet.UI_Example
             _metroSetTile5.HoverBorderColor = System.Drawing.Color.FromArgb(230, 230, 230);
             _metroSetTile5.HoverColor = System.Drawing.Color.FromArgb(65, 177, 225);
             _metroSetTile5.HoverTextColor = System.Drawing.Color.White;
-            _metroSetTile5.IsDerivedStyle = true;
+            _metroSetTile5.InheritStyle = true;
             _metroSetTile5.Location = new System.Drawing.Point(493, 104);
             _metroSetTile5.Name = "_metroSetTile5";
             _metroSetTile5.NormalBorderColor = System.Drawing.Color.FromArgb(65, 177, 225);
@@ -674,7 +674,7 @@ namespace MetroSet.UI_Example
             _metroSetTile5.StyleManager = styleManager1;
             _metroSetTile5.TabIndex = 12;
 
-            _metroSetTile5.TileAlign = UI.Enums.TileAlign.Topleft;
+            _metroSetTile5.TileAlign = UI.Enums.TileAlignment.TopLeft;
             // 
             // _metroSetTile3
             // 
@@ -685,7 +685,7 @@ namespace MetroSet.UI_Example
             _metroSetTile3.HoverBorderColor = System.Drawing.Color.FromArgb(230, 230, 230);
             _metroSetTile3.HoverColor = System.Drawing.Color.FromArgb(65, 177, 225);
             _metroSetTile3.HoverTextColor = System.Drawing.Color.White;
-            _metroSetTile3.IsDerivedStyle = true;
+            _metroSetTile3.InheritStyle = true;
             _metroSetTile3.Location = new System.Drawing.Point(15, 259);
             _metroSetTile3.Name = "_metroSetTile3";
             _metroSetTile3.NormalBorderColor = System.Drawing.Color.FromArgb(65, 177, 225);
@@ -700,7 +700,7 @@ namespace MetroSet.UI_Example
             _metroSetTile3.TabIndex = 11;
             _metroSetTile3.Text = "BottomRight";
 
-            _metroSetTile3.TileAlign = UI.Enums.TileAlign.BottomRight;
+            _metroSetTile3.TileAlign = UI.Enums.TileAlignment.BottomRight;
             // 
             // _metroSetTile1
             // 
@@ -711,7 +711,7 @@ namespace MetroSet.UI_Example
             _metroSetTile1.HoverBorderColor = System.Drawing.Color.FromArgb(230, 230, 230);
             _metroSetTile1.HoverColor = System.Drawing.Color.FromArgb(65, 177, 225);
             _metroSetTile1.HoverTextColor = System.Drawing.Color.White;
-            _metroSetTile1.IsDerivedStyle = true;
+            _metroSetTile1.InheritStyle = true;
             _metroSetTile1.Location = new System.Drawing.Point(15, 104);
             _metroSetTile1.Name = "_metroSetTile1";
             _metroSetTile1.NormalBorderColor = System.Drawing.Color.FromArgb(65, 177, 225);
@@ -726,12 +726,12 @@ namespace MetroSet.UI_Example
             _metroSetTile1.TabIndex = 12;
             _metroSetTile1.Text = "BottmLeft";
 
-            _metroSetTile1.TileAlign = UI.Enums.TileAlign.Topleft;
+            _metroSetTile1.TileAlign = UI.Enums.TileAlignment.TopLeft;
             // 
             // _metroSetLabel4
             // 
             _metroSetLabel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel4.IsDerivedStyle = true;
+            _metroSetLabel4.InheritStyle = true;
             _metroSetLabel4.Location = new System.Drawing.Point(15, 59);
             _metroSetLabel4.Name = "_metroSetLabel4";
             _metroSetLabel4.Size = new System.Drawing.Size(100, 23);
@@ -762,7 +762,7 @@ namespace MetroSet.UI_Example
             _metroSetSetTabPage3.Font = null;
             _metroSetSetTabPage3.ImageIndex = 0;
             _metroSetSetTabPage3.ImageKey = null;
-            _metroSetSetTabPage3.IsDerivedStyle = true;
+            _metroSetSetTabPage3.InheritStyle = true;
             _metroSetSetTabPage3.Location = new System.Drawing.Point(4, 42);
             _metroSetSetTabPage3.Name = "_metroSetSetTabPage3";
             _metroSetSetTabPage3.Size = new System.Drawing.Size(1106, 570);
@@ -782,7 +782,7 @@ namespace MetroSet.UI_Example
             _metroSetListBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             _metroSetListBox2.HoveredItemBackColor = System.Drawing.Color.LightGray;
             _metroSetListBox2.HoveredItemColor = System.Drawing.Color.DimGray;
-            _metroSetListBox2.IsDerivedStyle = true;
+            _metroSetListBox2.InheritStyle = true;
             _metroSetListBox2.ItemHeight = 30;
             _metroSetListBox2.Items.Add("ListItem 1");
             _metroSetListBox2.Items.Add("ListItem 2");
@@ -918,7 +918,7 @@ namespace MetroSet.UI_Example
             _metroSetComboBox2.Enabled = false;
             _metroSetComboBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             _metroSetComboBox2.FormattingEnabled = true;
-            _metroSetComboBox2.IsDerivedStyle = true;
+            _metroSetComboBox2.InheritStyle = true;
             _metroSetComboBox2.ItemHeight = 20;
             _metroSetComboBox2.Location = new System.Drawing.Point(305, 342);
             _metroSetComboBox2.Name = "_metroSetComboBox2";
@@ -945,7 +945,7 @@ namespace MetroSet.UI_Example
             _metroSetComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             _metroSetComboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             _metroSetComboBox1.FormattingEnabled = true;
-            _metroSetComboBox1.IsDerivedStyle = true;
+            _metroSetComboBox1.InheritStyle = true;
             _metroSetComboBox1.ItemHeight = 20;
             _metroSetComboBox1.Items.AddRange(new object[] { "ListItem 1", "ListItem 2", "ListItem 3", "ListItem 4", "ListItem 5", "ListItem 6", "ListItem 7", "ListItem 8", "ListItem 9", "ListItem 10", "ListItem 11", "ListItem 12", "ListItem 13", "ListItem 14", "ListItem 15", "ListItem 16", "ListItem 17", "ListItem 18", "ListItem 19", "ListItem 20", "ListItem 21", "ListItem 22", "ListItem 23", "ListItem 24", "ListItem 25", "ListItem 26", "ListItem 27", "ListItem 28", "ListItem 29", "ListItem 30", "ListItem 31", "ListItem 32", "ListItem 33", "ListItem 34", "ListItem 35", "ListItem 36", "ListItem 37", "ListItem 38", "ListItem 39", "ListItem 40", "ListItem 41", "ListItem 42", "ListItem 43", "ListItem 44", "ListItem 45", "ListItem 46", "ListItem 47", "ListItem 48", "ListItem 49", "ListItem 50", "ListItem 51", "ListItem 52", "ListItem 53", "ListItem 54", "ListItem 55", "ListItem 56", "ListItem 57", "ListItem 58", "ListItem 59", "ListItem 60", "ListItem 61", "ListItem 62", "ListItem 63", "ListItem 64", "ListItem 65", "ListItem 66", "ListItem 67", "ListItem 68", "ListItem 69", "ListItem 70", "ListItem 71", "ListItem 72", "ListItem 73", "ListItem 74", "ListItem 75", "ListItem 76", "ListItem 77", "ListItem 78", "ListItem 79", "ListItem 80", "ListItem 81", "ListItem 82", "ListItem 83", "ListItem 84", "ListItem 85", "ListItem 86", "ListItem 87", "ListItem 88", "ListItem 89", "ListItem 90", "ListItem 91", "ListItem 92", "ListItem 93", "ListItem 94", "ListItem 95", "ListItem 96", "ListItem 97", "ListItem 98", "ListItem 99", "ListItem 100" });
             _metroSetComboBox1.Location = new System.Drawing.Point(305, 292);
@@ -968,7 +968,7 @@ namespace MetroSet.UI_Example
             _metroSetNumeric3.DisabledBorderColor = System.Drawing.Color.FromArgb(155, 155, 155);
             _metroSetNumeric3.DisabledForeColor = System.Drawing.Color.FromArgb(136, 136, 136);
             _metroSetNumeric3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetNumeric3.IsDerivedStyle = true;
+            _metroSetNumeric3.InheritStyle = true;
             _metroSetNumeric3.Location = new System.Drawing.Point(15, 426);
             _metroSetNumeric3.Maximum = 100;
             _metroSetNumeric3.Minimum = 0;
@@ -992,7 +992,7 @@ namespace MetroSet.UI_Example
             _metroSetNumeric2.DisabledForeColor = System.Drawing.Color.FromArgb(136, 136, 136);
             _metroSetNumeric2.Enabled = false;
             _metroSetNumeric2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetNumeric2.IsDerivedStyle = true;
+            _metroSetNumeric2.InheritStyle = true;
             _metroSetNumeric2.Location = new System.Drawing.Point(15, 476);
             _metroSetNumeric2.Maximum = 100;
             _metroSetNumeric2.Minimum = 0;
@@ -1015,7 +1015,7 @@ namespace MetroSet.UI_Example
             _metroSetRichTextBox1.DisabledForeColor = System.Drawing.Color.FromArgb(136, 136, 136);
             _metroSetRichTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             _metroSetRichTextBox1.HoverColor = System.Drawing.Color.FromArgb(102, 102, 102);
-            _metroSetRichTextBox1.IsDerivedStyle = true;
+            _metroSetRichTextBox1.InheritStyle = true;
             _metroSetRichTextBox1.Lines = null;
             _metroSetRichTextBox1.Location = new System.Drawing.Point(305, 93);
             _metroSetRichTextBox1.MaxLength = 32767;
@@ -1041,7 +1041,7 @@ namespace MetroSet.UI_Example
             _metroSetTextBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             _metroSetTextBox3.HoverColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetTextBox3.Image = null;
-            _metroSetTextBox3.IsDerivedStyle = true;
+            _metroSetTextBox3.InheritStyle = true;
             _metroSetTextBox3.Lines = null;
             _metroSetTextBox3.Location = new System.Drawing.Point(15, 230);
             _metroSetTextBox3.MaxLength = 32767;
@@ -1071,7 +1071,7 @@ namespace MetroSet.UI_Example
             _metroSetTextBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             _metroSetTextBox2.HoverColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetTextBox2.Image = null;
-            _metroSetTextBox2.IsDerivedStyle = true;
+            _metroSetTextBox2.InheritStyle = true;
             _metroSetTextBox2.Lines = null;
             _metroSetTextBox2.Location = new System.Drawing.Point(15, 185);
             _metroSetTextBox2.MaxLength = 32767;
@@ -1099,7 +1099,7 @@ namespace MetroSet.UI_Example
             _metroSetTextBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             _metroSetTextBox4.HoverColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetTextBox4.Image = null;
-            _metroSetTextBox4.IsDerivedStyle = true;
+            _metroSetTextBox4.InheritStyle = true;
             _metroSetTextBox4.Lines = null;
             _metroSetTextBox4.Location = new System.Drawing.Point(15, 139);
             _metroSetTextBox4.MaxLength = 32767;
@@ -1128,7 +1128,7 @@ namespace MetroSet.UI_Example
             _metroSetTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             _metroSetTextBox1.HoverColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetTextBox1.Image = null;
-            _metroSetTextBox1.IsDerivedStyle = true;
+            _metroSetTextBox1.InheritStyle = true;
             _metroSetTextBox1.Lines = null;
             _metroSetTextBox1.Location = new System.Drawing.Point(15, 93);
             _metroSetTextBox1.MaxLength = 32767;
@@ -1146,7 +1146,7 @@ namespace MetroSet.UI_Example
             // 
             // _metroSetContextMenuStrip1
             // 
-            _metroSetContextMenuStrip1.IsDerivedStyle = true;
+            _metroSetContextMenuStrip1.InheritStyle = true;
             _metroSetContextMenuStrip1.Name = "_metroSetContextMenuStrip1";
             _metroSetContextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             _metroSetContextMenuStrip1.Style = UI.Enums.Style.Light;
@@ -1156,7 +1156,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel8
             // 
             _metroSetLabel8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel8.IsDerivedStyle = true;
+            _metroSetLabel8.InheritStyle = true;
             _metroSetLabel8.Location = new System.Drawing.Point(305, 254);
             _metroSetLabel8.Name = "_metroSetLabel8";
             _metroSetLabel8.Size = new System.Drawing.Size(138, 23);
@@ -1169,7 +1169,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel9
             // 
             _metroSetLabel9.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel9.IsDerivedStyle = true;
+            _metroSetLabel9.InheritStyle = true;
             _metroSetLabel9.Location = new System.Drawing.Point(635, 55);
             _metroSetLabel9.Name = "_metroSetLabel9";
             _metroSetLabel9.Size = new System.Drawing.Size(138, 23);
@@ -1182,7 +1182,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel6
             // 
             _metroSetLabel6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel6.IsDerivedStyle = true;
+            _metroSetLabel6.InheritStyle = true;
             _metroSetLabel6.Location = new System.Drawing.Point(305, 55);
             _metroSetLabel6.Name = "_metroSetLabel6";
             _metroSetLabel6.Size = new System.Drawing.Size(138, 23);
@@ -1195,7 +1195,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel7
             // 
             _metroSetLabel7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel7.IsDerivedStyle = true;
+            _metroSetLabel7.InheritStyle = true;
             _metroSetLabel7.Location = new System.Drawing.Point(15, 388);
             _metroSetLabel7.Name = "_metroSetLabel7";
             _metroSetLabel7.Size = new System.Drawing.Size(114, 23);
@@ -1208,7 +1208,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel5
             // 
             _metroSetLabel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel5.IsDerivedStyle = true;
+            _metroSetLabel5.InheritStyle = true;
             _metroSetLabel5.Location = new System.Drawing.Point(15, 55);
             _metroSetLabel5.Name = "_metroSetLabel5";
             _metroSetLabel5.Size = new System.Drawing.Size(114, 23);
@@ -1241,7 +1241,7 @@ namespace MetroSet.UI_Example
             _metroSetSetTabPage4.Font = null;
             _metroSetSetTabPage4.ImageIndex = 0;
             _metroSetSetTabPage4.ImageKey = null;
-            _metroSetSetTabPage4.IsDerivedStyle = true;
+            _metroSetSetTabPage4.InheritStyle = true;
             _metroSetSetTabPage4.Location = new System.Drawing.Point(4, 42);
             _metroSetSetTabPage4.Name = "_metroSetSetTabPage4";
             _metroSetSetTabPage4.Size = new System.Drawing.Size(1106, 570);
@@ -1264,7 +1264,7 @@ namespace MetroSet.UI_Example
             _metroSetSwitch4.DisabledCheckColor = System.Drawing.Color.FromArgb(100, 65, 177, 225);
             _metroSetSwitch4.DisabledUnCheckColor = System.Drawing.Color.FromArgb(200, 205, 205, 205);
             _metroSetSwitch4.Enabled = false;
-            _metroSetSwitch4.IsDerivedStyle = true;
+            _metroSetSwitch4.InheritStyle = true;
             _metroSetSwitch4.Location = new System.Drawing.Point(635, 220);
             _metroSetSwitch4.Name = "_metroSetSwitch4";
             _metroSetSwitch4.Size = new System.Drawing.Size(58, 22);
@@ -1289,7 +1289,7 @@ namespace MetroSet.UI_Example
             _metroSetSwitch3.DisabledCheckColor = System.Drawing.Color.FromArgb(100, 65, 177, 225);
             _metroSetSwitch3.DisabledUnCheckColor = System.Drawing.Color.FromArgb(200, 205, 205, 205);
             _metroSetSwitch3.Enabled = false;
-            _metroSetSwitch3.IsDerivedStyle = true;
+            _metroSetSwitch3.InheritStyle = true;
             _metroSetSwitch3.Location = new System.Drawing.Point(635, 179);
             _metroSetSwitch3.Name = "_metroSetSwitch3";
             _metroSetSwitch3.Size = new System.Drawing.Size(58, 22);
@@ -1313,7 +1313,7 @@ namespace MetroSet.UI_Example
             _metroSetSwitch2.DisabledBorderColor = System.Drawing.Color.FromArgb(205, 205, 205);
             _metroSetSwitch2.DisabledCheckColor = System.Drawing.Color.FromArgb(100, 65, 177, 225);
             _metroSetSwitch2.DisabledUnCheckColor = System.Drawing.Color.FromArgb(200, 205, 205, 205);
-            _metroSetSwitch2.IsDerivedStyle = true;
+            _metroSetSwitch2.InheritStyle = true;
             _metroSetSwitch2.Location = new System.Drawing.Point(635, 134);
             _metroSetSwitch2.Name = "_metroSetSwitch2";
             _metroSetSwitch2.Size = new System.Drawing.Size(58, 22);
@@ -1338,7 +1338,7 @@ namespace MetroSet.UI_Example
             _metroSetSwitch1.DisabledBorderColor = System.Drawing.Color.FromArgb(205, 205, 205);
             _metroSetSwitch1.DisabledCheckColor = System.Drawing.Color.FromArgb(100, 65, 177, 225);
             _metroSetSwitch1.DisabledUnCheckColor = System.Drawing.Color.FromArgb(200, 205, 205, 205);
-            _metroSetSwitch1.IsDerivedStyle = true;
+            _metroSetSwitch1.InheritStyle = true;
             _metroSetSwitch1.Location = new System.Drawing.Point(635, 99);
             _metroSetSwitch1.Name = "_metroSetSwitch1";
             _metroSetSwitch1.Size = new System.Drawing.Size(58, 22);
@@ -1354,7 +1354,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel12
             // 
             _metroSetLabel12.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel12.IsDerivedStyle = true;
+            _metroSetLabel12.InheritStyle = true;
             _metroSetLabel12.Location = new System.Drawing.Point(635, 55);
             _metroSetLabel12.Name = "_metroSetLabel12";
             _metroSetLabel12.Size = new System.Drawing.Size(130, 23);
@@ -1376,7 +1376,7 @@ namespace MetroSet.UI_Example
             _metroSetRadioButton4.Enabled = false;
             _metroSetRadioButton4.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             _metroSetRadioButton4.Group = 0;
-            _metroSetRadioButton4.IsDerivedStyle = true;
+            _metroSetRadioButton4.InheritStyle = true;
             _metroSetRadioButton4.Location = new System.Drawing.Point(305, 219);
             _metroSetRadioButton4.Name = "_metroSetRadioButton4";
             _metroSetRadioButton4.Size = new System.Drawing.Size(145, 17);
@@ -1397,7 +1397,7 @@ namespace MetroSet.UI_Example
             _metroSetRadioButton3.DisabledBorderColor = System.Drawing.Color.FromArgb(205, 205, 205);
             _metroSetRadioButton3.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             _metroSetRadioButton3.Group = 0;
-            _metroSetRadioButton3.IsDerivedStyle = true;
+            _metroSetRadioButton3.InheritStyle = true;
             _metroSetRadioButton3.Location = new System.Drawing.Point(305, 139);
             _metroSetRadioButton3.Name = "_metroSetRadioButton3";
             _metroSetRadioButton3.Size = new System.Drawing.Size(145, 17);
@@ -1419,7 +1419,7 @@ namespace MetroSet.UI_Example
             _metroSetRadioButton2.Enabled = false;
             _metroSetRadioButton2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             _metroSetRadioButton2.Group = 0;
-            _metroSetRadioButton2.IsDerivedStyle = true;
+            _metroSetRadioButton2.InheritStyle = true;
             _metroSetRadioButton2.Location = new System.Drawing.Point(305, 179);
             _metroSetRadioButton2.Name = "_metroSetRadioButton2";
             _metroSetRadioButton2.Size = new System.Drawing.Size(145, 17);
@@ -1440,7 +1440,7 @@ namespace MetroSet.UI_Example
             _metroSetRadioButton1.DisabledBorderColor = System.Drawing.Color.FromArgb(205, 205, 205);
             _metroSetRadioButton1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             _metroSetRadioButton1.Group = 0;
-            _metroSetRadioButton1.IsDerivedStyle = true;
+            _metroSetRadioButton1.InheritStyle = true;
             _metroSetRadioButton1.Location = new System.Drawing.Point(305, 99);
             _metroSetRadioButton1.Name = "_metroSetRadioButton1";
             _metroSetRadioButton1.Size = new System.Drawing.Size(145, 17);
@@ -1462,10 +1462,10 @@ namespace MetroSet.UI_Example
             _metroSetCheckBox5.DisabledBorderColor = System.Drawing.Color.FromArgb(205, 205, 205);
             _metroSetCheckBox5.Enabled = false;
             _metroSetCheckBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetCheckBox5.IsDerivedStyle = true;
+            _metroSetCheckBox5.InheritStyle = true;
             _metroSetCheckBox5.Location = new System.Drawing.Point(15, 300);
             _metroSetCheckBox5.Name = "_metroSetCheckBox5";
-            _metroSetCheckBox5.SignStyle = UI.Enums.SignStyle.Shape;
+            _metroSetCheckBox5.CheckmarkStyle = UI.Enums.CheckMarkstyle.Rectangle;
             _metroSetCheckBox5.Size = new System.Drawing.Size(197, 16);
             _metroSetCheckBox5.Style = UI.Enums.Style.Light;
             _metroSetCheckBox5.StyleManager = styleManager1;
@@ -1485,10 +1485,10 @@ namespace MetroSet.UI_Example
             _metroSetCheckBox4.DisabledBorderColor = System.Drawing.Color.FromArgb(205, 205, 205);
             _metroSetCheckBox4.Enabled = false;
             _metroSetCheckBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetCheckBox4.IsDerivedStyle = true;
+            _metroSetCheckBox4.InheritStyle = true;
             _metroSetCheckBox4.Location = new System.Drawing.Point(15, 260);
             _metroSetCheckBox4.Name = "_metroSetCheckBox4";
-            _metroSetCheckBox4.SignStyle = UI.Enums.SignStyle.Sign;
+            _metroSetCheckBox4.CheckmarkStyle = UI.Enums.CheckMarkstyle.Check;
             _metroSetCheckBox4.Size = new System.Drawing.Size(187, 16);
             _metroSetCheckBox4.Style = UI.Enums.Style.Light;
             _metroSetCheckBox4.StyleManager = styleManager1;
@@ -1507,10 +1507,10 @@ namespace MetroSet.UI_Example
             _metroSetCheckBox3.Cursor = System.Windows.Forms.Cursors.Hand;
             _metroSetCheckBox3.DisabledBorderColor = System.Drawing.Color.FromArgb(205, 205, 205);
             _metroSetCheckBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetCheckBox3.IsDerivedStyle = true;
+            _metroSetCheckBox3.InheritStyle = true;
             _metroSetCheckBox3.Location = new System.Drawing.Point(15, 180);
             _metroSetCheckBox3.Name = "_metroSetCheckBox3";
-            _metroSetCheckBox3.SignStyle = UI.Enums.SignStyle.Shape;
+            _metroSetCheckBox3.CheckmarkStyle = UI.Enums.CheckMarkstyle.Rectangle;
             _metroSetCheckBox3.Size = new System.Drawing.Size(197, 16);
             _metroSetCheckBox3.Style = UI.Enums.Style.Light;
             _metroSetCheckBox3.StyleManager = styleManager1;
@@ -1529,10 +1529,10 @@ namespace MetroSet.UI_Example
             _metroSetCheckBox2.Cursor = System.Windows.Forms.Cursors.Hand;
             _metroSetCheckBox2.DisabledBorderColor = System.Drawing.Color.FromArgb(205, 205, 205);
             _metroSetCheckBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetCheckBox2.IsDerivedStyle = true;
+            _metroSetCheckBox2.InheritStyle = true;
             _metroSetCheckBox2.Location = new System.Drawing.Point(15, 140);
             _metroSetCheckBox2.Name = "_metroSetCheckBox2";
-            _metroSetCheckBox2.SignStyle = UI.Enums.SignStyle.Sign;
+            _metroSetCheckBox2.CheckmarkStyle = UI.Enums.CheckMarkstyle.Check;
             _metroSetCheckBox2.Size = new System.Drawing.Size(187, 16);
             _metroSetCheckBox2.Style = UI.Enums.Style.Light;
             _metroSetCheckBox2.StyleManager = styleManager1;
@@ -1552,10 +1552,10 @@ namespace MetroSet.UI_Example
             _metroSetCheckBox6.DisabledBorderColor = System.Drawing.Color.FromArgb(205, 205, 205);
             _metroSetCheckBox6.Enabled = false;
             _metroSetCheckBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetCheckBox6.IsDerivedStyle = true;
+            _metroSetCheckBox6.InheritStyle = true;
             _metroSetCheckBox6.Location = new System.Drawing.Point(15, 220);
             _metroSetCheckBox6.Name = "_metroSetCheckBox6";
-            _metroSetCheckBox6.SignStyle = UI.Enums.SignStyle.Sign;
+            _metroSetCheckBox6.CheckmarkStyle = UI.Enums.CheckMarkstyle.Check;
             _metroSetCheckBox6.Size = new System.Drawing.Size(148, 16);
             _metroSetCheckBox6.Style = UI.Enums.Style.Light;
             _metroSetCheckBox6.StyleManager = styleManager1;
@@ -1574,10 +1574,10 @@ namespace MetroSet.UI_Example
             _metroSetCheckBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             _metroSetCheckBox1.DisabledBorderColor = System.Drawing.Color.FromArgb(205, 205, 205);
             _metroSetCheckBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetCheckBox1.IsDerivedStyle = true;
+            _metroSetCheckBox1.InheritStyle = true;
             _metroSetCheckBox1.Location = new System.Drawing.Point(15, 100);
             _metroSetCheckBox1.Name = "_metroSetCheckBox1";
-            _metroSetCheckBox1.SignStyle = UI.Enums.SignStyle.Sign;
+            _metroSetCheckBox1.CheckmarkStyle = UI.Enums.CheckMarkstyle.Check;
             _metroSetCheckBox1.Size = new System.Drawing.Size(148, 16);
             _metroSetCheckBox1.Style = UI.Enums.Style.Light;
             _metroSetCheckBox1.StyleManager = styleManager1;
@@ -1588,7 +1588,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel11
             // 
             _metroSetLabel11.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel11.IsDerivedStyle = true;
+            _metroSetLabel11.InheritStyle = true;
             _metroSetLabel11.Location = new System.Drawing.Point(305, 55);
             _metroSetLabel11.Name = "_metroSetLabel11";
             _metroSetLabel11.Size = new System.Drawing.Size(145, 23);
@@ -1601,7 +1601,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel10
             // 
             _metroSetLabel10.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel10.IsDerivedStyle = true;
+            _metroSetLabel10.InheritStyle = true;
             _metroSetLabel10.Location = new System.Drawing.Point(15, 55);
             _metroSetLabel10.Name = "_metroSetLabel10";
             _metroSetLabel10.Size = new System.Drawing.Size(130, 23);
@@ -1626,7 +1626,7 @@ namespace MetroSet.UI_Example
             _metroSetSetTabPage5.Font = null;
             _metroSetSetTabPage5.ImageIndex = 0;
             _metroSetSetTabPage5.ImageKey = null;
-            _metroSetSetTabPage5.IsDerivedStyle = true;
+            _metroSetSetTabPage5.InheritStyle = true;
             _metroSetSetTabPage5.Location = new System.Drawing.Point(4, 42);
             _metroSetSetTabPage5.Name = "_metroSetSetTabPage5";
             _metroSetSetTabPage5.Size = new System.Drawing.Size(1106, 570);
@@ -1648,7 +1648,7 @@ namespace MetroSet.UI_Example
             _metroSetTrackBar2.DisabledValueColor = System.Drawing.Color.FromArgb(205, 205, 205);
             _metroSetTrackBar2.Enabled = false;
             _metroSetTrackBar2.HandlerColor = System.Drawing.Color.FromArgb(180, 180, 180);
-            _metroSetTrackBar2.IsDerivedStyle = true;
+            _metroSetTrackBar2.InheritStyle = true;
             _metroSetTrackBar2.Location = new System.Drawing.Point(494, 147);
             _metroSetTrackBar2.Maximum = 100;
             _metroSetTrackBar2.Minimum = 0;
@@ -1672,7 +1672,7 @@ namespace MetroSet.UI_Example
             _metroSetTrackBar1.DisabledHandlerColor = System.Drawing.Color.FromArgb(196, 196, 196);
             _metroSetTrackBar1.DisabledValueColor = System.Drawing.Color.FromArgb(205, 205, 205);
             _metroSetTrackBar1.HandlerColor = System.Drawing.Color.FromArgb(180, 180, 180);
-            _metroSetTrackBar1.IsDerivedStyle = true;
+            _metroSetTrackBar1.InheritStyle = true;
             _metroSetTrackBar1.Location = new System.Drawing.Point(494, 102);
             _metroSetTrackBar1.Maximum = 100;
             _metroSetTrackBar1.Minimum = 0;
@@ -1694,7 +1694,7 @@ namespace MetroSet.UI_Example
             _metroSetProgressBar4.DisabledBorderColor = System.Drawing.Color.FromArgb(238, 238, 238);
             _metroSetProgressBar4.DisabledProgressColor = System.Drawing.Color.FromArgb(120, 65, 177, 225);
             _metroSetProgressBar4.Enabled = false;
-            _metroSetProgressBar4.IsDerivedStyle = true;
+            _metroSetProgressBar4.InheritStyle = true;
             _metroSetProgressBar4.Location = new System.Drawing.Point(144, 289);
             _metroSetProgressBar4.Maximum = 100;
             _metroSetProgressBar4.Minimum = 0;
@@ -1716,7 +1716,7 @@ namespace MetroSet.UI_Example
             _metroSetProgressBar3.DisabledBackColor = System.Drawing.Color.FromArgb(238, 238, 238);
             _metroSetProgressBar3.DisabledBorderColor = System.Drawing.Color.FromArgb(238, 238, 238);
             _metroSetProgressBar3.DisabledProgressColor = System.Drawing.Color.FromArgb(120, 65, 177, 225);
-            _metroSetProgressBar3.IsDerivedStyle = true;
+            _metroSetProgressBar3.InheritStyle = true;
             _metroSetProgressBar3.Location = new System.Drawing.Point(15, 289);
             _metroSetProgressBar3.Maximum = 100;
             _metroSetProgressBar3.Minimum = 0;
@@ -1734,7 +1734,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel14
             // 
             _metroSetLabel14.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel14.IsDerivedStyle = true;
+            _metroSetLabel14.InheritStyle = true;
             _metroSetLabel14.Location = new System.Drawing.Point(15, 209);
             _metroSetLabel14.Name = "_metroSetLabel14";
             _metroSetLabel14.Size = new System.Drawing.Size(159, 23);
@@ -1747,7 +1747,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel15
             // 
             _metroSetLabel15.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel15.IsDerivedStyle = true;
+            _metroSetLabel15.InheritStyle = true;
             _metroSetLabel15.Location = new System.Drawing.Point(494, 59);
             _metroSetLabel15.Name = "_metroSetLabel15";
             _metroSetLabel15.Size = new System.Drawing.Size(159, 23);
@@ -1760,7 +1760,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel13
             // 
             _metroSetLabel13.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel13.IsDerivedStyle = true;
+            _metroSetLabel13.InheritStyle = true;
             _metroSetLabel13.Location = new System.Drawing.Point(15, 59);
             _metroSetLabel13.Name = "_metroSetLabel13";
             _metroSetLabel13.Size = new System.Drawing.Size(159, 23);
@@ -1778,7 +1778,7 @@ namespace MetroSet.UI_Example
             _metroSetProgressBar2.DisabledBorderColor = System.Drawing.Color.FromArgb(238, 238, 238);
             _metroSetProgressBar2.DisabledProgressColor = System.Drawing.Color.FromArgb(120, 65, 177, 225);
             _metroSetProgressBar2.Enabled = false;
-            _metroSetProgressBar2.IsDerivedStyle = true;
+            _metroSetProgressBar2.InheritStyle = true;
             _metroSetProgressBar2.Location = new System.Drawing.Point(15, 147);
             _metroSetProgressBar2.Maximum = 100;
             _metroSetProgressBar2.Minimum = 0;
@@ -1800,7 +1800,7 @@ namespace MetroSet.UI_Example
             _metroSetProgressBar1.DisabledBackColor = System.Drawing.Color.FromArgb(238, 238, 238);
             _metroSetProgressBar1.DisabledBorderColor = System.Drawing.Color.FromArgb(238, 238, 238);
             _metroSetProgressBar1.DisabledProgressColor = System.Drawing.Color.FromArgb(120, 65, 177, 225);
-            _metroSetProgressBar1.IsDerivedStyle = true;
+            _metroSetProgressBar1.InheritStyle = true;
             _metroSetProgressBar1.Location = new System.Drawing.Point(15, 102);
             _metroSetProgressBar1.Maximum = 100;
             _metroSetProgressBar1.Minimum = 0;
@@ -1825,7 +1825,7 @@ namespace MetroSet.UI_Example
             _metroSetSetTabPage6.Font = null;
             _metroSetSetTabPage6.ImageIndex = 0;
             _metroSetSetTabPage6.ImageKey = null;
-            _metroSetSetTabPage6.IsDerivedStyle = true;
+            _metroSetSetTabPage6.InheritStyle = true;
             _metroSetSetTabPage6.Location = new System.Drawing.Point(4, 42);
             _metroSetSetTabPage6.Name = "_metroSetSetTabPage6";
             _metroSetSetTabPage6.Size = new System.Drawing.Size(1106, 570);
@@ -1841,7 +1841,7 @@ namespace MetroSet.UI_Example
             _metroSetLink2.Cursor = System.Windows.Forms.Cursors.Hand;
             _metroSetLink2.Enabled = false;
             _metroSetLink2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLink2.IsDerivedStyle = true;
+            _metroSetLink2.InheritStyle = true;
             _metroSetLink2.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             _metroSetLink2.Location = new System.Drawing.Point(309, 110);
             _metroSetLink2.Name = "_metroSetLink2";
@@ -1858,7 +1858,7 @@ namespace MetroSet.UI_Example
             // 
             _metroSetLink1.Cursor = System.Windows.Forms.Cursors.Hand;
             _metroSetLink1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLink1.IsDerivedStyle = true;
+            _metroSetLink1.InheritStyle = true;
             _metroSetLink1.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             _metroSetLink1.Location = new System.Drawing.Point(309, 59);
             _metroSetLink1.Name = "_metroSetLink1";
@@ -1875,7 +1875,7 @@ namespace MetroSet.UI_Example
             // 
             _metroSetLabel17.Enabled = false;
             _metroSetLabel17.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel17.IsDerivedStyle = true;
+            _metroSetLabel17.InheritStyle = true;
             _metroSetLabel17.Location = new System.Drawing.Point(15, 110);
             _metroSetLabel17.Name = "_metroSetLabel17";
             _metroSetLabel17.Size = new System.Drawing.Size(108, 23);
@@ -1888,7 +1888,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel16
             // 
             _metroSetLabel16.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel16.IsDerivedStyle = true;
+            _metroSetLabel16.InheritStyle = true;
             _metroSetLabel16.Location = new System.Drawing.Point(15, 59);
             _metroSetLabel16.Name = "_metroSetLabel16";
             _metroSetLabel16.Size = new System.Drawing.Size(100, 23);
@@ -1910,7 +1910,7 @@ namespace MetroSet.UI_Example
             _metroSetSetTabPage7.Font = null;
             _metroSetSetTabPage7.ImageIndex = 0;
             _metroSetSetTabPage7.ImageKey = null;
-            _metroSetSetTabPage7.IsDerivedStyle = true;
+            _metroSetSetTabPage7.InheritStyle = true;
             _metroSetSetTabPage7.Location = new System.Drawing.Point(4, 42);
             _metroSetSetTabPage7.Name = "_metroSetSetTabPage7";
             _metroSetSetTabPage7.Size = new System.Drawing.Size(1106, 570);
@@ -1930,7 +1930,7 @@ namespace MetroSet.UI_Example
             _metroSetButton7.HoverBorderColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetButton7.HoverColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetButton7.HoverTextColor = System.Drawing.Color.White;
-            _metroSetButton7.IsDerivedStyle = true;
+            _metroSetButton7.InheritStyle = true;
             _metroSetButton7.Location = new System.Drawing.Point(506, 111);
             _metroSetButton7.Name = "_metroSetButton7";
             _metroSetButton7.NormalBorderColor = System.Drawing.Color.FromArgb(204, 204, 204);
@@ -1956,7 +1956,7 @@ namespace MetroSet.UI_Example
             _metroSetButton6.HoverBorderColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetButton6.HoverColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetButton6.HoverTextColor = System.Drawing.Color.White;
-            _metroSetButton6.IsDerivedStyle = true;
+            _metroSetButton6.InheritStyle = true;
             _metroSetButton6.Location = new System.Drawing.Point(258, 183);
             _metroSetButton6.Name = "_metroSetButton6";
             _metroSetButton6.NormalBorderColor = System.Drawing.Color.FromArgb(204, 204, 204);
@@ -1982,7 +1982,7 @@ namespace MetroSet.UI_Example
             _metroSetButton5.HoverBorderColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetButton5.HoverColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetButton5.HoverTextColor = System.Drawing.Color.White;
-            _metroSetButton5.IsDerivedStyle = true;
+            _metroSetButton5.InheritStyle = true;
             _metroSetButton5.Location = new System.Drawing.Point(258, 111);
             _metroSetButton5.Name = "_metroSetButton5";
             _metroSetButton5.NormalBorderColor = System.Drawing.Color.FromArgb(204, 204, 204);
@@ -2008,7 +2008,7 @@ namespace MetroSet.UI_Example
             _metroSetButton4.HoverBorderColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetButton4.HoverColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetButton4.HoverTextColor = System.Drawing.Color.White;
-            _metroSetButton4.IsDerivedStyle = true;
+            _metroSetButton4.InheritStyle = true;
             _metroSetButton4.Location = new System.Drawing.Point(15, 183);
             _metroSetButton4.Name = "_metroSetButton4";
             _metroSetButton4.NormalBorderColor = System.Drawing.Color.FromArgb(204, 204, 204);
@@ -2034,7 +2034,7 @@ namespace MetroSet.UI_Example
             _metroSetButton3.HoverBorderColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetButton3.HoverColor = System.Drawing.Color.FromArgb(102, 102, 102);
             _metroSetButton3.HoverTextColor = System.Drawing.Color.White;
-            _metroSetButton3.IsDerivedStyle = true;
+            _metroSetButton3.InheritStyle = true;
             _metroSetButton3.Location = new System.Drawing.Point(15, 111);
             _metroSetButton3.Name = "_metroSetButton3";
             _metroSetButton3.NormalBorderColor = System.Drawing.Color.FromArgb(204, 204, 204);
@@ -2054,7 +2054,7 @@ namespace MetroSet.UI_Example
             // _metroSetLabel18
             // 
             _metroSetLabel18.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            _metroSetLabel18.IsDerivedStyle = true;
+            _metroSetLabel18.InheritStyle = true;
             _metroSetLabel18.Location = new System.Drawing.Point(15, 59);
             _metroSetLabel18.Name = "_metroSetLabel18";
             _metroSetLabel18.Size = new System.Drawing.Size(100, 23);
@@ -2070,7 +2070,7 @@ namespace MetroSet.UI_Example
             _metroSetSetTabPage8.Font = null;
             _metroSetSetTabPage8.ImageIndex = 0;
             _metroSetSetTabPage8.ImageKey = null;
-            _metroSetSetTabPage8.IsDerivedStyle = true;
+            _metroSetSetTabPage8.InheritStyle = true;
             _metroSetSetTabPage8.Location = new System.Drawing.Point(4, 42);
             _metroSetSetTabPage8.Name = "_metroSetSetTabPage8";
             _metroSetSetTabPage8.Size = new System.Drawing.Size(1106, 570);
@@ -2089,7 +2089,7 @@ namespace MetroSet.UI_Example
             _metroSetControlBox1.CloseHoverForeColor = System.Drawing.Color.White;
             _metroSetControlBox1.CloseNormalForeColor = System.Drawing.Color.Gray;
             _metroSetControlBox1.DisabledForeColor = System.Drawing.Color.DimGray;
-            _metroSetControlBox1.IsDerivedStyle = true;
+            _metroSetControlBox1.InheritStyle = true;
             _metroSetControlBox1.Location = new System.Drawing.Point(1026, 13);
             _metroSetControlBox1.MaximizeBox = true;
             _metroSetControlBox1.MaximizeHoverBackColor = System.Drawing.Color.FromArgb(238, 238, 238);
@@ -2112,7 +2112,7 @@ namespace MetroSet.UI_Example
             _metroSetSetToolTip1.BackColor = System.Drawing.Color.White;
             _metroSetSetToolTip1.BorderColor = System.Drawing.Color.FromArgb(204, 204, 204);
             _metroSetSetToolTip1.ForeColor = System.Drawing.Color.FromArgb(170, 170, 170);
-            _metroSetSetToolTip1.IsDerivedStyle = true;
+            _metroSetSetToolTip1.InheritStyle = true;
             _metroSetSetToolTip1.OwnerDraw = true;
             _metroSetSetToolTip1.Style = UI.Enums.Style.Light;
             _metroSetSetToolTip1.StyleManager = null;

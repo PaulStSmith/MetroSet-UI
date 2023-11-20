@@ -5,10 +5,11 @@
     <OutputType>WinExe</OutputType>
     <UseWindowsForms>True</UseWindowsForms>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MetroSet_UI_Example</RootNamespace>
+    <RootNamespace>$(AssemblyName.Replace(" ","."))</RootNamespace>
     <AssemblyName>MetroSet UI Example</AssemblyName>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
     <TargetFramework>net7.0-windows</TargetFramework>
+    <StartupObject>MetroSet.UI_Example.Program</StartupObject>
 
   </PropertyGroup>
   <ItemGroup>

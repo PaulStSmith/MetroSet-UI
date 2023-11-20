@@ -33,11 +33,11 @@ namespace MetroSet.UI.Actions
 {
 	internal class MetroSetSwitchActionList : DesignerActionList
 	{
-		private readonly MetroSetSwitch _metroSetSwitch;
+		private readonly MetroSetSwitchBox _metroSetSwitch;
 
 		public MetroSetSwitchActionList(IComponent component) : base(component)
 		{
-			_metroSetSwitch = (MetroSetSwitch)component;
+			_metroSetSwitch = (MetroSetSwitchBox)component;
 		}
 
 		public Style Style

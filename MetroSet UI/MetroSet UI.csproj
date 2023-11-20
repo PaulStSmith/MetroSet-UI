@@ -13,6 +13,9 @@
     <PackageProjectUrl>https://github.com/PaulStSmith/MetroSet-UI</PackageProjectUrl>
     <RepositoryUrl>https://github.com/PaulStSmith/MetroSet-UI</RepositoryUrl>
     <Description>A modern UI set of controls for WinForms</Description>
+    <Authors>Paulo Santos</Authors>
+    <Company>PaulStSmith</Company>
+    <Copyright>Copyright © 2023 - Paulo Santos</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

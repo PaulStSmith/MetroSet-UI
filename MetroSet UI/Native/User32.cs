@@ -103,11 +103,6 @@ namespace MetroSet.UI.Native
         [DllImport("user32")]
         public static extern bool AnimateWindow(IntPtr hwnd, int time, AnimateWindowFlags flags);
 
-        internal void AnimateWindow(IntPtr handle, int v, object p)
-        {
-            throw new NotImplementedException();
-        }
-
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, string lParam);
 
@@ -257,7 +252,7 @@ namespace MetroSet.UI.Native
             /// <summary>
             /// Specified WM_SETTINGCHANGE enumeration value.
             /// </summary>
-            WM_SETTINGCHANGE = 0x001A,
+            WM_SETTINGCHANGE = WM_WININICHANGE,
 
             /// <summary>
             /// Specified WM_DEVMODECHANGE enumeration value.
@@ -652,7 +647,7 @@ namespace MetroSet.UI.Native
             /// <summary>
             /// Specified WM_IME_KEYLAST enumeration value.
             /// </summary>
-            WM_IME_KEYLAST = 0x010F,
+            WM_IME_KEYLAST = WM_IME_COMPOSITION,
 
             /// <summary>
             /// Specified WM_INITDIALOG enumeration value.

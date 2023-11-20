@@ -8,7 +8,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>$(MSBuildProjectName.Replace(" ", "."))</RootNamespace>
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-      <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <ItemGroup>

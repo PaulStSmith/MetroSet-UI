@@ -39,53 +39,8 @@ namespace MetroSet.UI.Controls
 	[Designer(typeof(MetroSetScrollBarDesigner))]
 	[DefaultEvent("Scroll")]
 	[DefaultProperty("Value")]
-	public class MetroSetScrollBar : Control, IMetroSetControl
+	public class MetroSetScrollBar : MetroSetControl
 	{
-
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set { _styleManager = value; Invalidate(); }
-		}
-
-		private Style _style;
-		private StyleManager _styleManager;
 		private int _minimum;
 		private int _maximum;
 		private int _value;
@@ -102,7 +57,7 @@ namespace MetroSet.UI.Controls
 		private Color _disabledForeColor;
 		private Color _disabledBackColor;
 
-		public MetroSetScrollBar()
+		public MetroSetScrollBar() : base(ControlKind.ScrollBar)
 		{
 			SetStyle(
 				ControlStyles.OptimizedDoubleBuffer |
@@ -113,9 +68,7 @@ namespace MetroSet.UI.Controls
 				ControlStyles.SupportsTransparentBackColor, true);
 			UpdateStyles();
 			SetDefaults();
-			
 			ApplyTheme();
-
 		}
 
 		void SetDefaults()
@@ -126,15 +79,12 @@ namespace MetroSet.UI.Controls
 			_thumbSize = 20;
 		}
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
-
+        /// <summary>
+        /// Gets or sets the style provided by the user.
+        /// </summary>
+        /// <param name="style">The Style.</param>
+        protected override void ApplyThemeInternal(Style style)
+        {
 			switch (style)
 			{
 				case Style.Light:
@@ -142,7 +92,6 @@ namespace MetroSet.UI.Controls
 					BackColor = Color.White;
 					DisabledBackColor = Color.FromArgb(204, 204, 204);
 					DisabledForeColor = Color.FromArgb(136, 136, 136);
-					UpdateProperties();
 					break;
 
 				case Style.Dark:
@@ -150,46 +99,18 @@ namespace MetroSet.UI.Controls
 					BackColor = Color.FromArgb(30, 30, 30);
 					DisabledBackColor = Color.FromArgb(80, 80, 80);
 					DisabledForeColor = Color.FromArgb(109, 109, 109);
-					UpdateProperties();
 					break;
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.ScrollBarDictionary)
-						{
-							switch (varkey.Key)
-							{
-
-								case "ForeColor":
-									ForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BackColor":
-									BackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledBackColor":
-									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledForeColor":
-									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								default:
-									return;
-							}
-						}
-					UpdateProperties();
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(style), style, null);
+					{
+                        ForeColor = Utils.HexColor(StyleDictionary["ForeColor"]);
+                        BackColor = Utils.HexColor(StyleDictionary["BackColor"]);
+                        DisabledBackColor = Utils.HexColor(StyleDictionary["DisabledBackColor"]);
+                        DisabledForeColor = Utils.HexColor(StyleDictionary["DisabledForeColor"]);
+                    }
+                    break;
 			}
-		}
-
-		public void UpdateProperties()
-		{
-			Invalidate();
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -489,7 +410,7 @@ namespace MetroSet.UI.Controls
 					_val = Convert.ToInt32((double)thumbPosition / thumbBounds * (Maximum - Minimum)) - Minimum;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException();
+					throw new InvalidOperationException();
 			}
 
 			Value = Math.Min(Math.Max(_val, Minimum), Maximum);
@@ -503,19 +424,13 @@ namespace MetroSet.UI.Controls
 		/// <param name="e">MouseEventArgs</param>
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
-			_thumbState = _thumb.Contains(e.Location) ? MouseMode.Hovered : MouseMode.Normal;
-			switch (Orientation)
-			{
-				case ScrollOrientate.Vertical:
-					_thumbState = (e.Location.Y < 16) | (e.Location.Y > Width - 16) ? MouseMode.Hovered : MouseMode.Normal;
-					break;
-				case ScrollOrientate.Horizontal:
-					_thumbState = e.Location.X < 16 | e.Location.X > Width - 16 ? MouseMode.Hovered : MouseMode.Normal;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-			Invalidate();
+            _thumbState = Orientation switch
+            {
+                ScrollOrientate.Vertical => (e.Location.Y < 16) | (e.Location.Y > Width - 16) ? MouseMode.Hovered : MouseMode.Normal,
+                ScrollOrientate.Horizontal => e.Location.X < 16 | e.Location.X > Width - 16 ? MouseMode.Hovered : MouseMode.Normal,
+                _ => throw new InvalidOperationException(),
+            };
+            Invalidate();
 		}
 
 		/// <summary>

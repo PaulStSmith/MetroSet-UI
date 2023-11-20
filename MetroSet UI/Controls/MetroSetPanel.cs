@@ -24,6 +24,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -40,52 +41,6 @@ namespace MetroSet.UI.Controls
 	[ComVisible(true)]
 	public class MetroSetPanel : Panel, IMetroSetControl
 	{
-
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set { _styleManager = value; Invalidate(); }
-		}
-
-		private Style _style;
-		private StyleManager _styleManager;
-
 		private int _borderThickness = 1;
 		private Color _borderColor;
 		private Color _backgroundColor;
@@ -100,61 +55,99 @@ namespace MetroSet.UI.Controls
 				ControlStyles.SupportsTransparentBackColor, true);
 			BorderStyle = BorderStyle.None;
 			UpdateStyles();
-			
 			ApplyTheme();
 		}
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
+        /// <summary>
+        /// Gets a value indicating whether or not the light theme should be used.
+        /// </summary>
+        public static bool UseLightTheme => Utils.UseLightTheme;
 
-			switch (style)
+        /// <inheritdoc />
+        public Style Style
+        {
+            get => (Style)(_style ?? StyleManager?.Style);
+            set
+            {
+                if (_style != value)
+                    ApplyTheme((Style)(_style = value));
+            }
+        }
+        private Style? _style = UseLightTheme ? Style.Light : Style.Dark;
+
+        /// <inheritdoc />
+        public StyleManager StyleManager
+        {
+            get => _StyleManager;
+            set
+            {
+                if (value != _StyleManager)
+                {
+                    _StyleManager = value;
+                    Refresh();
+                }
+            }
+        }
+        private StyleManager _StyleManager;
+
+        /// <inheritdoc />
+        public bool IsCustomStyle
+        {
+            get => _IsCustomStyle;
+            set
+            {
+                if (value == _IsCustomStyle)
+                    return;
+                _IsCustomStyle = value;
+                Refresh();
+            }
+        }
+        private bool _IsCustomStyle = false;
+
+        /// <summary>
+        /// Applies the current style to the control.
+        /// </summary>
+        public void ApplyTheme()
+        {
+            if (IsCustomStyle)
+                return;
+            ApplyTheme(Style);
+        }
+
+        /// <summary>
+        /// Gets the style dictionary for the control.
+        /// </summary>
+        public IDictionary<string, object> StyleDictionary => _StyleManager?.StyleDictionary(ControlKind.Panel);
+
+        /// <summary>
+        /// Applies the specified style to the control.
+        /// </summary>
+        /// <param name="style">The style to apply.</param>
+        public void ApplyTheme(Style style)
+        {
+            if (IsCustomStyle)
+                return;
+            SuspendLayout();
+            switch (style)
 			{
 				case Style.Light:
 					BorderColor = Color.FromArgb(150, 150, 150);
 					BackgroundColor = Color.White;
-					UpdateProperties();
 					break;
 
 				case Style.Dark:
 					BorderColor = Color.FromArgb(110, 110, 110);
 					BackgroundColor = Color.FromArgb(30, 30, 30);
-					UpdateProperties();
 					break;
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.LabelDictionary)
-						{
-							switch (varkey.Key)
-							{
-								case "BorderColor":
-									BorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BackColor":
-									BackgroundColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								default:
-									return;
-							}
-						}
-					UpdateProperties();
+					{
+                        BorderColor = Utils.HexColor(StyleDictionary["BorderColor"]);
+                        BackColor = Utils.HexColor(StyleDictionary["BackColor"]);
+                    }
 					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(style), style, null);
 			}
-		}
-
-		private void UpdateProperties()
-		{
-			Invalidate();
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -162,16 +155,12 @@ namespace MetroSet.UI.Controls
 			var g = e.Graphics;
 			var r = new Rectangle(BorderThickness, BorderThickness, Width - (BorderThickness * 2 + 1), Height - ((BorderThickness * 2) + 1));
 
-			using (var bg = new SolidBrush(BackgroundColor))
-			{
-				using (var p = new Pen(BorderColor, BorderThickness))
-				{
-					g.FillRectangle(bg, r);
-					g.DrawRectangle(p, r);
-				}
-			}
+            using var bg = new SolidBrush(BackgroundColor);
+            using var p = new Pen(BorderColor, BorderThickness);
+            g.FillRectangle(bg, r);
+            g.DrawRectangle(p, r);
 
-		}
+        }
 
 		/// <summary>
 		/// Gets the background color.
@@ -233,25 +222,5 @@ namespace MetroSet.UI.Controls
 				Refresh();
 			}
 		}
-
-		private bool _isDerivedStyle = true;
-
-		/// <summary>
-		/// Gets or sets the whether this control reflect to parent form style.
-		/// Set it to false if you want the style of this control be independent. 
-		/// </summary>
-		[Category("MetroSet Framework")]
-		[Description("Gets or sets the whether this control reflect to parent(s) style. \n " +
-					 "Set it to false if you want the style of this control be independent. ")]
-		public bool IsDerivedStyle
-		{
-			get { return _isDerivedStyle; }
-			set
-			{
-				_isDerivedStyle = value;
-				Refresh();
-			}
-		}
-
 	}
 }

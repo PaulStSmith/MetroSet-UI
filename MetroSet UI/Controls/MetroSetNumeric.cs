@@ -43,57 +43,12 @@ namespace MetroSet.UI.Controls
 	[Designer(typeof(MetroSetNumericDesigner))]
 	[DefaultProperty("Text")]
 	[ComVisible(true)]
-	public class MetroSetNumeric : Control, IMetroSetControl
+	public class MetroSetNumeric : MetroSetControl
 	{
 
-		/// <summary>
-		/// Gets or sets the style associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the style associated with the control.")]
-		public Style Style
-		{
-			get => StyleManager?.Style ?? _style;
-			set
-			{
-				_style = value;
-				switch (value)
-				{
-					case Style.Light:
-						ApplyTheme();
-						break;
-
-					case Style.Dark:
-						ApplyTheme(Style.Dark);
-						break;
-
-					case Style.Custom:
-						ApplyTheme(Style.Custom);
-						break;
-
-					default:
-						ApplyTheme();
-						break;
-				}
-				Invalidate();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Style Manager associated with the control.
-		/// </summary>
-		[Category("MetroSet Framework"), Description("Gets or sets the Style Manager associated with the control.")]
-		public StyleManager StyleManager
-		{
-			get => _styleManager;
-			set { _styleManager = value; Invalidate(); }
-		}
-
-		private Style _style;
-		private StyleManager _styleManager;
 		private Point _point;
 		private int _value;
 		private readonly Timer _holdTimer;
-
 		private int _maximum = 100;
 		private int _minimum;
 		private Color _backgroundColor;
@@ -103,7 +58,7 @@ namespace MetroSet.UI.Controls
 		private Color _borderColor;
 		private Color _symbolsColor;
 
-		public MetroSetNumeric()
+		public MetroSetNumeric() : base(ControlKind.Numeric)
 		{
 			SetStyle(
 				ControlStyles.ResizeRedraw |
@@ -148,15 +103,12 @@ namespace MetroSet.UI.Controls
 
         }
 
-		/// <summary>
-		/// Gets or sets the style provided by the user.
-		/// </summary>
-		/// <param name="style">The Style.</param>
-		private void ApplyTheme(Style style = Style.Light)
-		{
-			if (!IsDerivedStyle)
-				return;
-
+        /// <summary>
+        /// Gets or sets the style provided by the user.
+        /// </summary>
+        /// <param name="style">The Style.</param>
+        protected override void ApplyThemeInternal(Style style)
+        {
 			switch (style)
 			{
 				case Style.Light:
@@ -167,7 +119,6 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(204, 204, 204);
 					DisabledBorderColor = Color.FromArgb(155, 155, 155);
 					DisabledForeColor = Color.FromArgb(136, 136, 136);
-					UpdateProperties();
 					break;
 
 				case Style.Dark:
@@ -178,58 +129,21 @@ namespace MetroSet.UI.Controls
 					DisabledBackColor = Color.FromArgb(80, 80, 80);
 					DisabledBorderColor = Color.FromArgb(109, 109, 109);
 					DisabledForeColor = Color.FromArgb(109, 109, 109);
-					UpdateProperties();
 					break;
 
 				case Style.Custom:
 					if (StyleManager != null)
-						foreach (var varkey in StyleManager.NumericDictionary)
-						{
-							switch (varkey.Key)
-							{
-
-								case "ForeColor":
-									ForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BackColor":
-									BackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "BorderColor":
-									BorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "SymbolsColor":
-									SymbolsColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledBackColor":
-									DisabledBackColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledBorderColor":
-									DisabledBorderColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								case "DisabledForeColor":
-									DisabledForeColor = Utilites.HexColor((string)varkey.Value);
-									break;
-
-								default:
-									return;
-							}
-						}
-					UpdateProperties();
+					{
+                        ForeColor = Utils.HexColor(StyleDictionary["ForeColor"]);
+                        BackColor = Utils.HexColor(StyleDictionary["BackColor"]);
+                        BorderColor = Utils.HexColor(StyleDictionary["BorderColor"]);
+                        SymbolsColor = Utils.HexColor(StyleDictionary["SymbolsColor"]);
+                        DisabledBackColor = Utils.HexColor(StyleDictionary["DisabledBackColor"]);
+                        DisabledBorderColor = Utils.HexColor(StyleDictionary["DisabledBorderColor"]);
+                        DisabledForeColor = Utils.HexColor(StyleDictionary["DisabledForeColor"]);
+                    }
 					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(style), style, null);
 			}
-		}
-
-		private void UpdateProperties()
-		{
-			Invalidate();
 		}
 
 		/// <summary>
